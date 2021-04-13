@@ -1,35 +1,38 @@
 package io.smartinez.exposeller.client.domain;
 
+import java.util.Date;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.firebase.firestore.Exclude;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
-public class Concert implements Parcelable {
-    private String id;
+public class Concert implements Parcelable, IModel {
+    private String docId;
     private String name;
     private Float cost;
     private Uri photoConcert;
     private String artistName;
     private Date eventDate;
+    private Integer friendlyId;
 
-    public Concert(String id, String name, Float cost, Uri photoConcert, String artistName, Date eventDate) {
-        this.id = id;
+    public Concert(String docId, String name, Float cost, Uri photoConcert, String artistName, Date eventDate, Integer friendlyId) {
+        this.docId = docId;
         this.name = name;
         this.cost = cost;
         this.photoConcert = photoConcert;
         this.artistName = artistName;
         this.eventDate = eventDate;
+        this.friendlyId = friendlyId;
     }
 
-    public String getId() {
-        return id;
+    @Exclude
+    public String getDocId() {
+        return docId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    @Exclude
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 
     public String getName() {
@@ -48,14 +51,6 @@ public class Concert implements Parcelable {
         this.cost = cost;
     }
 
-    public Date getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(Timestamp eventDate) {
-        this.eventDate = eventDate;
-    }
-
     public Uri getPhotoConcert() {
         return photoConcert;
     }
@@ -72,13 +67,31 @@ public class Concert implements Parcelable {
         this.artistName = artistName;
     }
 
+    public Date getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public Integer getFriendlyId() {
+        return friendlyId;
+    }
+
+    public void setFriendlyId(Integer friendlyId) {
+        this.friendlyId = friendlyId;
+    }
+
     protected Concert(Parcel in) {
-        id = in.readString();
+        docId = in.readString();
         name = in.readString();
         cost = in.readByte() == 0x00 ? null : in.readFloat();
         photoConcert = (Uri) in.readValue(Uri.class.getClassLoader());
         artistName = in.readString();
-        eventDate = (Date) in.readValue(Date.class.getClassLoader());
+        long tmpEventDate = in.readLong();
+        eventDate = tmpEventDate != -1 ? new Date(tmpEventDate) : null;
+        friendlyId = in.readByte() == 0x00 ? null : in.readInt();
     }
 
     @Override
@@ -88,7 +101,7 @@ public class Concert implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeString(docId);
         dest.writeString(name);
         if (cost == null) {
             dest.writeByte((byte) (0x00));
@@ -98,7 +111,13 @@ public class Concert implements Parcelable {
         }
         dest.writeValue(photoConcert);
         dest.writeString(artistName);
-        dest.writeValue(eventDate);
+        dest.writeLong(eventDate != null ? eventDate.getTime() : -1L);
+        if (friendlyId == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(friendlyId);
+        }
     }
 
     @SuppressWarnings("unused")

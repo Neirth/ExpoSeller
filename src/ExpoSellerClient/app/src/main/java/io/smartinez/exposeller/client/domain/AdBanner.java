@@ -3,24 +3,29 @@ package io.smartinez.exposeller.client.domain;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.firebase.firestore.Exclude;
 
-public class AdBanner implements Parcelable {
-    private String id;
+public class AdBanner implements Parcelable, IModel {
+    private String docId;
     private String name;
     private Uri photoAd;
+    private Integer friendlyId;
 
-    public AdBanner(String id, String name, Uri photoAd) {
-        this.id = id;
+    public AdBanner(String docId, String name, Uri photoAd, Integer friendlyId) {
+        this.docId = docId;
         this.name = name;
         this.photoAd = photoAd;
+        this.friendlyId = friendlyId;
     }
 
-    public String getId() {
-        return id;
+    @Exclude
+    public String getDocId() {
+        return docId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    @Exclude
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 
     public String getName() {
@@ -39,10 +44,19 @@ public class AdBanner implements Parcelable {
         this.photoAd = photoAd;
     }
 
+    public Integer getFriendlyId() {
+        return friendlyId;
+    }
+
+    public void setFriendlyId(Integer friendlyId) {
+        this.friendlyId = friendlyId;
+    }
+
     protected AdBanner(Parcel in) {
-        id = in.readString();
+        docId = in.readString();
         name = in.readString();
         photoAd = (Uri) in.readValue(Uri.class.getClassLoader());
+        friendlyId = in.readByte() == 0x00 ? null : in.readInt();
     }
 
     @Override
@@ -52,9 +66,15 @@ public class AdBanner implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeString(docId);
         dest.writeString(name);
         dest.writeValue(photoAd);
+        if (friendlyId == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(friendlyId);
+        }
     }
 
     @SuppressWarnings("unused")

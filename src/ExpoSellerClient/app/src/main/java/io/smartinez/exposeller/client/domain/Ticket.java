@@ -2,26 +2,29 @@ package io.smartinez.exposeller.client.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.firebase.firestore.Exclude;
 
-public class Ticket implements Parcelable {
-    private String id;
+public class Ticket implements Parcelable, IModel {
+    private String docId;
     private String concertId;
     private Integer friendlyId;
     private Boolean isUsed;
 
-    public Ticket(String id, String concertId, Integer friendlyId) {
-        this.id = id;
+    public Ticket(String docId, String concertId, Integer friendlyId) {
+        this.docId = docId;
         this.concertId = concertId;
         this.friendlyId = friendlyId;
         this.isUsed = false;
     }
 
-    public String getId() {
-        return id;
+    @Exclude
+    public String getDocId() {
+        return docId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    @Exclude
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 
     public String getConcertId() {
@@ -49,7 +52,7 @@ public class Ticket implements Parcelable {
     }
 
     protected Ticket(Parcel in) {
-        id = in.readString();
+        docId = in.readString();
         concertId = in.readString();
         friendlyId = in.readByte() == 0x00 ? null : in.readInt();
         byte isUsedVal = in.readByte();
@@ -63,7 +66,7 @@ public class Ticket implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeString(docId);
         dest.writeString(concertId);
         if (friendlyId == null) {
             dest.writeByte((byte) (0x00));
