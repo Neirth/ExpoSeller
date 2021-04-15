@@ -1,8 +1,10 @@
 package io.smartinez.exposeller.client.repository.datasource;
 
+import java.io.Closeable;
+
 import io.smartinez.exposeller.client.domain.IModel;
 
-public interface IDataSource {
+public interface IDataSource extends Closeable {
     void insert(IModel entityObj);
 
     IModel getByDocId(String docId, Class<? extends IModel> entityClass) throws IllegalAccessException;

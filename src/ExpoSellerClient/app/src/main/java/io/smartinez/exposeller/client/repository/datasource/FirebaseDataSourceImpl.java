@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
 import java.util.List;
 
 import io.smartinez.exposeller.client.domain.IModel;
@@ -66,5 +67,9 @@ public class FirebaseDataSourceImpl implements IDataSource {
         if (!isDeleted) {
             throw new IllegalStateException("Could not delete the document");
         }
+    }
+
+    @Override
+    public void close() throws IOException {
     }
 }
