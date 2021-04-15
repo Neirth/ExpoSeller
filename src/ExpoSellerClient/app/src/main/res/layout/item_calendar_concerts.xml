@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/component_background"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/cvConcertCalendar"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardPreventCornerOverlap="false">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/clConcertCalendar">
+
+        <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                tools:srcCompat="@tools:sample/avatars"
+                android:id="@+id/tvPhotoArtist"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp" />
+
+        <TextView
+                android:text="{{concert_name}}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvConcertName"
+                card_view:layout_constraintStart_toEndOf="@+id/tvPhotoArtist"
+                card_view:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white" />
+
+        <TextView
+                android:text="{{artist_name}}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvArtistName"
+                android:layout_marginStart="8dp"
+                card_view:layout_constraintStart_toEndOf="@+id/tvPhotoArtist"
+                android:layout_marginTop="8dp"
+                card_view:layout_constraintTop_toBottomOf="@+id/tvConcertName"
+                android:textColor="@color/white" />
+
+        <TextView
+                android:text="{{price_name}}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvPriceName"
+                card_view:layout_constraintStart_toEndOf="@+id/tvPhotoArtist"
+                card_view:layout_constraintTop_toBottomOf="@+id/tvArtistName"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

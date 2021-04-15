@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="io.smartinez.exposeller.client">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.smartinez.exposeller.client">
     <application android:label="@string/app_name">
         <uses-library android:name="com.google.android.things" />
 
-        <activity android:name=".ui.mainscreen.MainScreenActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <!-- Make this the first activity that is displayed when the device boots. -->
+        <activity android:name=".ui.mainscreen.MainScreenActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.pickupticket.PickupTicketActivity" />
-        <activity android:name=".ui.insertcoins.InsertCoinsActivity" />
-        <activity android:name=".ui.checkschedules.CheckSchedulesActivity" />
-        <activity android:name=".ui.buytickets.BuyTicketsActivity" />
-        <activity android:name=".ui.adsconcert.AdsConcertActivity" />
+        <activity android:name=".ui.pickupticket.PickupTicketActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".ui.insertcoins.InsertCoinsActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".ui.checkschedules.CheckSchedulesActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".ui.buytickets.BuyTicketsActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".ui.adsconcert.AdsConcertActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"/>
     </application>
 
 </manifest>
