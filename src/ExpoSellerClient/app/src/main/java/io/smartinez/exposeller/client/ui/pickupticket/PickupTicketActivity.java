@@ -1,8 +1,10 @@
-package io.smartinez.exposeller.client;
+package io.smartinez.exposeller.client.ui.pickupticket;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import io.smartinez.exposeller.client.R;
 
 /**
  * Skeleton of an Android Things activity.
@@ -21,11 +23,10 @@ import android.os.Bundle;
  * <p>
  * You can find additional examples on GitHub: https://github.com/androidthings
  */
-public class MainActivity extends AppCompatActivity {
-
+public class PickupTicketActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_pickup_ticket);
     }
 }

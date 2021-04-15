@@ -5,7 +5,7 @@
     <application android:label="@string/app_name">
         <uses-library android:name="com.google.android.things" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.mainscreen.MainScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,6 +19,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.pickupticket.PickupTicketActivity" />
+        <activity android:name=".ui.insertcoins.InsertCoinsActivity" />
+        <activity android:name=".ui.checkschedules.CheckSchedulesActivity" />
+        <activity android:name=".ui.buytickets.BuyTicketsActivity" />
+        <activity android:name=".ui.adsconcert.AdsConcertActivity" />
     </application>
 
 </manifest>
