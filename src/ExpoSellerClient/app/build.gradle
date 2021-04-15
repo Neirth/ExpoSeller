@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 29
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "io.smartinez.exposeller.client"
-        minSdkVersion 26
+        minSdkVersion 27
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -25,6 +25,10 @@ android {
     }
     lintOptions {
         disable('AllowBackup', 'GoogleAppIndexingWarning', 'MissingApplicationIcon')
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
