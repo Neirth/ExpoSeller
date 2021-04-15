@@ -6,7 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
-public class Concert implements Parcelable, IModel {
+public class Concert implements IModel, Parcelable {
     private String docId;
     private String name;
     private Float cost;
@@ -14,8 +14,9 @@ public class Concert implements Parcelable, IModel {
     private String artistName;
     private Date eventDate;
     private Integer friendlyId;
+    private String organizationName;
 
-    public Concert(String docId, String name, Float cost, Uri photoConcert, String artistName, Date eventDate, Integer friendlyId) {
+    public Concert(String docId, String name, Float cost, Uri photoConcert, String artistName, Date eventDate, Integer friendlyId, String organizationName) {
         this.docId = docId;
         this.name = name;
         this.cost = cost;
@@ -23,14 +24,15 @@ public class Concert implements Parcelable, IModel {
         this.artistName = artistName;
         this.eventDate = eventDate;
         this.friendlyId = friendlyId;
+        this.organizationName = organizationName;
     }
 
-    @Exclude
+    @Override
     public String getDocId() {
         return docId;
     }
 
-    @Exclude
+    @Override
     public void setDocId(String docId) {
         this.docId = docId;
     }
@@ -75,12 +77,22 @@ public class Concert implements Parcelable, IModel {
         this.eventDate = eventDate;
     }
 
+    @Override
     public Integer getFriendlyId() {
         return friendlyId;
     }
 
+    @Override
     public void setFriendlyId(Integer friendlyId) {
         this.friendlyId = friendlyId;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 
     protected Concert(Parcel in) {
@@ -92,6 +104,7 @@ public class Concert implements Parcelable, IModel {
         long tmpEventDate = in.readLong();
         eventDate = tmpEventDate != -1 ? new Date(tmpEventDate) : null;
         friendlyId = in.readByte() == 0x00 ? null : in.readInt();
+        organizationName = in.readString();
     }
 
     @Override
@@ -118,6 +131,7 @@ public class Concert implements Parcelable, IModel {
             dest.writeByte((byte) (0x01));
             dest.writeInt(friendlyId);
         }
+        dest.writeString(organizationName);
     }
 
     @SuppressWarnings("unused")

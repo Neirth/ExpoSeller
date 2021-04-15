@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ExpoSeller Client</string>
+    <string name="terms_and_conditions_name"></string>
+    <string name="terms_and_conditions_desc"></string>
+    <string name="event_name" />
+    <string name="artist_name" />
+    <string name="event_date" />
 </resources>
