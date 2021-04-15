@@ -22,17 +22,23 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import dagger.Component;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.domain.Ticket;
 import io.smartinez.exposeller.client.repository.IRepository;
 import io.smartinez.exposeller.client.util.Utilities;
 
+@Component
 public class PassbookTicketGeneratorImpl implements ITicketGenerator {
     private final TicketType ticketType = TicketType.VIRTUAL;
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     private IRepository<Concert> mConcertRepo;
-    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+    public PassbookTicketGeneratorImpl(IRepository<Concert> concertRepo) {
+        this.mConcertRepo = concertRepo;
+    }
 
     @Override
     public boolean generatePhysicalTicket(Ticket ticket) throws IOException {
@@ -77,18 +83,20 @@ public class PassbookTicketGeneratorImpl implements ITicketGenerator {
                                               .intermediateCertificate(new FileInputStream("assets/AppleWWDRCA.cer"))
                                               .build();
 
-            // Prepare buffer for ticket
-            ByteArrayOutputStream outputFile = new ByteArrayOutputStream();
-
-            // Write to buffer the generated ticket
-            PassSerializer.writePkPassArchive(pass, signer, outputFile);
-
-            outputFile.flush();
             // Get the reference to file
             StorageReference ticketCloudUri = storageRef.child(UUID.randomUUID().toString() + "/" + UUID.randomUUID().toString() + ".pkpass");
 
-            // Upload bytes to file
-            ticketCloudUri.putStream(new ByteArrayInputStream(outputFile.toByteArray()));
+            // Prepare the buffer to receive the ticket file
+            try (ByteArrayOutputStream outputFile = new ByteArrayOutputStream()){
+                // Write to buffer the generated ticket
+                PassSerializer.writePkPassArchive(pass, signer, outputFile);
+
+                // Flush the buffer
+                outputFile.flush();
+
+                // Upload bytes to file
+                ticketCloudUri.putStream(new ByteArrayInputStream(outputFile.toByteArray()));
+            }
 
             // Return the path.
             return ticketCloudUri.getDownloadUrl().getResult().getPath();

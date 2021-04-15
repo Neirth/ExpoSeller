@@ -2,8 +2,10 @@ package io.smartinez.exposeller.client.repository.datasource;
 
 import java.io.Closeable;
 
+import dagger.Component;
 import io.smartinez.exposeller.client.domain.IModel;
 
+@Component
 public interface IDataSource extends Closeable {
     void insert(IModel entityObj);
 

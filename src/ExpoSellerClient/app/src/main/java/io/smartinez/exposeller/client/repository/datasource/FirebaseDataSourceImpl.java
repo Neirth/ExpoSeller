@@ -9,8 +9,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.io.IOException;
 import java.util.List;
 
+import dagger.Component;
 import io.smartinez.exposeller.client.domain.IModel;
 
+@Component
 public class FirebaseDataSourceImpl implements IDataSource {
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
 

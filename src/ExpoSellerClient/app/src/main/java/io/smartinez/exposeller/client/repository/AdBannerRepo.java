@@ -1,8 +1,10 @@
 package io.smartinez.exposeller.client.repository;
 
+import dagger.Component;
 import io.smartinez.exposeller.client.domain.AdBanner;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
+@Component
 public class AdBannerRepo implements IRepository<AdBanner> {
     private IDataSource mDatasource;
 

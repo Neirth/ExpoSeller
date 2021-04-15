@@ -1,8 +1,10 @@
 package io.smartinez.exposeller.client.repository;
 
+import dagger.Component;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
+@Component
 public class ConcertRepo implements IRepository<Concert> {
     private IDataSource mDataSource;
 

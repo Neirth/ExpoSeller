@@ -10,6 +10,9 @@ import com.google.android.things.pio.PeripheralManager;
 
 import java.io.IOException;
 
+import dagger.Component;
+
+@Component
 public class ButtonInsertCoinsImpl implements IInsertCoins {
     private PeripheralManager mPeripheralManager = PeripheralManager.getInstance();
 

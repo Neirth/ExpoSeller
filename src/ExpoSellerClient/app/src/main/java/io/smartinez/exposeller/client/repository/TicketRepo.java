@@ -1,8 +1,10 @@
 package io.smartinez.exposeller.client.repository;
 
+import dagger.Component;
 import io.smartinez.exposeller.client.domain.Ticket;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
+@Component
 public class TicketRepo implements IRepository<Ticket> {
     private IDataSource mDataSource;
 
