@@ -4,6 +4,44 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/activity_background"
         tools:context=".ui.mainscreen.MainScreenActivity">
+
+    <Button
+            android:text="@string/consultar_horarios"
+            android:textColor="@color/white"
+            android:layout_width="191dp"
+            android:layout_height="69dp"
+            android:id="@+id/btnConsultarHorarios"
+            android:background="@drawable/component_background"
+            android:fontFamily="sans-serif-light"
+            app:layout_constraintStart_toEndOf="@+id/btnComprarEntradas"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/ivExpoSellerLogo"
+            android:layout_marginBottom="32dp" />
+
+    <Button
+            android:text="@string/comprar_entradas"
+            android:textColor="@color/white"
+            android:layout_width="191dp"
+            android:layout_height="69dp"
+            android:id="@+id/btnComprarEntradas"
+            android:background="@drawable/component_background"
+            android:fontFamily="sans-serif-light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/btnConsultarHorarios"
+            app:layout_constraintBottom_toTopOf="@+id/ivExpoSellerLogo"
+            android:layout_marginBottom="32dp" />
+
+    <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            tools:srcCompat="@drawable/exposeller_logo"
+            android:id="@+id/ivExpoSellerLogo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

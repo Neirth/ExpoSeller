@@ -5,4 +5,6 @@
     <string name="event_name" />
     <string name="artist_name" />
     <string name="event_date" />
+    <string name="consultar_horarios">Consultar horarios</string>
+    <string name="comprar_entradas">Comprar Entradas</string>
 </resources>
