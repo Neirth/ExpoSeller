@@ -22,21 +22,25 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.UUID;
 
-import dagger.Component;
+import javax.inject.Inject;
+
+import dagger.hilt.android.scopes.ActivityScoped;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.domain.Ticket;
+import io.smartinez.exposeller.client.repository.ConcertRepo;
 import io.smartinez.exposeller.client.repository.IRepository;
 import io.smartinez.exposeller.client.util.Utilities;
 
-@Component
+@ActivityScoped
 public class PassbookTicketGeneratorImpl implements ITicketGenerator {
     private final TicketType ticketType = TicketType.VIRTUAL;
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-    private IRepository<Concert> mConcertRepo;
+    private ConcertRepo mConcertRepo;
 
-    public PassbookTicketGeneratorImpl(IRepository<Concert> concertRepo) {
+    @Inject
+    public PassbookTicketGeneratorImpl(ConcertRepo concertRepo) {
         this.mConcertRepo = concertRepo;
     }
 

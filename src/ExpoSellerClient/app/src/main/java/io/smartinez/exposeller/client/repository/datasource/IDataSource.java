@@ -1,13 +1,15 @@
 package io.smartinez.exposeller.client.repository.datasource;
 
 import java.io.Closeable;
+import java.util.Date;
+import java.util.List;
 
-import dagger.Component;
 import io.smartinez.exposeller.client.domain.IModel;
 
-@Component
 public interface IDataSource extends Closeable {
     void insert(IModel entityObj);
+
+    List<IModel> getBySpecificDate(Date date, Class<? extends IModel> entityClass);
 
     IModel getByDocId(String docId, Class<? extends IModel> entityClass) throws IllegalAccessException;
     IModel getByFriendlyId(String friendlyId, Class<? extends IModel> entityClass) throws IllegalAccessException;

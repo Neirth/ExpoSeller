@@ -1,9 +1,10 @@
 package io.smartinez.exposeller.client.ui.mainscreen;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 
 /**
@@ -23,6 +24,7 @@ import io.smartinez.exposeller.client.R;
  * <p>
  * You can find additional examples on GitHub: https://github.com/androidthings
  */
+@AndroidEntryPoint
 public class MainScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

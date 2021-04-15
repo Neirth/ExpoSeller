@@ -10,11 +10,18 @@ import com.google.android.things.pio.PeripheralManager;
 
 import java.io.IOException;
 
-import dagger.Component;
+import javax.inject.Inject;
 
-@Component
+import dagger.Provides;
+import dagger.hilt.android.scopes.ActivityScoped;
+
+@ActivityScoped
 public class ButtonInsertCoinsImpl implements IInsertCoins {
     private PeripheralManager mPeripheralManager = PeripheralManager.getInstance();
+
+    @Inject
+    public ButtonInsertCoinsImpl() {
+    }
 
     public LiveData<Float> checkInsertedValue() throws IOException {
         Gpio gpio = mPeripheralManager.openGpio("");

@@ -7,12 +7,14 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import dagger.Component;
+import dagger.hilt.android.scopes.ActivityScoped;
 import io.smartinez.exposeller.client.domain.IModel;
 
-@Component
+@ActivityScoped
 public class FirebaseDataSourceImpl implements IDataSource {
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
 
@@ -23,6 +25,17 @@ public class FirebaseDataSourceImpl implements IDataSource {
         if (!isInserted) {
             throw new IllegalStateException("Could not insert the document");
         }
+    }
+
+    @Override
+    public List<IModel> getBySpecificDate(Date date, Class<? extends IModel> entityClass) {
+        Query queryDate = mDb.collection(entityClass.getSimpleName()).whereEqualTo("eventDate", date);
+
+        QuerySnapshot queryResult = queryDate.get().getResult();
+
+        List<DocumentSnapshot> result = queryResult.getDocuments();
+
+        return result.stream().map(entityClass::cast).collect(Collectors.toList());
     }
 
     @Override

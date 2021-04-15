@@ -1,13 +1,20 @@
 package io.smartinez.exposeller.client.repository;
 
-import dagger.Component;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.scopes.ActivityScoped;
 import io.smartinez.exposeller.client.domain.Ticket;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
-@Component
+@ActivityScoped
 public class TicketRepo implements IRepository<Ticket> {
     private IDataSource mDataSource;
 
+    @Inject
     public TicketRepo(IDataSource dataSource) {
         this.mDataSource = dataSource;
     }
@@ -25,6 +32,11 @@ public class TicketRepo implements IRepository<Ticket> {
     @Override
     public void delete(Ticket entity) {
         mDataSource.delete(entity.getDocId(), entity.getClass());
+    }
+
+    @Override
+    public List<Ticket> getBySpecificDate(Date dateConcerts) {
+        return Arrays.asList((Ticket[]) mDataSource.getBySpecificDate(dateConcerts, Ticket.class).toArray());
     }
 
     @Override

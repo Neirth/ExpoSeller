@@ -1,39 +1,53 @@
 package io.smartinez.exposeller.client.repository;
 
-import dagger.Component;
+import android.util.Log;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.scopes.ActivityScoped;
 import io.smartinez.exposeller.client.domain.AdBanner;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
-@Component
+@ActivityScoped
 public class AdBannerRepo implements IRepository<AdBanner> {
-    private IDataSource mDatasource;
+    private IDataSource mDataSource;
 
-    private AdBannerRepo(IDataSource dataSource) {
-        this.mDatasource = dataSource;
+    @Inject
+    public AdBannerRepo(IDataSource dataSource) {
+        this.mDataSource = dataSource;
     }
 
     @Override
     public void insert(AdBanner entity) {
-        mDatasource.insert(entity);
+        mDataSource.insert(entity);
     }
 
     @Override
     public void update(AdBanner entity) {
-        mDatasource.update(entity.getDocId(), entity);
+        mDataSource.update(entity.getDocId(), entity);
     }
 
     @Override
     public void delete(AdBanner entity) {
-        mDatasource.delete(entity.getDocId(), AdBanner.class);
+        mDataSource.delete(entity.getDocId(), AdBanner.class);
+    }
+
+    @Override
+    public List<AdBanner> getBySpecificDate(Date dateConcerts) {
+        return Arrays.asList((AdBanner[]) mDataSource.getBySpecificDate(dateConcerts, AdBanner.class).toArray());
     }
 
     @Override
     public AdBanner getByDocId(String docId) throws IllegalAccessException {
-        return (AdBanner) mDatasource.getByDocId(docId, AdBanner.class);
+        return (AdBanner) mDataSource.getByDocId(docId, AdBanner.class);
     }
 
     @Override
     public AdBanner getByFriendlyId(String friendlyId) throws IllegalAccessException {
-        return (AdBanner) mDatasource.getByFriendlyId(friendlyId, AdBanner.class);
+        return (AdBanner) mDataSource.getByFriendlyId(friendlyId, AdBanner.class);
     }
 }

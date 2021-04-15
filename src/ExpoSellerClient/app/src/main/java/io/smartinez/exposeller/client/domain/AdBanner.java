@@ -5,25 +5,31 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
-public class AdBanner implements Parcelable, IModel {
+import java.util.Date;
+
+public class AdBanner implements IModel, Parcelable {
     private String docId;
     private String name;
     private Uri photoAd;
     private Integer friendlyId;
+    private Date eventDate;
 
-    public AdBanner(String docId, String name, Uri photoAd, Integer friendlyId) {
+    public AdBanner(String docId, String name, Uri photoAd, Integer friendlyId, Date eventDate) {
         this.docId = docId;
         this.name = name;
         this.photoAd = photoAd;
         this.friendlyId = friendlyId;
+        this.eventDate = eventDate;
     }
 
     @Exclude
+    @Override
     public String getDocId() {
         return docId;
     }
 
     @Exclude
+    @Override
     public void setDocId(String docId) {
         this.docId = docId;
     }
@@ -44,12 +50,22 @@ public class AdBanner implements Parcelable, IModel {
         this.photoAd = photoAd;
     }
 
+    @Override
     public Integer getFriendlyId() {
         return friendlyId;
     }
 
+    @Override
     public void setFriendlyId(Integer friendlyId) {
         this.friendlyId = friendlyId;
+    }
+
+    public Date getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
     }
 
     protected AdBanner(Parcel in) {
@@ -57,6 +73,8 @@ public class AdBanner implements Parcelable, IModel {
         name = in.readString();
         photoAd = (Uri) in.readValue(Uri.class.getClassLoader());
         friendlyId = in.readByte() == 0x00 ? null : in.readInt();
+        long tmpEventDate = in.readLong();
+        eventDate = tmpEventDate != -1 ? new Date(tmpEventDate) : null;
     }
 
     @Override
@@ -75,6 +93,7 @@ public class AdBanner implements Parcelable, IModel {
             dest.writeByte((byte) (0x01));
             dest.writeInt(friendlyId);
         }
+        dest.writeLong(eventDate != null ? eventDate.getTime() : -1L);
     }
 
     @SuppressWarnings("unused")

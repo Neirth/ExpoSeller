@@ -27,11 +27,13 @@ public class Concert implements IModel, Parcelable {
         this.organizationName = organizationName;
     }
 
+    @Exclude
     @Override
     public String getDocId() {
         return docId;
     }
 
+    @Exclude
     @Override
     public void setDocId(String docId) {
         this.docId = docId;

@@ -3,6 +3,8 @@ package io.smartinez.exposeller.client.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.util.Date;
 
 public class Ticket implements IModel, Parcelable {
@@ -10,21 +12,23 @@ public class Ticket implements IModel, Parcelable {
     private String concertId;
     private Integer friendlyId;
     private Boolean isUsed;
-    private Date generatedDate;
+    private Date eventDate;
 
-    public Ticket(String docId, String concertId, Integer friendlyId, Boolean isUsed, Date generatedDate) {
+    public Ticket(String docId, String concertId, Integer friendlyId, Boolean isUsed, Date eventDate) {
         this.docId = docId;
         this.concertId = concertId;
         this.friendlyId = friendlyId;
         this.isUsed = isUsed;
-        this.generatedDate = generatedDate;
+        this.eventDate = eventDate;
     }
 
+    @Exclude
     @Override
     public String getDocId() {
         return docId;
     }
 
+    @Exclude
     @Override
     public void setDocId(String docId) {
         this.docId = docId;
@@ -48,20 +52,20 @@ public class Ticket implements IModel, Parcelable {
         this.friendlyId = friendlyId;
     }
 
-    public Boolean isUsed() {
+    public Boolean getUsed() {
         return isUsed;
     }
 
-    public void setIsUsed(Boolean used) {
+    public void setUsed(Boolean used) {
         isUsed = used;
     }
 
-    public Date getGeneratedDate() {
-        return generatedDate;
+    public Date getEventDate() {
+        return eventDate;
     }
 
-    public void setGeneratedDate(Date generatedDate) {
-        this.generatedDate = generatedDate;
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
     }
 
     protected Ticket(Parcel in) {
@@ -70,8 +74,8 @@ public class Ticket implements IModel, Parcelable {
         friendlyId = in.readByte() == 0x00 ? null : in.readInt();
         byte isUsedVal = in.readByte();
         isUsed = isUsedVal == 0x02 ? null : isUsedVal != 0x00;
-        long tmpGeneratedDate = in.readLong();
-        generatedDate = tmpGeneratedDate != -1 ? new Date(tmpGeneratedDate) : null;
+        long tmpEventDate = in.readLong();
+        eventDate = tmpEventDate != -1 ? new Date(tmpEventDate) : null;
     }
 
     @Override
@@ -94,7 +98,7 @@ public class Ticket implements IModel, Parcelable {
         } else {
             dest.writeByte((byte) (isUsed ? 0x01 : 0x00));
         }
-        dest.writeLong(generatedDate != null ? generatedDate.getTime() : -1L);
+        dest.writeLong(eventDate != null ? eventDate.getTime() : -1L);
     }
 
     @SuppressWarnings("unused")
