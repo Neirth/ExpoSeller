@@ -40,7 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:srcCompat="@drawable/exposeller_logo"
-            android:id="@+id/ivExpoSellerLogo2"
+            android:id="@+id/ivExpoSellerLogo1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@+id/glHorizontalSeparator2"
             app:layout_constraintEnd_toEndOf="parent"

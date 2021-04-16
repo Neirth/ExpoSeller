@@ -5,6 +5,106 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.insertcoins.InsertCoinsActivity"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/activity_background">
 
+    <ImageView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            app:srcCompat="@drawable/exposeller_insert_coin"
+            android:id="@+id/ivInsertCoins"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivExpoSellerLogo3"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvInsertCoins"
+            android:layout_marginBottom="64dp" />
+
+    <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            app:srcCompat="@drawable/exposeller_logo"
+            android:id="@+id/ivExpoSellerLogo3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp" />
+
+    <TextView
+            android:text="@string/insert_import_value_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            app:layout_constraintStart_toEndOf="@+id/ivExpoSellerLogo3"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="56dp"
+            android:layout_marginStart="16dp"
+            android:fontFamily="sans-serif-light" />
+
+    <TextView
+            android:text="@string/concert_choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvConcertChoice"
+            app:layout_constraintStart_toEndOf="@+id/ivInsertCoins"
+            android:layout_marginStart="32dp"
+            app:layout_constraintTop_toTopOf="@+id/ivInsertCoins" />
+
+    <TextView
+            android:text="@string/concert_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvConcertValue"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvConcertChoice"
+            app:layout_constraintStart_toEndOf="@+id/ivInsertCoins"
+            android:layout_marginStart="32dp"
+            android:fontFamily="sans-serif-light" />
+
+    <TextView
+            android:text="@string/inserted_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvInsertedValue"
+            app:layout_constraintStart_toEndOf="@+id/ivInsertCoins"
+            app:layout_constraintTop_toBottomOf="@+id/tvConcertValue"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-light" />
+
+    <TextView
+            android:text="@string/return_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvReturnValue"
+            app:layout_constraintTop_toBottomOf="@+id/tvInsertedValue"
+            app:layout_constraintStart_toEndOf="@+id/ivInsertCoins"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivInsertCoins"
+            tools:visibility="invisible"
+            android:fontFamily="sans-serif-light" />
+
+    <TextView
+            android:text="@string/insert_coins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvInsertCoins"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="24dp"
+            android:fontFamily="sans-serif-light" />
+
+    <Button
+            android:text="@string/cancel_operation"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCancelOperation2"
+            android:background="@drawable/component_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif-light" />
 </androidx.constraintlayout.widget.ConstraintLayout>
