@@ -26,8 +26,7 @@ public class ButtonInsertCoinsImpl implements IInsertCoins {
     public LiveData<Float> checkInsertedValue() throws IOException {
         Gpio gpio = mPeripheralManager.openGpio("");
 
-        MutableLiveData<Float> countedValue = new MutableLiveData<>();
-        countedValue.setValue(0f);
+        MutableLiveData<Float> countedValue = new MutableLiveData<>(0f);
 
         gpio.registerGpioCallback((gpioAux) -> {
             try {

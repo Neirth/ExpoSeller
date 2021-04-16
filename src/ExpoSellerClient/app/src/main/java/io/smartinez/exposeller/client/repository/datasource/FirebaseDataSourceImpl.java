@@ -7,6 +7,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +40,13 @@ public class FirebaseDataSourceImpl implements IDataSource {
 
         QuerySnapshot queryResult = queryDate.get().getResult();
 
-        List<DocumentSnapshot> result = queryResult.getDocuments();
+        List<DocumentSnapshot> result;
+
+        if (queryResult != null && !queryResult.isEmpty()) {
+            result = queryResult.getDocuments();
+        } else {
+            result = Collections.emptyList();
+        }
 
         return result.stream().map(entityClass::cast).collect(Collectors.toList());
     }
@@ -64,11 +71,9 @@ public class FirebaseDataSourceImpl implements IDataSource {
        QuerySnapshot queryResult = queryFriendlyId.get().getResult();
 
        if (queryResult != null && !queryResult.isEmpty()) {
-           List<DocumentSnapshot> result = queryResult.getDocuments();
-
-           return result.get(0).toObject(entityClass);
+           return queryResult.getDocuments().get(0).toObject(entityClass);
        } else {
-           throw new IllegalAccessException("The desired list is empty");
+           throw new IllegalAccessException("Entity not found in the database");
        }
     }
 

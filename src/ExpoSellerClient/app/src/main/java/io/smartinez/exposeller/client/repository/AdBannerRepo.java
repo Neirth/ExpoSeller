@@ -1,7 +1,5 @@
 package io.smartinez.exposeller.client.repository;
 
-import android.util.Log;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;

@@ -82,8 +82,8 @@ public class PassbookTicketGeneratorImpl implements ITicketGenerator {
 
             // Prepare the signer
             PassSigner signer = PassSignerImpl.builder()
-                                              .keystore(new FileInputStream("assets/Certificates.p12"), null)
-                                              .intermediateCertificate(new FileInputStream("assets/AppleWWDRCA.cer"))
+                                              .keystore(new FileInputStream("certificates/Certificates.p12"), null)
+                                              .intermediateCertificate(new FileInputStream("certificates/AppleWWDRCA.cer"))
                                               .build();
 
             // Get the reference to file
