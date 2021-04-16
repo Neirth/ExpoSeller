@@ -13,7 +13,6 @@ import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
 @Module
 @InstallIn(ActivityComponent.class)
-
 public abstract class ExpoSellerBindings {
     @Binds
     public abstract ITicketGenerator ticketGenerator(PassbookTicketGeneratorImpl passbookTicketGenerator);
