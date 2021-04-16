@@ -11,12 +11,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.scopes.ActivityScoped;
 import io.smartinez.exposeller.client.domain.IModel;
 
 @ActivityScoped
 public class FirebaseDataSourceImpl implements IDataSource {
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
+
+    @Inject
+    public FirebaseDataSourceImpl() {
+    }
 
     @Override
     public void insert(IModel entityObj) {

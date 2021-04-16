@@ -9,7 +9,6 @@ import java.net.URI;
 
 public class Utilities {
     public static Application getApplicationUsingReflection() throws Exception {
-        return (Application) Class.forName("android.app.ActivityThread")
-                .getMethod("currentApplication").invoke(null, (Object[]) null);
+        return (Application) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null, (Object[]) null);
     }
 }

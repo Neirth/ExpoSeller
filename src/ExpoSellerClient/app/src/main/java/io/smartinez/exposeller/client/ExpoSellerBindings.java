@@ -8,6 +8,8 @@ import io.smartinez.exposeller.client.peripherals.insertcoins.ButtonInsertCoinsI
 import io.smartinez.exposeller.client.peripherals.insertcoins.IInsertCoins;
 import io.smartinez.exposeller.client.peripherals.ticketgenerator.ITicketGenerator;
 import io.smartinez.exposeller.client.peripherals.ticketgenerator.PassbookTicketGeneratorImpl;
+import io.smartinez.exposeller.client.repository.datasource.FirebaseDataSourceImpl;
+import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
 @Module
 @InstallIn(ActivityComponent.class)
@@ -18,4 +20,7 @@ public abstract class ExpoSellerBindings {
 
     @Binds
     public abstract IInsertCoins insertCoins(ButtonInsertCoinsImpl buttonInsertCoins);
+
+    @Binds
+    public abstract IDataSource dataSource(FirebaseDataSourceImpl firebaseDataSource);
 }

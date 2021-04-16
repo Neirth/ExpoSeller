@@ -29,7 +29,6 @@ import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.domain.Ticket;
 import io.smartinez.exposeller.client.repository.ConcertRepo;
-import io.smartinez.exposeller.client.repository.IRepository;
 import io.smartinez.exposeller.client.util.Utilities;
 
 @ActivityScoped
