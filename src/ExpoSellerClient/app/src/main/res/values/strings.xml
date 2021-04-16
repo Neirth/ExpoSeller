@@ -15,4 +15,7 @@
     <string name="concert_value">Importe estimado: %s</string>
     <string name="concert_choice">Concierto escogido: %s</string>
     <string name="insert_import_value_title">Introduzca el importe estimado</string>
+    <string name="pickup_ticket">Recoja su entrada</string>
+    <string name="pickup_ticket_text1">¡Felicidades, su entrada ya está disponible!</string>
+    <string name="pickup_ticket_text2">Escanea el código QR con tu aplicación de Apple Wallet® o compatibles.</string>
 </resources>

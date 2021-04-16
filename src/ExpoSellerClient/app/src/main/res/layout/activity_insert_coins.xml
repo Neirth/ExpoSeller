@@ -6,7 +6,8 @@
         android:layout_height="match_parent"
         tools:context=".ui.insertcoins.InsertCoinsActivity"
         android:orientation="horizontal"
-        android:background="@drawable/activity_background">
+        android:background="@drawable/activity_background"
+        android:id="@+id/clInsertCoins">
 
     <ImageView
             android:layout_width="128dp"
@@ -16,9 +17,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivExpoSellerLogo3"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintBottom_toTopOf="@+id/tvInsertCoins"
-            android:layout_marginBottom="64dp" />
+            android:layout_marginTop="32dp" />
 
     <ImageView
             android:layout_width="96dp"
@@ -34,12 +33,12 @@
             android:text="@string/insert_import_value_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
+            android:id="@+id/tvInsertImportValue"
             app:layout_constraintStart_toEndOf="@+id/ivExpoSellerLogo3"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="56dp"
             android:layout_marginStart="16dp"
-            android:fontFamily="sans-serif-light" />
+            android:fontFamily="sans-serif-medium" />
 
     <TextView
             android:text="@string/concert_choice"
@@ -48,7 +47,8 @@
             android:id="@+id/tvConcertChoice"
             app:layout_constraintStart_toEndOf="@+id/ivInsertCoins"
             android:layout_marginStart="32dp"
-            app:layout_constraintTop_toTopOf="@+id/ivInsertCoins" />
+            app:layout_constraintTop_toTopOf="@+id/ivInsertCoins"
+            android:fontFamily="sans-serif-medium" />
 
     <TextView
             android:text="@string/concert_value"
@@ -59,7 +59,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvConcertChoice"
             app:layout_constraintStart_toEndOf="@+id/ivInsertCoins"
             android:layout_marginStart="32dp"
-            android:fontFamily="sans-serif-light" />
+            android:fontFamily="sans-serif-thin" />
 
     <TextView
             android:text="@string/inserted_value"
@@ -70,7 +70,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvConcertValue"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif-light" />
+            android:fontFamily="sans-serif-thin" />
 
     <TextView
             android:text="@string/return_value"
@@ -83,7 +83,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/ivInsertCoins"
             tools:visibility="invisible"
-            android:fontFamily="sans-serif-light" />
+            android:fontFamily="sans-serif-thin" />
 
     <TextView
             android:text="@string/insert_coins"
@@ -106,5 +106,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="sans-serif-light" />
+            android:fontFamily="sans-serif-thin" />
 </androidx.constraintlayout.widget.ConstraintLayout>

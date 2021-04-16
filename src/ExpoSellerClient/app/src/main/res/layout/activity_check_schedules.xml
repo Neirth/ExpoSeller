@@ -6,7 +6,8 @@
         android:layout_height="match_parent"
         tools:context=".ui.checkschedules.CheckSchedulesActivity"
         android:background="@drawable/activity_background"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/clCheckSchedules">
 
     <androidx.constraintlayout.widget.Guideline
             android:layout_width="wrap_content"
@@ -54,7 +55,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toTopOf="@+id/glHorizontalSeparator"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="sans-serif-medium"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
@@ -75,7 +76,7 @@
             android:layout_marginBottom="8dp"
             android:textColor="@color/white"
             android:background="@drawable/component_background"
-            android:fontFamily="sans-serif-light" />
+            android:fontFamily="sans-serif-thin" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"

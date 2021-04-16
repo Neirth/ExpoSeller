@@ -38,7 +38,8 @@
                 card_view:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif-medium" />
 
         <TextView
                 android:text="{{artist_name}}"
@@ -50,7 +51,7 @@
                 android:layout_marginTop="8dp"
                 card_view:layout_constraintTop_toBottomOf="@+id/tvConcertName"
                 android:textColor="@color/white"
-                android:fontFamily="sans-serif-light" />
+                android:fontFamily="sans-serif-thin" />
 
         <TextView
                 android:text="{{price_name}}"
@@ -64,6 +65,6 @@
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="8dp"
                 android:textColor="@color/white"
-                android:fontFamily="sans-serif-light" />
+                android:fontFamily="sans-serif-thin" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

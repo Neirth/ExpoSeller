@@ -6,7 +6,8 @@
         android:layout_height="match_parent"
         android:background="@drawable/activity_background"
         tools:context=".ui.mainscreen.MainScreenActivity"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/clMainScreen">
 
     <Button
             android:text="@string/check_dates"
@@ -15,7 +16,7 @@
             android:layout_height="69dp"
             android:id="@+id/btnCheckSchedules"
             android:background="@drawable/component_background"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="sans-serif-thin"
             app:layout_constraintStart_toEndOf="@+id/btnBuyTickets"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +30,7 @@
             android:layout_height="69dp"
             android:id="@+id/btnBuyTickets"
             android:background="@drawable/component_background"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="sans-serif-thin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/btnCheckSchedules"
