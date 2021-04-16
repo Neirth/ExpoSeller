@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">ExpoSeller Client</string>
-    <string name="terms_and_conditions_name"></string>
-    <string name="terms_and_conditions_desc"></string>
-    <string name="event_name" />
-    <string name="artist_name" />
-    <string name="event_date" />
+    <string name="terms_and_conditions_name">Terminos y condiciones</string>
+    <string name="terms_and_conditions_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices justo eget diam tincidunt, a finibus turpis blandit. Nunc accumsan nec mauris non tempor. Suspendisse potenti. Nunc facilisis sagittis urna ac efficitur. Duis posuere est nunc, a consectetur tellus mattis euismod. Pellentesque commodo metus sit amet metus lacinia, a condimentum lorem sodales. Cras suscipit vel felis eu blandit. Nulla luctus suscipit ex quis mollis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lorem justo, pharetra ac ipsum eget, egestas bibendum eros. Quisque elementum, dolor eu rhoncus tincidunt, ipsum tellus semper est, eget luctus mauris nunc non libero. Donec id dolor ipsum. Vivamus ut nisl velit. Sed fermentum pretium purus, porta ultricies massa lobortis in. Interdum et malesuada fames ac ante ipsum primis in faucibus. Suspendisse cursus erat accumsan nulla euismod faucibus.</string>
+    <string name="event_name">Concierto</string>
+    <string name="artist_name">Artista</string>
+    <string name="event_date">Fecha del evento</string>
     <string name="check_dates">Consultar horarios</string>
     <string name="buy_tickets">Comprar Entradas</string>
     <string name="cancel_operation">Cancelar Operación</string>

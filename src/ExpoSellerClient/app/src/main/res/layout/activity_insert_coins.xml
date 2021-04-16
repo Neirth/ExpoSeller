@@ -93,7 +93,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="24dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             android:fontFamily="sans-serif-light" />
 
     <Button
