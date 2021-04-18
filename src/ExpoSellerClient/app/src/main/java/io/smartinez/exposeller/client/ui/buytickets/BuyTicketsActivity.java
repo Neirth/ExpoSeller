@@ -1,32 +1,34 @@
 package io.smartinez.exposeller.client.ui.buytickets;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import io.smartinez.exposeller.client.R;
 
-/**
- * Skeleton of an Android Things activity.
- * <p>
- * Android Things peripheral APIs are accessible through the PeripheralManager
- * For example, the snippet below will open a GPIO pin and set it to HIGH:
- * <p>
- * PeripheralManager manager = PeripheralManager.getInstance();
- * try {
- * Gpio gpio = manager.openGpio("BCM6");
- * gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
- * gpio.setValue(true);
- * } catch (IOException e) {
- * Log.e(TAG, "Unable to access GPIO");
- * }
- * <p>
- * You can find additional examples on GitHub: https://github.com/androidthings
- */
 public class BuyTicketsActivity extends AppCompatActivity {
+
+    private ConstraintLayout mClBuyTickets;
+    private TextView mTvInsertImportValue2;
+    private ImageView mIvExpoSellerLogo5;
+    private RecyclerView mRvBuyTickets;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_tickets);
+
+        initView();
+    }
+
+    public void initView() {
+        mClBuyTickets = findViewById(R.id.clBuyTickets);
+        mTvInsertImportValue2 = findViewById(R.id.tvInsertImportValue2);
+        mIvExpoSellerLogo5 = findViewById(R.id.ivExpoSellerLogo5);
+        mRvBuyTickets = findViewById(R.id.rvBuyTickets);
     }
 }

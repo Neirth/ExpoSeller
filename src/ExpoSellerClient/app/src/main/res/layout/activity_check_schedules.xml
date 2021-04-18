@@ -24,7 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/glVerticalSeparator"
             android:layout_marginBottom="8dp"
-            android:id="@+id/rvConcertList1"
+            android:id="@+id/rvConcertList"
             tools:listitem="@layout/item_calendar_schedules"
             android:layout_marginEnd="16dp" />
 

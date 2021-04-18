@@ -4,7 +4,7 @@
                  android:name=".ExpoSellerApplication">
         <uses-library android:name="com.google.android.things" />
 
-        <activity android:name=".ui.checkschedules.CheckSchedulesActivity"
+        <activity android:name=".ui.mainscreen.MainScreenActivity"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:screenOrientation="landscape">
             <intent-filter>
@@ -21,7 +21,7 @@
         <activity android:name=".ui.insertcoins.InsertCoinsActivity"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:screenOrientation="landscape" />
-        <activity android:name=".ui.mainscreen.MainScreenActivity"
+        <activity android:name=".ui.checkschedules.CheckSchedulesActivity"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:screenOrientation="landscape" />
         <activity android:name=".ui.buytickets.BuyTicketsActivity"

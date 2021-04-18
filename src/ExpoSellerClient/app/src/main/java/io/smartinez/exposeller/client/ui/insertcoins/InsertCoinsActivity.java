@@ -1,32 +1,45 @@
 package io.smartinez.exposeller.client.ui.insertcoins;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import io.smartinez.exposeller.client.R;
 
-/**
- * Skeleton of an Android Things activity.
- * <p>
- * Android Things peripheral APIs are accessible through the PeripheralManager
- * For example, the snippet below will open a GPIO pin and set it to HIGH:
- * <p>
- * PeripheralManager manager = PeripheralManager.getInstance();
- * try {
- * Gpio gpio = manager.openGpio("BCM6");
- * gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
- * gpio.setValue(true);
- * } catch (IOException e) {
- * Log.e(TAG, "Unable to access GPIO");
- * }
- * <p>
- * You can find additional examples on GitHub: https://github.com/androidthings
- */
 public class InsertCoinsActivity extends AppCompatActivity {
+
+    private ConstraintLayout mClInsertCoins;
+    private ImageView mIvInsertCoins;
+    private ImageView mIvExpoSellerLogo3;
+    private TextView mTvInsertImportValue;
+    private TextView mTvConcertChoice;
+    private TextView mTvConcertValue;
+    private TextView mTvInsertedValue;
+    private TextView mTvReturnValue;
+    private TextView mTvInsertCoins;
+    private Button mBtnCancelOperation2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_coins);
+
+        initView();
+    }
+
+    public void initView() {
+        mClInsertCoins = findViewById(R.id.clInsertCoins);
+        mIvInsertCoins = findViewById(R.id.ivInsertCoins);
+        mTvInsertImportValue = findViewById(R.id.tvInsertImportValue);
+        mTvConcertChoice = findViewById(R.id.tvConcertChoice);
+        mTvConcertValue = findViewById(R.id.tvConcertValue);
+        mTvInsertedValue = findViewById(R.id.tvInsertedValue);
+        mTvReturnValue = findViewById(R.id.tvReturnValue);
+        mTvInsertCoins = findViewById(R.id.tvInsertCoins);
+        mBtnCancelOperation2 = findViewById(R.id.btnCancelOperation2);
     }
 }
