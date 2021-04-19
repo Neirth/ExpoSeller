@@ -8,7 +8,7 @@
     <string name="check_dates">Consultar horarios</string>
     <string name="buy_tickets">Comprar Entradas</string>
     <string name="cancel_operation">Cancelar Operación</string>
-    <string name="check_schedules">Conciertos en el mes de %s de %s</string>
+    <string name="check_schedules">Conciertos en el mes de %s de %d</string>
     <string name="insert_coins">Introduzca el importe estimado en monedas</string>
     <string name="return_value">Cantidad a devolver: %s</string>
     <string name="inserted_value">Importe introducido: %s</string>

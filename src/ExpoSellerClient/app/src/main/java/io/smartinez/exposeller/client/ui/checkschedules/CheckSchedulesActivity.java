@@ -12,6 +12,16 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.Month;
+import java.time.Year;
+import java.time.format.TextStyle;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
 import io.smartinez.exposeller.client.util.TimeoutIdle;
@@ -59,6 +69,20 @@ public class CheckSchedulesActivity extends AppCompatActivity {
         mCvCalendar = findViewById(R.id.cvCalendar);
 
         mBtnCancelOperation1.setOnClickListener(v -> CheckSchedulesActivity.this.onBackPressed());
+
+        mCvCalendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            String monthStr = Month.of(month + 1).getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).toLowerCase();
+
+            mTvTitlePickup.setText(String.format(getString(R.string.check_schedules), monthStr, year));
+        });
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        String monthStr = Month.of(calendar.get(Calendar.MONTH) + 1).getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).toLowerCase();
+        Integer yearInt = calendar.get(Calendar.YEAR);
+
+        mTvTitlePickup.setText(String.format(getString(R.string.check_schedules), monthStr, yearInt));
     }
 
     @Override
