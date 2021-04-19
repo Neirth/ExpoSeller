@@ -78,13 +78,15 @@ public class UserService {
         List<AdBanner> adBanners = mAdBannerRepo.getNotBeforeDate(new Date());
         List<AdBanner> randomAdBanners = Collections.emptyList();
 
-        Collections.shuffle(adBanners);
+        if (!adBanners.isEmpty()) {
+            Collections.shuffle(adBanners);
 
-        for (int i = 0; i < 5; i++) {
-            int randomIndex = randomGen.nextInt(adBanners.size());
+            for (int i = 0; i < 5; i++) {
+                int randomIndex = randomGen.nextInt(adBanners.size());
 
-            randomAdBanners.add(adBanners.get(randomIndex));
-            adBanners.remove(randomIndex);
+                randomAdBanners.add(adBanners.get(randomIndex));
+                adBanners.remove(randomIndex);
+            }
         }
 
         return randomAdBanners;
