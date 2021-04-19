@@ -22,7 +22,7 @@ import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.util.runnable.OnAdapterClickListener;
 
 public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConcertAdapter.BuyTicketConcertViewHolder> {
-    private List<Concert> mConcertsList;
+    private List<Concert> mConcertList;
     private OnAdapterClickListener mOnAdapterClickListener;
     private Context mContext;
 
@@ -36,10 +36,10 @@ public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConce
 
     @Override
     public void onBindViewHolder(@NonNull BuyTicketConcertViewHolder holder, int position) {
-        if (mConcertsList != null) {
-            Concert concert = mConcertsList.get(position);
+        if (mConcertList != null) {
+            Concert concert = mConcertList.get(position);
 
-            Glide.with(mContext).load(concert.getPhotoConcert()).into(holder.mTvPhotoArtist);
+            Glide.with(mContext).load(concert.getPhotoConcert()).into(holder.mIvPhotoArtist2);
 
             holder.mTvConcertName2.setText(concert.getName());
             holder.mTvArtistName2.setText(concert.getArtistName());
@@ -51,12 +51,12 @@ public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConce
         }
     }
 
-    public List<Concert> getConcertsList() {
-        return mConcertsList;
+    public List<Concert> getConcertList() {
+        return mConcertList;
     }
 
-    public void setConcertsList(List<Concert> concertsList) {
-        this.mConcertsList = concertsList;
+    public void setConcertList(List<Concert> concertsList) {
+        this.mConcertList = concertsList;
     }
 
     public OnAdapterClickListener getAdapterClickListener() {
@@ -69,13 +69,13 @@ public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConce
 
     @Override
     public int getItemCount() {
-        return mConcertsList != null ? mConcertsList.size() : 0;
+        return mConcertList != null ? mConcertList.size() : 0;
     }
 
     public class BuyTicketConcertViewHolder extends RecyclerView.ViewHolder {
         private CardView mCvConcertCalendar;
         private ConstraintLayout mClConcertCalendar;
-        private ImageView mTvPhotoArtist;
+        private ImageView mIvPhotoArtist2;
         private TextView mTvArtistName2;
         private TextView mTvConcertDate2;
         private TextView mTvConcertValue2;
@@ -88,13 +88,13 @@ public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConce
             super(itemView);
 
             initHolder();
-            itemView.setOnClickListener(v -> mOnAdapterClickListener.onAdapaterClickListener(mConcertsList.get(getBindingAdapterPosition())));
+            itemView.setOnClickListener(v -> mOnAdapterClickListener.onAdapaterClickListener(mConcertList.get(getBindingAdapterPosition())));
         }
 
         public void initHolder() {
             mCvConcertCalendar = itemView.findViewById(R.id.cvConcertCalendar);
             mClConcertCalendar = itemView.findViewById(R.id.clConcertCalendar);
-            mTvPhotoArtist = itemView.findViewById(R.id.tvPhotoArtist);
+            mIvPhotoArtist2 = itemView.findViewById(R.id.ivPhotoArtist2);
             mTvArtistName2 = itemView.findViewById(R.id.tvArtistName2);
             mTvConcertDate2 = itemView.findViewById(R.id.tvConcertDate2);
             mTvConcertValue2 = itemView.findViewById(R.id.tvConcertValue2);

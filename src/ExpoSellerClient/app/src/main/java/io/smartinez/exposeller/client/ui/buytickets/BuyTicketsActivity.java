@@ -58,6 +58,8 @@ public class BuyTicketsActivity extends AppCompatActivity {
                 intent.putExtra(InsertCoinsActivity.EXTRA_CONCERT, concert);
 
                 startActivity(intent);
+
+                finish();
             }
         });
 

@@ -19,7 +19,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import io.smartinez.exposeller.client.R;
+import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.ui.checkschedules.adapter.CheckSchedulesAdapter;
+import io.smartinez.exposeller.client.ui.insertcoins.InsertCoinsActivity;
 import io.smartinez.exposeller.client.util.TimeoutIdle;
 
 public class CheckSchedulesActivity extends AppCompatActivity {
@@ -34,6 +37,7 @@ public class CheckSchedulesActivity extends AppCompatActivity {
     private ConstraintLayout mClCalendar;
     private CalendarView mCvCalendar;
 
+    private CheckSchedulesAdapter mConcertScheduleAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +83,22 @@ public class CheckSchedulesActivity extends AppCompatActivity {
         Integer yearInt = calendar.get(Calendar.YEAR);
 
         mTvTitleCheckSchedules.setText(String.format(getString(R.string.check_schedules), monthStr, yearInt));
+
+        mConcertScheduleAdapter = new CheckSchedulesAdapter();
+        mConcertScheduleAdapter.setOnAdapterClickListener(model -> {
+            if (model instanceof Concert) {
+                Concert concert = (Concert) model;
+
+                Intent intent = new Intent(CheckSchedulesActivity.this, InsertCoinsActivity.class);
+                intent.putExtra(InsertCoinsActivity.EXTRA_CONCERT, concert);
+
+                startActivity(intent);
+
+                finish();
+            }
+        });
+
+        mRvConcertList.setAdapter(mConcertScheduleAdapter);
     }
 
     @Override
