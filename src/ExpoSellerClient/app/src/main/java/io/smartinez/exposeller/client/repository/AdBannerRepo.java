@@ -5,12 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import dagger.hilt.android.scopes.ActivityScoped;
+import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.domain.AdBanner;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
-@ActivityScoped
+@ViewModelScoped
 public class AdBannerRepo implements IRepository<AdBanner> {
     private IDataSource mDataSource;
 

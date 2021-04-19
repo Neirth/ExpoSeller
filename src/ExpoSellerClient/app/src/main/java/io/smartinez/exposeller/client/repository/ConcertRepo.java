@@ -3,14 +3,16 @@ package io.smartinez.exposeller.client.repository;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import dagger.hilt.android.scopes.ActivityScoped;
+import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
-@ActivityScoped
+@ViewModelScoped
 public class ConcertRepo implements IRepository<Concert> {
     private IDataSource mDataSource;
 
@@ -36,7 +38,7 @@ public class ConcertRepo implements IRepository<Concert> {
 
     @Override
     public List<Concert> getBySpecificDate(Date dateConcerts) {
-        return Arrays.asList((Concert[]) mDataSource.getBySpecificDate(dateConcerts, Concert.class).toArray());
+        return mDataSource.getBySpecificDate(dateConcerts, Concert.class).stream().map(Concert.class::cast).collect(Collectors.toList());
     }
 
     @Override
@@ -50,6 +52,6 @@ public class ConcertRepo implements IRepository<Concert> {
     }
 
     public List<Concert> getNotBeforeDate(Date nowDate) {
-        return Arrays.asList((Concert[]) mDataSource.getNotBeforeDate(nowDate, Concert.class).toArray());
+        return mDataSource.getNotBeforeDate(nowDate, Concert.class).stream().map(Concert.class::cast).collect(Collectors.toList());
     }
 }

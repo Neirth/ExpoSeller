@@ -23,6 +23,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btnCancelOperation1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/glVerticalSeparator"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginBottom="8dp"
             android:id="@+id/rvConcertList"
             tools:listitem="@layout/item_calendar_schedules"

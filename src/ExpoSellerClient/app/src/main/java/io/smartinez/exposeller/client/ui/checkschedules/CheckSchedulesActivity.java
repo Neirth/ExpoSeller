@@ -3,6 +3,7 @@ package io.smartinez.exposeller.client.ui.checkschedules;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -18,13 +19,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
 import io.smartinez.exposeller.client.ui.checkschedules.adapter.CheckSchedulesAdapter;
 import io.smartinez.exposeller.client.ui.insertcoins.InsertCoinsActivity;
-import io.smartinez.exposeller.client.util.TimeoutIdle;
+import io.smartinez.exposeller.client.util.TimeOutIdle;
 
+@AndroidEntryPoint
 public class CheckSchedulesActivity extends AppCompatActivity {
 
     private ConstraintLayout mClCheckSchedules;
@@ -38,6 +41,8 @@ public class CheckSchedulesActivity extends AppCompatActivity {
     private CalendarView mCvCalendar;
 
     private CheckSchedulesAdapter mConcertScheduleAdapter;
+    private CheckSchedulesViewModel mConcertScheduleViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +50,7 @@ public class CheckSchedulesActivity extends AppCompatActivity {
 
         initView();
 
-        TimeoutIdle.initIdleHandler(() -> {
+        TimeOutIdle.initIdleHandler(() -> {
             Intent intent = new Intent(CheckSchedulesActivity.this, AdsConcertActivity.class);
             startActivity(intent);
 
@@ -54,7 +59,7 @@ public class CheckSchedulesActivity extends AppCompatActivity {
             finish();
         });
 
-        TimeoutIdle.startIdleHandler();
+        TimeOutIdle.startIdleHandler();
     }
 
     public void initView() {
@@ -69,20 +74,7 @@ public class CheckSchedulesActivity extends AppCompatActivity {
         mCvCalendar = findViewById(R.id.cvCalendar);
 
         mBtnCancelOperation1.setOnClickListener(v -> CheckSchedulesActivity.this.onBackPressed());
-
-        mCvCalendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            String monthStr = Month.of(month + 1).getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).toLowerCase();
-
-            mTvTitleCheckSchedules.setText(String.format(getString(R.string.check_schedules), monthStr, year));
-        });
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-
-        String monthStr = Month.of(calendar.get(Calendar.MONTH) + 1).getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).toLowerCase();
-        Integer yearInt = calendar.get(Calendar.YEAR);
-
-        mTvTitleCheckSchedules.setText(String.format(getString(R.string.check_schedules), monthStr, yearInt));
+        mConcertScheduleViewModel = new ViewModelProvider(this).get(CheckSchedulesViewModel.class);
 
         mConcertScheduleAdapter = new CheckSchedulesAdapter();
         mConcertScheduleAdapter.setOnAdapterClickListener(model -> {
@@ -99,6 +91,26 @@ public class CheckSchedulesActivity extends AppCompatActivity {
         });
 
         mRvConcertList.setAdapter(mConcertScheduleAdapter);
+
+        mCvCalendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            String monthStr = Month.of(month + 1).getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).toLowerCase();
+
+            mTvTitleCheckSchedules.setText(String.format(getString(R.string.check_schedules), monthStr, year));
+
+            mConcertScheduleViewModel.searchConcertWithDay(new Date(view.getDate()))
+                                     .observe(this, concerts -> mConcertScheduleAdapter.setConcertList(concerts));
+        });
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        String monthStr = Month.of(calendar.get(Calendar.MONTH) + 1).getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).toLowerCase();
+        Integer yearInt = calendar.get(Calendar.YEAR);
+
+        mTvTitleCheckSchedules.setText(String.format(getString(R.string.check_schedules), monthStr, yearInt));
+
+        mConcertScheduleViewModel.searchConcertWithDay(new Date())
+                                 .observe(this, concerts -> mConcertScheduleAdapter.setConcertList(concerts));
     }
 
     @Override
@@ -112,7 +124,7 @@ public class CheckSchedulesActivity extends AppCompatActivity {
     public void onUserInteraction() {
         super.onUserInteraction();
 
-        TimeoutIdle.stopIdleHandler();
-        TimeoutIdle.startIdleHandler();
+        TimeOutIdle.stopIdleHandler();
+        TimeOutIdle.startIdleHandler();
     }
 }

@@ -16,7 +16,7 @@ import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
 import io.smartinez.exposeller.client.ui.buytickets.BuyTicketsActivity;
 import io.smartinez.exposeller.client.ui.checkschedules.CheckSchedulesActivity;
-import io.smartinez.exposeller.client.util.TimeoutIdle;
+import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
 public class MainScreenActivity extends AppCompatActivity {
@@ -35,7 +35,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
         initView();
 
-        TimeoutIdle.initIdleHandler(() -> {
+        TimeOutIdle.initIdleHandler(() -> {
             Intent intent = new Intent(MainScreenActivity.this, AdsConcertActivity.class);
             startActivity(intent);
 
@@ -44,7 +44,7 @@ public class MainScreenActivity extends AppCompatActivity {
             finish();
         });
 
-        TimeoutIdle.startIdleHandler();
+        TimeOutIdle.startIdleHandler();
     }
 
     public void initView() {
@@ -79,7 +79,7 @@ public class MainScreenActivity extends AppCompatActivity {
     public void onUserInteraction() {
         super.onUserInteraction();
 
-        TimeoutIdle.stopIdleHandler();
-        TimeoutIdle.startIdleHandler();
+        TimeOutIdle.stopIdleHandler();
+        TimeOutIdle.startIdleHandler();
     }
 }

@@ -1,12 +1,18 @@
 package io.smartinez.exposeller.client.ui.insertcoins;
 
-import android.app.Application;
+import androidx.lifecycle.ViewModel;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
+import javax.inject.Inject;
 
-public class InsertCoinsViewModel extends AndroidViewModel {
-    public InsertCoinsViewModel(@NonNull Application application) {
-        super(application);
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.smartinez.exposeller.client.service.UserService;
+
+@HiltViewModel
+public class InsertCoinsViewModel extends ViewModel {
+    private UserService mUsersService;
+
+    @Inject
+    public InsertCoinsViewModel(UserService mUsersService) {
+        this.mUsersService = mUsersService;
     }
 }

@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
-import io.smartinez.exposeller.client.util.TimeoutIdle;
+import io.smartinez.exposeller.client.util.TimeOutIdle;
 
+@AndroidEntryPoint
 public class PickupTicketActivity extends AppCompatActivity {
 
     private ConstraintLayout mClPickupTicket;
@@ -29,7 +31,7 @@ public class PickupTicketActivity extends AppCompatActivity {
 
         initView();
 
-        TimeoutIdle.initIdleHandler(() -> {
+        TimeOutIdle.initIdleHandler(() -> {
             Intent intent = new Intent(PickupTicketActivity.this, AdsConcertActivity.class);
             startActivity(intent);
 
@@ -38,7 +40,7 @@ public class PickupTicketActivity extends AppCompatActivity {
             finish();
         });
 
-        TimeoutIdle.startIdleHandler();
+        TimeOutIdle.startIdleHandler();
     }
 
     public void initView() {
@@ -61,7 +63,7 @@ public class PickupTicketActivity extends AppCompatActivity {
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        TimeoutIdle.startIdleHandler();
-        TimeoutIdle.stopIdleHandler();
+        TimeOutIdle.startIdleHandler();
+        TimeOutIdle.stopIdleHandler();
     }
 }

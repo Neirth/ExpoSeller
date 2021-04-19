@@ -1,5 +1,6 @@
 package io.smartinez.exposeller.client.repository.datasource;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -13,11 +14,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import dagger.hilt.android.scopes.ActivityScoped;
+import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.domain.IModel;
 
-@ActivityScoped
+@ViewModelScoped
 public class FirebaseDataSourceImpl implements IDataSource {
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
 
@@ -38,11 +40,15 @@ public class FirebaseDataSourceImpl implements IDataSource {
     public List<IModel> getBySpecificDate(Date date, Class<? extends IModel> entityClass) {
         Query queryDate = mDb.collection(entityClass.getSimpleName()).whereEqualTo("eventDate", date);
 
-        QuerySnapshot queryResult = queryDate.get().getResult();
+        Task<QuerySnapshot> querySnapshotTask = queryDate.get();
+
+        while (!querySnapshotTask.isSuccessful());
+
+        QuerySnapshot queryResult = querySnapshotTask.getResult();
 
         List<DocumentSnapshot> result;
 
-        if (queryResult != null && !queryResult.isEmpty()) {
+        if (queryResult != null && !queryResult .isEmpty()) {
             result = queryResult.getDocuments();
         } else {
             result = Collections.emptyList();
@@ -55,7 +61,11 @@ public class FirebaseDataSourceImpl implements IDataSource {
     public List<IModel> getNotBeforeDate(Date date, Class<? extends IModel> entityClass) {
         Query queryDate = mDb.collection(entityClass.getSimpleName()).whereGreaterThan("eventDate", date);
 
-        QuerySnapshot queryResult = queryDate.get().getResult();
+        Task<QuerySnapshot> querySnapshotTask = queryDate.get();
+
+        while (!querySnapshotTask.isSuccessful() && querySnapshotTask.getException() == null);
+
+        QuerySnapshot queryResult = querySnapshotTask.getResult();
 
         List<DocumentSnapshot> result;
 
@@ -85,7 +95,11 @@ public class FirebaseDataSourceImpl implements IDataSource {
     public IModel getByFriendlyId(String friendlyId, Class<? extends IModel> entityClass) throws IllegalAccessException {
        Query queryFriendlyId = mDb.collection(entityClass.getSimpleName()).whereEqualTo("friendlyId", friendlyId);
 
-       QuerySnapshot queryResult = queryFriendlyId.get().getResult();
+        Task<QuerySnapshot> querySnapshotTask = queryFriendlyId.get();
+
+        while (!querySnapshotTask.isSuccessful());
+
+        QuerySnapshot queryResult = querySnapshotTask.getResult();
 
        if (queryResult != null && !queryResult.isEmpty()) {
            return queryResult.getDocuments().get(0).toObject(entityClass);

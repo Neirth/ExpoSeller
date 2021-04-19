@@ -65,6 +65,8 @@ public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConce
 
     public void setAdapterClickListener(OnAdapterClickListener mOnAdapterClickListener) {
         this.mOnAdapterClickListener = mOnAdapterClickListener;
+
+        notifyDataSetChanged();
     }
 
     @Override

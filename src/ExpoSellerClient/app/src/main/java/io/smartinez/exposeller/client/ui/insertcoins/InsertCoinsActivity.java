@@ -9,10 +9,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
-import io.smartinez.exposeller.client.util.TimeoutIdle;
+import io.smartinez.exposeller.client.util.TimeOutIdle;
 
+@AndroidEntryPoint
 public class InsertCoinsActivity extends AppCompatActivity {
     public static final String EXTRA_CONCERT = "io.smartinez.exposeller.client.ui.insertcoins.concertData";
 
@@ -34,7 +36,7 @@ public class InsertCoinsActivity extends AppCompatActivity {
 
         initView();
 
-        TimeoutIdle.initIdleHandler(() -> {
+        TimeOutIdle.initIdleHandler(() -> {
             Intent intent = new Intent(InsertCoinsActivity.this, AdsConcertActivity.class);
             startActivity(intent);
 
@@ -43,7 +45,7 @@ public class InsertCoinsActivity extends AppCompatActivity {
             finish();
         });
 
-        TimeoutIdle.startIdleHandler();
+        TimeOutIdle.startIdleHandler();
     }
 
     public void initView() {
@@ -71,7 +73,7 @@ public class InsertCoinsActivity extends AppCompatActivity {
     public void onUserInteraction() {
         super.onUserInteraction();
 
-        TimeoutIdle.stopIdleHandler();
-        TimeoutIdle.startIdleHandler();
+        TimeOutIdle.stopIdleHandler();
+        TimeOutIdle.startIdleHandler();
     }
 }

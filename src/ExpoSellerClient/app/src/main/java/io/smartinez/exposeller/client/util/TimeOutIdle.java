@@ -2,7 +2,7 @@ package io.smartinez.exposeller.client.util;
 
 import android.os.Handler;
 
-public class TimeoutIdle {
+public class TimeOutIdle {
     private static Handler mHandler;
     private static Runnable mIdleRunnable;
 
@@ -10,7 +10,7 @@ public class TimeoutIdle {
         if (mHandler == null && mIdleRunnable == null) {
             mHandler = new Handler();
         } else {
-            TimeoutIdle.stopIdleHandler();
+            TimeOutIdle.stopIdleHandler();
         }
 
         mIdleRunnable = runnable;

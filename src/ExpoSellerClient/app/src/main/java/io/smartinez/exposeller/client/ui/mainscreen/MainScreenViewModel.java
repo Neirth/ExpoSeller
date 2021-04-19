@@ -1,12 +1,18 @@
 package io.smartinez.exposeller.client.ui.mainscreen;
 
-import android.app.Application;
+import androidx.lifecycle.ViewModel;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
+import javax.inject.Inject;
 
-public class MainScreenViewModel extends AndroidViewModel {
-    public MainScreenViewModel(@NonNull Application application) {
-        super(application);
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.smartinez.exposeller.client.service.UserService;
+
+@HiltViewModel
+public class MainScreenViewModel extends ViewModel {
+    private UserService mUsersService;
+
+    @Inject
+    public MainScreenViewModel(UserService mUsersService) {
+        this.mUsersService = mUsersService;
     }
 }

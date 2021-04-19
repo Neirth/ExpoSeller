@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.mainscreen.MainScreenActivity;
 
+@AndroidEntryPoint
 public class AdsConcertActivity extends AppCompatActivity {
 
     private ConstraintLayout mClAdsConcert;

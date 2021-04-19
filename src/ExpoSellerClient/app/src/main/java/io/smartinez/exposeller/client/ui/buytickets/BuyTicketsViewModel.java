@@ -1,12 +1,20 @@
 package io.smartinez.exposeller.client.ui.buytickets;
 
-import android.app.Application;
+import androidx.lifecycle.ViewModel;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
+import javax.inject.Inject;
 
-public class BuyTicketsViewModel extends AndroidViewModel {
-    public BuyTicketsViewModel(@NonNull Application application) {
-        super(application);
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.smartinez.exposeller.client.service.UserService;
+
+@HiltViewModel
+public class BuyTicketsViewModel extends ViewModel {
+    private UserService mUsersService;
+
+    @Inject
+    public BuyTicketsViewModel(UserService mUsersService) {
+        this.mUsersService = mUsersService;
     }
+
+    
 }

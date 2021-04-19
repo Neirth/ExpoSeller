@@ -9,13 +9,15 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
 import io.smartinez.exposeller.client.ui.buytickets.adapter.BuyTicketConcertAdapter;
 import io.smartinez.exposeller.client.ui.insertcoins.InsertCoinsActivity;
-import io.smartinez.exposeller.client.util.TimeoutIdle;
+import io.smartinez.exposeller.client.util.TimeOutIdle;
 
+@AndroidEntryPoint
 public class BuyTicketsActivity extends AppCompatActivity {
     private ConstraintLayout mClBuyTickets;
     private TextView mTvInsertImportValue2;
@@ -31,7 +33,7 @@ public class BuyTicketsActivity extends AppCompatActivity {
 
         initView();
 
-        TimeoutIdle.initIdleHandler(() -> {
+        TimeOutIdle.initIdleHandler(() -> {
             Intent intent = new Intent(BuyTicketsActivity.this, AdsConcertActivity.class);
             startActivity(intent);
 
@@ -40,7 +42,7 @@ public class BuyTicketsActivity extends AppCompatActivity {
             finish();
         });
 
-        TimeoutIdle.startIdleHandler();
+        TimeOutIdle.startIdleHandler();
     }
 
     public void initView() {
@@ -77,7 +79,7 @@ public class BuyTicketsActivity extends AppCompatActivity {
     public void onUserInteraction() {
         super.onUserInteraction();
 
-        TimeoutIdle.stopIdleHandler();
-        TimeoutIdle.startIdleHandler();
+        TimeOutIdle.stopIdleHandler();
+        TimeOutIdle.startIdleHandler();
     }
 }

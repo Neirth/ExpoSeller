@@ -64,6 +64,8 @@ public class CheckSchedulesAdapter extends RecyclerView.Adapter<CheckSchedulesAd
 
     public void setOnAdapterClickListener(OnAdapterClickListener mOnAdapterClickListener) {
         this.mOnAdapterClickListener = mOnAdapterClickListener;
+
+        notifyDataSetChanged();
     }
 
     public class CheckSchedulesViewHolder extends RecyclerView.ViewHolder {

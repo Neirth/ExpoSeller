@@ -1,12 +1,27 @@
 package io.smartinez.exposeller.client.ui.checkschedules;
 
-import android.app.Application;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
+import java.util.Date;
+import java.util.List;
 
-public class CheckSchedulesViewModel extends AndroidViewModel {
-    public CheckSchedulesViewModel(@NonNull Application application) {
-        super(application);
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.smartinez.exposeller.client.domain.Concert;
+import io.smartinez.exposeller.client.service.UserService;
+
+@HiltViewModel
+public class CheckSchedulesViewModel extends ViewModel {
+    private UserService mUsersService;
+
+    @Inject
+    public CheckSchedulesViewModel(UserService mUsersService) {
+        this.mUsersService = mUsersService;
+    }
+
+    public LiveData<List<Concert>> searchConcertWithDay(Date date) {
+        return mUsersService.searchConcertWithDay(date);
     }
 }

@@ -11,14 +11,15 @@ import com.google.android.things.pio.PeripheralManager;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import dagger.Provides;
-import dagger.hilt.android.scopes.ActivityScoped;
+import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.ExpoSellerApplication;
 
-@ActivityScoped
+@ViewModelScoped
 public class ButtonInsertCoinsImpl implements IInsertCoins {
-    private PeripheralManager mPeripheralManager = PeripheralManager.getInstance();
+//    private PeripheralManager mPeripheralManager = PeripheralManager.getInstance();
+    private PeripheralManager mPeripheralManager = null;
 
     @Inject
     public ButtonInsertCoinsImpl() {
