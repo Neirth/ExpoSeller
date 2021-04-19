@@ -48,4 +48,8 @@ public class AdBannerRepo implements IRepository<AdBanner> {
     public AdBanner getByFriendlyId(String friendlyId) throws IllegalAccessException {
         return (AdBanner) mDataSource.getByFriendlyId(friendlyId, AdBanner.class);
     }
+
+    public List<AdBanner> getNotBeforeDate(Date nowDate) {
+        return Arrays.asList((AdBanner[]) mDataSource.getNotBeforeDate(nowDate, AdBanner.class).toArray());
+    }
 }

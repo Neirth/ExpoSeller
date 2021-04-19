@@ -48,4 +48,8 @@ public class ConcertRepo implements IRepository<Concert> {
     public Concert getByFriendlyId(String friendlyId) throws IllegalAccessException {
         return (Concert) mDataSource.getByFriendlyId(friendlyId, Concert.class);
     }
+
+    public List<Concert> getNotBeforeDate(Date nowDate) {
+        return Arrays.asList((Concert[]) mDataSource.getNotBeforeDate(nowDate, Concert.class).toArray());
+    }
 }

@@ -52,6 +52,23 @@ public class FirebaseDataSourceImpl implements IDataSource {
     }
 
     @Override
+    public List<IModel> getNotBeforeDate(Date date, Class<? extends IModel> entityClass) {
+        Query queryDate = mDb.collection(entityClass.getSimpleName()).whereGreaterThan("eventDate", date);
+
+        QuerySnapshot queryResult = queryDate.get().getResult();
+
+        List<DocumentSnapshot> result;
+
+        if (queryResult != null && !queryResult.isEmpty()) {
+            result = queryResult.getDocuments();
+        } else {
+            result = Collections.emptyList();
+        }
+
+        return result.stream().map(entityClass::cast).collect(Collectors.toList());
+    }
+
+    @Override
     public IModel getByDocId(String docId, Class<? extends IModel> entityClass) throws IllegalAccessException {
         DocumentReference docRef = mDb.collection(entityClass.getSimpleName()).document(docId);
 
