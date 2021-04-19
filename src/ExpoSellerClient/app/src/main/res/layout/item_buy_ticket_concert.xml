@@ -96,11 +96,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvConcertName2"
-                card_view:layout_constraintStart_toStartOf="@+id/ivPhotoArtist3"
-                android:layout_marginTop="16dp"
-                card_view:layout_constraintTop_toBottomOf="@+id/ivPhotoArtist3"
                 android:textColor="@color/white"
-                android:fontFamily="sans-serif-medium" />
+                android:fontFamily="sans-serif-medium"
+                card_view:layout_constraintTop_toBottomOf="@+id/ivPhotoArtist2"
+                android:layout_marginTop="8dp"
+                card_view:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

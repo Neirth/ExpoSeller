@@ -52,7 +52,7 @@ public class UserService {
         return mInsertCoins.returnExcessAmount(desiredValue, giveValue);
     }
 
-    public void buyTicket(Ticket ticket) throws IOException {
+    public void buyTicket(Ticket ticket, Runnable checkoutComplete) throws IOException {
         threadPool.execute(() -> {
             try {
                 int friendlyId = Utilities.generateRandomFriendlyId();
@@ -79,6 +79,8 @@ public class UserService {
                         mTicketGenerator.generatePhysicalTicket(ticket);
                         break;
                 }
+
+                checkoutComplete.run();
             } catch (IOException e) {
                 Thread currentThread = Thread.currentThread();
                 currentThread.getUncaughtExceptionHandler().uncaughtException(currentThread, e);
@@ -126,5 +128,25 @@ public class UserService {
         threadPool.execute(() -> concertList.setValue(mConcertRepo.getBySpecificDate(date)));
 
         return concertList;
+    }
+
+    public LiveData<Integer> generateFreeTicketFriendlyId() {
+        MutableLiveData<Integer> result = new MutableLiveData<>();
+
+        threadPool.execute(() -> {
+            int friendlyId = 0;
+
+            try {
+                while (true) {
+                    friendlyId = Utilities.generateRandomFriendlyId();
+
+                    mTicketRepo.getByFriendlyId(String.valueOf(friendlyId));
+                }
+            } catch (IllegalAccessException e) {
+                result.setValue(friendlyId);
+            }
+        });
+
+        return result;
     }
 }
