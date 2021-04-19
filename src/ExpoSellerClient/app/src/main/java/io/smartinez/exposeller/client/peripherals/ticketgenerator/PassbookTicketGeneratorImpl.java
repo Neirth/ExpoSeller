@@ -25,6 +25,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import dagger.hilt.android.scopes.ActivityScoped;
+import io.smartinez.exposeller.client.ExpoSellerApplication;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.domain.Ticket;
@@ -104,7 +105,7 @@ public class PassbookTicketGeneratorImpl implements ITicketGenerator {
             // Return the path.
             return ticketCloudUri.getDownloadUrl().getResult().getPath();
         } catch (Exception e) {
-            Log.e("PassbookTicket", "No could generate the ticket");
+            Log.e(ExpoSellerApplication.LOG_TAG, "No could generate the ticket");
             e.printStackTrace();
 
             return null;

@@ -18,4 +18,5 @@
     <string name="pickup_ticket">Recoja su entrada</string>
     <string name="pickup_ticket_text1">¡Felicidades, su entrada ya está disponible!</string>
     <string name="pickup_ticket_text2">Escanea el código QR con tu aplicación de Apple Wallet® o compatibles.</string>
+    <string name="concert_select">Selecciona un concierto</string>
 </resources>

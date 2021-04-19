@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import io.smartinez.exposeller.client.R;
+import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.util.TimeoutIdle;
 
 public class BuyTicketsActivity extends AppCompatActivity {
 
@@ -23,6 +26,17 @@ public class BuyTicketsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_buy_tickets);
 
         initView();
+
+        TimeoutIdle.initIdleHandler(() -> {
+            Intent intent = new Intent(BuyTicketsActivity.this, AdsConcertActivity.class);
+            startActivity(intent);
+
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+            finish();
+        });
+
+        TimeoutIdle.startIdleHandler();
     }
 
     public void initView() {
@@ -30,5 +44,20 @@ public class BuyTicketsActivity extends AppCompatActivity {
         mTvInsertImportValue2 = findViewById(R.id.tvInsertImportValue2);
         mIvExpoSellerLogo5 = findViewById(R.id.ivExpoSellerLogo5);
         mRvBuyTickets = findViewById(R.id.rvBuyTickets);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, android.R.anim.fade_out);
+        finish();
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+
+        TimeoutIdle.stopIdleHandler();
+        TimeoutIdle.startIdleHandler();
     }
 }

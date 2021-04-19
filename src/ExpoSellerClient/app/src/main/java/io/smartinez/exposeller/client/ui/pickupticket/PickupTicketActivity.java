@@ -3,11 +3,14 @@ package io.smartinez.exposeller.client.ui.pickupticket;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import io.smartinez.exposeller.client.R;
+import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.util.TimeoutIdle;
 
 public class PickupTicketActivity extends AppCompatActivity {
 
@@ -25,6 +28,17 @@ public class PickupTicketActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pickup_ticket);
 
         initView();
+
+        TimeoutIdle.initIdleHandler(() -> {
+            Intent intent = new Intent(PickupTicketActivity.this, AdsConcertActivity.class);
+            startActivity(intent);
+
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+            finish();
+        });
+
+        TimeoutIdle.startIdleHandler();
     }
 
     public void initView() {
@@ -35,5 +49,19 @@ public class PickupTicketActivity extends AppCompatActivity {
         mIvQrCode = findViewById(R.id.ivQrCode);
         mTvPickupText1 = findViewById(R.id.tvPickupText1);
         mTvPickupText2 = findViewById(R.id.tvPickupText2);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, android.R.anim.fade_out);
+        finish();
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        TimeoutIdle.startIdleHandler();
+        TimeoutIdle.stopIdleHandler();
     }
 }

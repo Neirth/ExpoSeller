@@ -3,12 +3,15 @@ package io.smartinez.exposeller.client.ui.insertcoins;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import io.smartinez.exposeller.client.R;
+import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.util.TimeoutIdle;
 
 public class InsertCoinsActivity extends AppCompatActivity {
 
@@ -29,6 +32,17 @@ public class InsertCoinsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_insert_coins);
 
         initView();
+
+        TimeoutIdle.initIdleHandler(() -> {
+            Intent intent = new Intent(InsertCoinsActivity.this, AdsConcertActivity.class);
+            startActivity(intent);
+
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+            finish();
+        });
+
+        TimeoutIdle.startIdleHandler();
     }
 
     public void initView() {
@@ -41,5 +55,22 @@ public class InsertCoinsActivity extends AppCompatActivity {
         mTvReturnValue = findViewById(R.id.tvReturnValue);
         mTvInsertCoins = findViewById(R.id.tvInsertCoins);
         mBtnCancelOperation2 = findViewById(R.id.btnCancelOperation2);
+
+        mBtnCancelOperation2.setOnClickListener(v -> InsertCoinsActivity.this.onBackPressed());
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, android.R.anim.fade_out);
+        finish();
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+
+        TimeoutIdle.stopIdleHandler();
+        TimeoutIdle.startIdleHandler();
     }
 }

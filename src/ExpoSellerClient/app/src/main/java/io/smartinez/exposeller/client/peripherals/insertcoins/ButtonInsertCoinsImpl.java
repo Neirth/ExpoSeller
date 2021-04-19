@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import dagger.Provides;
 import dagger.hilt.android.scopes.ActivityScoped;
+import io.smartinez.exposeller.client.ExpoSellerApplication;
 
 @ActivityScoped
 public class ButtonInsertCoinsImpl implements IInsertCoins {
@@ -44,7 +45,7 @@ public class ButtonInsertCoinsImpl implements IInsertCoins {
     }
 
     public boolean returnExcessAmount(float desiredValue, float giveValue) {
-        Log.d("InsertCoins", "I'm a dummy method, checking if giveValue is greater or equal than desired value");
+        Log.d(ExpoSellerApplication.LOG_TAG, "I'm a dummy method, checking if giveValue is greater or equal than desired value");
 
         return giveValue >= desiredValue;
     }

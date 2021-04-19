@@ -26,6 +26,6 @@ public class UserService {
     }
 
     public void pickRandomAdsList() {
-        
+
     }
 }

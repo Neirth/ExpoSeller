@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -12,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import io.smartinez.exposeller.client.R;
+import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.util.TimeoutIdle;
 
 public class CheckSchedulesActivity extends AppCompatActivity {
 
@@ -31,6 +34,17 @@ public class CheckSchedulesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_check_schedules);
 
         initView();
+
+        TimeoutIdle.initIdleHandler(() -> {
+            Intent intent = new Intent(CheckSchedulesActivity.this, AdsConcertActivity.class);
+            startActivity(intent);
+
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+            finish();
+        });
+
+        TimeoutIdle.startIdleHandler();
     }
 
     public void initView() {
@@ -43,5 +57,22 @@ public class CheckSchedulesActivity extends AppCompatActivity {
         mBtnCancelOperation1 = findViewById(R.id.btnCancelOperation1);
         mClCalendar = findViewById(R.id.clCalendar);
         mCvCalendar = findViewById(R.id.cvCalendar);
+
+        mBtnCancelOperation1.setOnClickListener(v -> CheckSchedulesActivity.this.onBackPressed());
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, android.R.anim.fade_out);
+        finish();
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+
+        TimeoutIdle.stopIdleHandler();
+        TimeoutIdle.startIdleHandler();
     }
 }
