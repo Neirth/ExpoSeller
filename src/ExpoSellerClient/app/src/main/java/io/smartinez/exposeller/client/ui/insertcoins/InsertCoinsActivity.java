@@ -14,6 +14,7 @@ import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
 import io.smartinez.exposeller.client.util.TimeoutIdle;
 
 public class InsertCoinsActivity extends AppCompatActivity {
+    public static final String EXTRA_CONCERT = "io.smartinez.exposeller.client.ui.insertcoins.concertData";
 
     private ConstraintLayout mClInsertCoins;
     private ImageView mIvInsertCoins;

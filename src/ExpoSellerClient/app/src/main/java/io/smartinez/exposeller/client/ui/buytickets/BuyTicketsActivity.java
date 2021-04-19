@@ -10,15 +10,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import io.smartinez.exposeller.client.R;
+import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.ui.buytickets.adapter.BuyTicketConcertAdapter;
+import io.smartinez.exposeller.client.ui.insertcoins.InsertCoinsActivity;
 import io.smartinez.exposeller.client.util.TimeoutIdle;
 
 public class BuyTicketsActivity extends AppCompatActivity {
-
     private ConstraintLayout mClBuyTickets;
     private TextView mTvInsertImportValue2;
     private ImageView mIvExpoSellerLogo5;
     private RecyclerView mRvBuyTickets;
+
+    private BuyTicketConcertAdapter mBuyTicketConcertAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,20 @@ public class BuyTicketsActivity extends AppCompatActivity {
         mTvInsertImportValue2 = findViewById(R.id.tvInsertImportValue2);
         mIvExpoSellerLogo5 = findViewById(R.id.ivExpoSellerLogo5);
         mRvBuyTickets = findViewById(R.id.rvBuyTickets);
+
+        mBuyTicketConcertAdapter = new BuyTicketConcertAdapter();
+        mBuyTicketConcertAdapter.setAdapterClickListener(model -> {
+            if (model instanceof Concert) {
+                Concert concert = (Concert) model;
+
+                Intent intent = new Intent(BuyTicketsActivity.this, InsertCoinsActivity.class);
+                intent.putExtra(InsertCoinsActivity.EXTRA_CONCERT, concert);
+
+                startActivity(intent);
+            }
+        });
+
+        mRvBuyTickets.setAdapter(mBuyTicketConcertAdapter);
     }
 
     @Override
