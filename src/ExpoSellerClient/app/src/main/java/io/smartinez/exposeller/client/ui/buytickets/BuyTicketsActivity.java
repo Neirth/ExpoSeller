@@ -2,6 +2,7 @@ package io.smartinez.exposeller.client.ui.buytickets;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -25,6 +26,7 @@ public class BuyTicketsActivity extends AppCompatActivity {
     private RecyclerView mRvBuyTickets;
 
     private BuyTicketConcertAdapter mBuyTicketConcertAdapter;
+    private BuyTicketsViewModel mBuyTicketsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class BuyTicketsActivity extends AppCompatActivity {
         mIvExpoSellerLogo5 = findViewById(R.id.ivExpoSellerLogo5);
         mRvBuyTickets = findViewById(R.id.rvBuyTickets);
 
+        mBuyTicketsViewModel = new ViewModelProvider(this).get(BuyTicketsViewModel.class);
+
         mBuyTicketConcertAdapter = new BuyTicketConcertAdapter();
         mBuyTicketConcertAdapter.setAdapterClickListener(model -> {
             if (model instanceof Concert) {
@@ -66,6 +70,7 @@ public class BuyTicketsActivity extends AppCompatActivity {
         });
 
         mRvBuyTickets.setAdapter(mBuyTicketConcertAdapter);
+        mBuyTicketsViewModel.readConcertList().observe(this, value -> mBuyTicketConcertAdapter.setConcertList(value));
     }
 
     @Override

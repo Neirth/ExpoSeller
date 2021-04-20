@@ -27,12 +27,10 @@ public class InsertCoinsViewModel extends ViewModel {
         this.mExecutorService = executorService;
     }
 
-    public CompletableFuture<String> buyTicket(LifecycleOwner lifecycleOwner, Concert concert, TextView tvConcertValue, TextView tvInsertedValue, TextView tvReturnValue) {
+    public CompletableFuture<String> buyTicket(LifecycleOwner lifecycleOwner, Concert concert, TextView tvInsertedValue, TextView tvReturnValue) {
         CompletableFuture<String> futureResult = new CompletableFuture<>();
 
         mExecutorService.execute(() -> {
-            tvConcertValue.setText(String.valueOf(concert.getCost()));
-
             try {
                 mUsersService.checkInsertCoins().observe(lifecycleOwner, value -> {
                     try {

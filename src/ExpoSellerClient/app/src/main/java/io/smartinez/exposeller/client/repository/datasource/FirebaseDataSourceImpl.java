@@ -64,7 +64,7 @@ public class FirebaseDataSourceImpl implements IDataSource {
 
                 List<DocumentSnapshot> result;
 
-                if (queryResult != null && !queryResult .isEmpty()) {
+                if (queryResult != null && !queryResult.isEmpty()) {
                     result = queryResult.getDocuments();
                 } else {
                     result = Collections.emptyList();

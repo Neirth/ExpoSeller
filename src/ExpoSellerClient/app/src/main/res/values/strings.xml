@@ -19,4 +19,5 @@
     <string name="pickup_ticket_text1">¡Felicidades, su entrada ya está disponible!</string>
     <string name="pickup_ticket_text2">Escanea el código QR con tu aplicación de Apple Wallet® o compatibles.</string>
     <string name="concert_select">Selecciona un concierto</string>
+    <string name="buy_error">Ha ocurrido un error durante la compra del ticket, devolviendo el dinero depositado</string>
 </resources>

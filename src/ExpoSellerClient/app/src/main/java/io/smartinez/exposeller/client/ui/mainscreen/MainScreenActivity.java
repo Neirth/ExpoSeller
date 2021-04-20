@@ -20,7 +20,6 @@ import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
 public class MainScreenActivity extends AppCompatActivity {
-
     private ConstraintLayout mClMainScreen;
     private Button mBtnCheckSchedules;
     private Button mBtnBuyTickets;

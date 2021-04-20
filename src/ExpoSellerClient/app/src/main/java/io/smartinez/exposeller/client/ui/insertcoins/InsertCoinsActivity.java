@@ -2,16 +2,25 @@ package io.smartinez.exposeller.client.ui.insertcoins;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
+import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.ui.pickupticket.PickupTicketActivity;
+import io.smartinez.exposeller.client.ui.pickupticket.PickupTicketViewModel;
 import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
@@ -29,10 +38,15 @@ public class InsertCoinsActivity extends AppCompatActivity {
     private TextView mTvInsertCoins;
     private Button mBtnCancelOperation2;
 
+    private Concert mConcert;
+    private InsertCoinsViewModel mInsertCoinsViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_coins);
+
+        mConcert = getIntent().getParcelableExtra(EXTRA_CONCERT);
 
         initView();
 
@@ -60,6 +74,30 @@ public class InsertCoinsActivity extends AppCompatActivity {
         mBtnCancelOperation2 = findViewById(R.id.btnCancelOperation2);
 
         mBtnCancelOperation2.setOnClickListener(v -> InsertCoinsActivity.this.onBackPressed());
+        mTvConcertValue.setText(String.format(Locale.getDefault(),"%f", mConcert.getCost()));
+
+        mInsertCoinsViewModel = new ViewModelProvider(this).get(InsertCoinsViewModel.class);
+        mInsertCoinsViewModel.buyTicket(this, mConcert, mTvInsertedValue, mTvReturnValue)
+            .whenComplete((uriTicket, ex) -> {
+                Intent intent = new Intent(InsertCoinsActivity.this, PickupTicketActivity.class);
+                intent.putExtra(PickupTicketActivity.EXTRA_TICKET, Uri.parse(uriTicket));
+
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+                finish();
+            }).exceptionally(ex -> {
+                try {
+                    Toast.makeText(this, getText(R.string.buy_error), Toast.LENGTH_LONG).show();
+
+                    mInsertCoinsViewModel.cancelBuyTicket(null);
+                    ex.printStackTrace();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+
+                return "";
+            });
     }
 
     @Override

@@ -29,7 +29,6 @@ import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
 public class CheckSchedulesActivity extends AppCompatActivity {
-
     private ConstraintLayout mClCheckSchedules;
     private Guideline mGlVerticalSeparator;
     private RecyclerView mRvConcertList;
