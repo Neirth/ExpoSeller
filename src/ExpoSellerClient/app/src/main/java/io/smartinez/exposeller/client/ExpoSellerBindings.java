@@ -1,5 +1,10 @@
 package io.smartinez.exposeller.client;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.inject.Singleton;
+
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
@@ -25,4 +30,10 @@ public abstract class ExpoSellerBindings {
 
     @Binds
     public abstract IDataSource dataSource(FirebaseDataSourceImpl firebaseDataSource);
+
+    @Provides
+    @Singleton
+    public ExecutorService executorService() {
+       return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    }
 }

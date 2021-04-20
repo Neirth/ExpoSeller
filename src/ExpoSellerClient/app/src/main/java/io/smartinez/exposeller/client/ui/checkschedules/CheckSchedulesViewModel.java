@@ -1,10 +1,14 @@
 package io.smartinez.exposeller.client.ui.checkschedules;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
@@ -15,13 +19,25 @@ import io.smartinez.exposeller.client.service.UserService;
 @HiltViewModel
 public class CheckSchedulesViewModel extends ViewModel {
     private UserService mUsersService;
+    private ExecutorService mExecutorService;
 
     @Inject
-    public CheckSchedulesViewModel(UserService mUsersService) {
+    public CheckSchedulesViewModel(UserService mUsersService, ExecutorService executorService) {
         this.mUsersService = mUsersService;
+        this.mExecutorService = executorService;
     }
 
     public LiveData<List<Concert>> searchConcertWithDay(Date date) {
-        return mUsersService.searchConcertWithDay(date);
+        MutableLiveData<List<Concert>> concertList = new MutableLiveData<>();
+
+        mExecutorService.execute(() -> {
+            try {
+                concertList.setValue(mUsersService.searchConcertWithDay(date));
+            } catch (IOException e) {
+                concertList.setValue(Collections.emptyList());
+            }
+        });
+
+        return concertList;
     }
 }

@@ -33,8 +33,6 @@ public class UserService {
     private AdBannerRepo mAdBannerRepo;
     private ConcertRepo mConcertRepo;
 
-    public static final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
     @Inject
     public UserService(ITicketGenerator ticketGenerator, IInsertCoins insertCoins, TicketRepo ticketRepo, ConcertRepo concertRepo, AdBannerRepo adBannerRepo) {
         this.mTicketGenerator = ticketGenerator;
@@ -53,100 +51,75 @@ public class UserService {
     }
 
     public void buyTicket(Ticket ticket, Runnable checkoutComplete) throws IOException {
-        threadPool.execute(() -> {
-            try {
-                int friendlyId = Utilities.generateRandomFriendlyId();
+        int friendlyId = Utilities.generateRandomFriendlyId();
 
-                try {
-                    while (true) {
-                        mTicketRepo.getByFriendlyId(String.valueOf(friendlyId));
-                        friendlyId = Utilities.generateRandomFriendlyId();
-                    }
-                } catch (IllegalAccessException e) {
-                    ticket.setFriendlyId(friendlyId);
-                }
-
-                mTicketRepo.insert(ticket);
-
-                switch (mTicketGenerator.getImplementationType()) {
-                    case HYBRID:
-                        mTicketGenerator.generateHybridTicket(ticket);
-                        break;
-                    case VIRTUAL:
-                        mTicketGenerator.generateVirtualTicket(ticket);
-                        break;
-                    case PHYSICAL:
-                        mTicketGenerator.generatePhysicalTicket(ticket);
-                        break;
-                }
-
-                checkoutComplete.run();
-            } catch (IOException e) {
-                Thread currentThread = Thread.currentThread();
-                currentThread.getUncaughtExceptionHandler().uncaughtException(currentThread, e);
+        try {
+            while (true) {
+                mTicketRepo.getByFriendlyId(String.valueOf(friendlyId));
+                friendlyId = Utilities.generateRandomFriendlyId();
             }
-        });
+        } catch (IllegalAccessException e) {
+            ticket.setFriendlyId(friendlyId);
+        }
+
+        mTicketRepo.insert(ticket);
+
+        switch (mTicketGenerator.getImplementationType()) {
+            case HYBRID:
+                mTicketGenerator.generateHybridTicket(ticket);
+                break;
+            case VIRTUAL:
+                mTicketGenerator.generateVirtualTicket(ticket);
+                break;
+            case PHYSICAL:
+                mTicketGenerator.generatePhysicalTicket(ticket);
+                break;
+        }
+
+        checkoutComplete.run();
     }
 
-    public LiveData<List<AdBanner>> pickRandomAdsList() {
-        MutableLiveData<List<AdBanner>> adBannersList = new MutableLiveData<>();
+    public List<AdBanner> pickRandomAdsList() throws IOException {
+        Random randomGen = new Random();
 
-        threadPool.execute(() -> {
-            Random randomGen = new Random();
+        List<AdBanner> adBanners = mAdBannerRepo.getNotBeforeDate(new Date());
+        List<AdBanner> randomAdBanners = Collections.emptyList();
 
-            List<AdBanner> adBanners = mAdBannerRepo.getNotBeforeDate(new Date());
-            List<AdBanner> randomAdBanners = Collections.emptyList();
+        if (!adBanners.isEmpty()) {
+            Collections.shuffle(adBanners);
 
-            if (!adBanners.isEmpty()) {
-                Collections.shuffle(adBanners);
+            for (int i = 0; i < 5; i++) {
+                int randomIndex = randomGen.nextInt(adBanners.size());
 
-                for (int i = 0; i < 5; i++) {
-                    int randomIndex = randomGen.nextInt(adBanners.size());
-
-                    randomAdBanners.add(adBanners.get(randomIndex));
-                    adBanners.remove(randomIndex);
-                }
+                randomAdBanners.add(adBanners.get(randomIndex));
+                adBanners.remove(randomIndex);
             }
+        }
 
-            adBannersList.setValue(randomAdBanners);
-        });
-
-        return adBannersList;
+        return randomAdBanners;
     }
 
-    public LiveData<List<Concert>> readConcertList() {
-        MutableLiveData<List<Concert>> concertList = new MutableLiveData<>();
-
-        threadPool.execute(() -> concertList.setValue(mConcertRepo.getNotBeforeDate(new Date())));
-
-        return concertList;
+    public List<Concert> readConcertList() throws IOException {
+        return mConcertRepo.getNotBeforeDate(new Date());
     }
 
-    public LiveData<List<Concert>> searchConcertWithDay(Date date) {
-        MutableLiveData<List<Concert>> concertList = new MutableLiveData<>();
-
-        threadPool.execute(() -> concertList.setValue(mConcertRepo.getBySpecificDate(date)));
-
-        return concertList;
+    public List<Concert> searchConcertWithDay(Date date) throws IOException {
+        return mConcertRepo.getBySpecificDate(date);
     }
 
-    public LiveData<Integer> generateFreeTicketFriendlyId() {
-        MutableLiveData<Integer> result = new MutableLiveData<>();
+    public Integer generateFreeTicketFriendlyId() throws IOException {
+        int friendlyId = 0;
 
-        threadPool.execute(() -> {
-            int friendlyId = 0;
+        try {
+            while (true) {
+                friendlyId = Utilities.generateRandomFriendlyId();
 
-            try {
-                while (true) {
-                    friendlyId = Utilities.generateRandomFriendlyId();
-
-                    mTicketRepo.getByFriendlyId(String.valueOf(friendlyId));
-                }
-            } catch (IllegalAccessException e) {
-                result.setValue(friendlyId);
+                mTicketRepo.getByFriendlyId(String.valueOf(friendlyId));
             }
-        });
+        } catch (IllegalAccessException e) {
+            // Ignoring the consequences because the value is free
+        }
 
-        return result;
+        return friendlyId;
     }
 }

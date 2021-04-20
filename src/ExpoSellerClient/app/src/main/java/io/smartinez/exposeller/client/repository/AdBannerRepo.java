@@ -1,5 +1,6 @@
 package io.smartinez.exposeller.client.repository;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -21,36 +22,36 @@ public class AdBannerRepo implements IRepository<AdBanner> {
     }
 
     @Override
-    public void insert(AdBanner entity) {
+    public void insert(AdBanner entity) throws IOException {
         mDataSource.insert(entity);
     }
 
     @Override
-    public void update(AdBanner entity) {
+    public void update(AdBanner entity) throws IOException {
         mDataSource.update(entity.getDocId(), entity);
     }
 
     @Override
-    public void delete(AdBanner entity) {
+    public void delete(AdBanner entity) throws IOException {
         mDataSource.delete(entity.getDocId(), AdBanner.class);
     }
 
     @Override
-    public List<AdBanner> getBySpecificDate(Date dateConcerts) {
+    public List<AdBanner> getBySpecificDate(Date dateConcerts) throws IOException {
         return Arrays.asList((AdBanner[]) mDataSource.getBySpecificDate(dateConcerts, AdBanner.class).toArray());
     }
 
     @Override
-    public AdBanner getByDocId(String docId) throws IllegalAccessException {
+    public AdBanner getByDocId(String docId) throws IllegalAccessException, IOException {
         return (AdBanner) mDataSource.getByDocId(docId, AdBanner.class);
     }
 
     @Override
-    public AdBanner getByFriendlyId(String friendlyId) throws IllegalAccessException {
+    public AdBanner getByFriendlyId(String friendlyId) throws IllegalAccessException, IOException {
         return (AdBanner) mDataSource.getByFriendlyId(friendlyId, AdBanner.class);
     }
 
-    public List<AdBanner> getNotBeforeDate(Date nowDate) {
+    public List<AdBanner> getNotBeforeDate(Date nowDate) throws IOException {
         return Arrays.asList((AdBanner[]) mDataSource.getNotBeforeDate(nowDate, AdBanner.class).toArray());
     }
 }
