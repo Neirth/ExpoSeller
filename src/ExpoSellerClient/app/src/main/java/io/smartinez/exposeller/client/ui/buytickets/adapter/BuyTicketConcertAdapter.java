@@ -19,7 +19,7 @@ import java.util.List;
 
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
-import io.smartinez.exposeller.client.util.runnable.OnAdapterClickListener;
+import io.smartinez.exposeller.client.util.listener.OnAdapterClickListener;
 
 public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConcertAdapter.BuyTicketConcertViewHolder> {
     private List<Concert> mConcertList;

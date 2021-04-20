@@ -1,4 +1,4 @@
-package io.smartinez.exposeller.client.util.runnable;
+package io.smartinez.exposeller.client.util.listener;
 
 import io.smartinez.exposeller.client.domain.IModel;
 

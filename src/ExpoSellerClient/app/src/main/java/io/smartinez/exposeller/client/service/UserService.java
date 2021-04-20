@@ -1,18 +1,14 @@
 package io.smartinez.exposeller.client.service;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.domain.AdBanner;
@@ -24,6 +20,7 @@ import io.smartinez.exposeller.client.repository.AdBannerRepo;
 import io.smartinez.exposeller.client.repository.ConcertRepo;
 import io.smartinez.exposeller.client.repository.TicketRepo;
 import io.smartinez.exposeller.client.util.Utilities;
+import io.smartinez.exposeller.client.util.listener.CheckoutCompleteListener;
 
 @ViewModelScoped
 public class UserService {
@@ -46,37 +43,30 @@ public class UserService {
         return mInsertCoins.checkInsertedValue();
     }
 
-    public boolean returnValueCoins(float desiredValue, float giveValue) {
+    public boolean returnValueCoins(float desiredValue, float giveValue) throws IOException {
         return mInsertCoins.returnExcessAmount(desiredValue, giveValue);
     }
 
-    public void buyTicket(Ticket ticket, Runnable checkoutComplete) throws IOException {
-        int friendlyId = Utilities.generateRandomFriendlyId();
-
-        try {
-            while (true) {
-                mTicketRepo.getByFriendlyId(String.valueOf(friendlyId));
-                friendlyId = Utilities.generateRandomFriendlyId();
-            }
-        } catch (IllegalAccessException e) {
-            ticket.setFriendlyId(friendlyId);
-        }
+    public void buyTicket(Ticket ticket, CheckoutCompleteListener checkoutComplete) throws IOException {
+        int friendlyId = generateTicketFriendlyId();
 
         mTicketRepo.insert(ticket);
 
+        String result = "";
+
         switch (mTicketGenerator.getImplementationType()) {
             case HYBRID:
-                mTicketGenerator.generateHybridTicket(ticket);
+                result = mTicketGenerator.generateHybridTicket(ticket);
                 break;
             case VIRTUAL:
-                mTicketGenerator.generateVirtualTicket(ticket);
+                result = mTicketGenerator.generateVirtualTicket(ticket);
                 break;
             case PHYSICAL:
                 mTicketGenerator.generatePhysicalTicket(ticket);
                 break;
         }
 
-        checkoutComplete.run();
+        checkoutComplete.checkoutComplete(result);
     }
 
     public List<AdBanner> pickRandomAdsList() throws IOException {
@@ -107,7 +97,7 @@ public class UserService {
         return mConcertRepo.getBySpecificDate(date);
     }
 
-    public Integer generateFreeTicketFriendlyId() throws IOException {
+    public int generateTicketFriendlyId() throws IOException {
         int friendlyId = 0;
 
         try {

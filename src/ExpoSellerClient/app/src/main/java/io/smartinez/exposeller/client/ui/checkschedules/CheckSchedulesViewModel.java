@@ -32,9 +32,9 @@ public class CheckSchedulesViewModel extends ViewModel {
 
         mExecutorService.execute(() -> {
             try {
-                concertList.setValue(mUsersService.searchConcertWithDay(date));
+                concertList.postValue(mUsersService.searchConcertWithDay(date));
             } catch (IOException e) {
-                concertList.setValue(Collections.emptyList());
+                concertList.postValue(Collections.emptyList());
             }
         });
 

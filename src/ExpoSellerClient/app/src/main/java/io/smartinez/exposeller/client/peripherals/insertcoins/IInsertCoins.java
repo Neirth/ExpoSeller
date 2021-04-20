@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface IInsertCoins {
     LiveData<Float> checkInsertedValue() throws IOException;
-    boolean returnExcessAmount(float desiredValue, float giveValue);
+    boolean returnExcessAmount(float desiredValue, float giveValue) throws IOException;
 }

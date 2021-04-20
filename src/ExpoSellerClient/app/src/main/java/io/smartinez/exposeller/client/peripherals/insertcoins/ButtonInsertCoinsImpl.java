@@ -33,7 +33,7 @@ public class ButtonInsertCoinsImpl implements IInsertCoins {
         gpio.registerGpioCallback((gpioAux) -> {
             try {
                 if (gpioAux.getValue()) {
-                    countedValue.setValue(countedValue.getValue() + 0.50f);
+                    countedValue.postValue(countedValue.getValue() + 0.50f);
                 }
 
                 return gpioAux.getValue();
@@ -45,7 +45,7 @@ public class ButtonInsertCoinsImpl implements IInsertCoins {
         return countedValue;
     }
 
-    public boolean returnExcessAmount(float desiredValue, float giveValue) {
+    public boolean returnExcessAmount(float desiredValue, float giveValue) throws IOException {
         Log.d(ExpoSellerApplication.LOG_TAG, "I'm a dummy method, checking if giveValue is greater or equal than desired value");
 
         return giveValue >= desiredValue;

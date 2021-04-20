@@ -32,8 +32,7 @@ public abstract class ExpoSellerBindings {
     public abstract IDataSource dataSource(FirebaseDataSourceImpl firebaseDataSource);
 
     @Provides
-    @Singleton
-    public ExecutorService executorService() {
+    public static ExecutorService executorService() {
        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 }

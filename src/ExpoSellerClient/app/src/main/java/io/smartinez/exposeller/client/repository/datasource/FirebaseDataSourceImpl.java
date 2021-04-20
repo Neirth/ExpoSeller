@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -22,6 +24,7 @@ import io.smartinez.exposeller.client.domain.IModel;
 @ViewModelScoped
 public class FirebaseDataSourceImpl implements IDataSource {
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
+    private BlockingQueue<Boolean> mThreadBus = new LinkedBlockingDeque<>();
 
     @Inject
     public FirebaseDataSourceImpl() {
@@ -29,132 +32,166 @@ public class FirebaseDataSourceImpl implements IDataSource {
 
     @Override
     public void insert(IModel entityObj) throws IOException {
-        Task<DocumentReference> insertOperation = mDb.collection(entityObj.getClass().getSimpleName()).add(entityObj);
+        try {
+            Task<DocumentReference> insertOperation = mDb.collection(entityObj.getClass().getSimpleName()).add(entityObj);
 
-        while (!insertOperation.isComplete());
+            insertOperation.addOnCompleteListener(command -> mThreadBus.add(true));
+            mThreadBus.take();
 
-        boolean isInserted = insertOperation.isSuccessful();
+            boolean isInserted = insertOperation.isSuccessful();
 
-        if (isInserted) {
-            entityObj.setDocId(insertOperation.getResult().getId());
-        } else {
-            throw new IOException("Could not insert the document");
+            if (isInserted) {
+                entityObj.setDocId(insertOperation.getResult().getId());
+            } else {
+                throw new IOException("Could not insert the document");
+            }
+        } catch (InterruptedException e) {
+            throw new IOException("No could complete the operation");
         }
     }
 
     @Override
     public List<IModel> getBySpecificDate(Date date, Class<? extends IModel> entityClass) throws IOException {
-        Query queryDate = mDb.collection(entityClass.getSimpleName()).whereEqualTo("eventDate", date);
+        try {
+            Query queryDate = mDb.collection(entityClass.getSimpleName()).whereEqualTo("eventDate", date);
+            Task<QuerySnapshot> querySnapshotTask = queryDate.get();
 
-        Task<QuerySnapshot> querySnapshotTask = queryDate.get();
+            querySnapshotTask.addOnCompleteListener(command -> mThreadBus.add(true));
+            mThreadBus.take();
 
-        while (!querySnapshotTask.isComplete());
+            if (querySnapshotTask.isSuccessful()) {
+                QuerySnapshot queryResult = querySnapshotTask.getResult();
 
-        if (querySnapshotTask.isSuccessful()) {
-            QuerySnapshot queryResult = querySnapshotTask.getResult();
+                List<DocumentSnapshot> result;
 
-            List<DocumentSnapshot> result;
+                if (queryResult != null && !queryResult .isEmpty()) {
+                    result = queryResult.getDocuments();
+                } else {
+                    result = Collections.emptyList();
+                }
 
-            if (queryResult != null && !queryResult .isEmpty()) {
-                result = queryResult.getDocuments();
+                return result.stream().map(entityClass::cast).collect(Collectors.toList());
             } else {
-                result = Collections.emptyList();
+                throw new IOException("No could complete the operation");
             }
-
-            return result.stream().map(entityClass::cast).collect(Collectors.toList());
-        } else {
+        } catch (InterruptedException e) {
             throw new IOException("No could complete the operation");
         }
     }
 
     @Override
     public List<IModel> getNotBeforeDate(Date date, Class<? extends IModel> entityClass) throws IOException {
-        Query queryDate = mDb.collection(entityClass.getSimpleName()).whereGreaterThan("eventDate", date);
-        Task<QuerySnapshot> querySnapshotTask = queryDate.get();
+        try {
+            Query queryDate = mDb.collection(entityClass.getSimpleName()).whereGreaterThan("eventDate", date);
+            Task<QuerySnapshot> querySnapshotTask = queryDate.get();
 
-        while (!querySnapshotTask.isComplete());
+            querySnapshotTask.addOnCompleteListener(command -> mThreadBus.add(true));
+            mThreadBus.take();
 
-        if (querySnapshotTask.isSuccessful()) {
-            QuerySnapshot queryResult = querySnapshotTask.getResult();
+            if (querySnapshotTask.isSuccessful()) {
+                QuerySnapshot queryResult = querySnapshotTask.getResult();
 
-            List<DocumentSnapshot> result;
+                List<DocumentSnapshot> result;
 
-            if (queryResult != null && !queryResult.isEmpty()) {
-                result = queryResult.getDocuments();
+                if (queryResult != null && !queryResult.isEmpty()) {
+                    result = queryResult.getDocuments();
+                } else {
+                    result = Collections.emptyList();
+                }
+
+                return result.stream().map(entityClass::cast).collect(Collectors.toList());
             } else {
-                result = Collections.emptyList();
+                throw new IOException("No could complete the operation");
             }
-
-            return result.stream().map(entityClass::cast).collect(Collectors.toList());
-        } else {
+        } catch (InterruptedException e) {
             throw new IOException("No could complete the operation");
         }
     }
 
     @Override
     public IModel getByDocId(String docId, Class<? extends IModel> entityClass) throws IllegalAccessException, IOException {
-        DocumentReference docRef = mDb.collection(entityClass.getSimpleName()).document(docId);
+        try {
+            DocumentReference docRef = mDb.collection(entityClass.getSimpleName()).document(docId);
 
-        Task<DocumentSnapshot> taskDocSnap = docRef.get();
+            Task<DocumentSnapshot> taskDocSnap = docRef.get();
 
-        while (!taskDocSnap.isComplete());
+            taskDocSnap.addOnCompleteListener(command -> mThreadBus.add(true));
+            mThreadBus.take();
 
-        if (taskDocSnap.isSuccessful()) {
-            DocumentSnapshot docSnap = taskDocSnap.getResult();
+            if (taskDocSnap.isSuccessful()) {
+                DocumentSnapshot docSnap = taskDocSnap.getResult();
 
-            if (docSnap != null && docSnap.exists()) {
-                return docSnap.toObject(entityClass);
+                if (docSnap != null && docSnap.exists()) {
+                    return docSnap.toObject(entityClass);
+                } else {
+                    throw new IllegalAccessException("Entity not found in the database");
+                }
             } else {
-                throw new IllegalAccessException("Entity not found in the database");
+                throw new IOException("No could complete the operation");
             }
-        } else {
+        } catch (InterruptedException e) {
             throw new IOException("No could complete the operation");
         }
     }
 
     @Override
     public IModel getByFriendlyId(String friendlyId, Class<? extends IModel> entityClass) throws IllegalAccessException, IOException {
-       Query queryFriendlyId = mDb.collection(entityClass.getSimpleName()).whereEqualTo("friendlyId", friendlyId);
+        try {
+            Query queryFriendlyId = mDb.collection(entityClass.getSimpleName()).whereEqualTo("friendlyId", friendlyId);
 
-        Task<QuerySnapshot> querySnapshotTask = queryFriendlyId.get();
+            Task<QuerySnapshot> querySnapshotTask = queryFriendlyId.get();
 
-        while (!querySnapshotTask.isComplete());
+            querySnapshotTask.addOnCompleteListener(command -> mThreadBus.add(true));
+            mThreadBus.take();
 
-        if (querySnapshotTask.isSuccessful()) {
-            QuerySnapshot queryResult = querySnapshotTask.getResult();
+            if (querySnapshotTask.isSuccessful()) {
+                QuerySnapshot queryResult = querySnapshotTask.getResult();
 
-            if (queryResult != null && !queryResult.isEmpty()) {
-                return queryResult.getDocuments().get(0).toObject(entityClass);
+                if (queryResult != null && !queryResult.isEmpty()) {
+                    return queryResult.getDocuments().get(0).toObject(entityClass);
+                } else {
+                    throw new IllegalAccessException("Entity not found in the database");
+                }
             } else {
-                throw new IllegalAccessException("Entity not found in the database");
+                throw new IOException("No could complete the operation");
             }
-        } else {
+        } catch (InterruptedException e) {
             throw new IOException("No could complete the operation");
         }
     }
 
     @Override
     public void update(String docId, IModel entityObj) throws IOException {
-        Task<Void> updateOperation = mDb.collection(entityObj.getClass().getSimpleName()).document(docId).set(entityObj);
+        try {
+            Task<Void> updateOperation = mDb.collection(entityObj.getClass().getSimpleName()).document(docId).set(entityObj);
 
-        while (!updateOperation.isComplete());
+            updateOperation.addOnCompleteListener(command -> mThreadBus.add(true));
+            mThreadBus.take();
 
-        boolean isUpdated = updateOperation.isSuccessful();
+            boolean isUpdated = updateOperation.isSuccessful();
 
-        if (!isUpdated) {
+            if (!isUpdated) {
+                throw new IOException("Could not update the document");
+            }
+        } catch (InterruptedException e) {
             throw new IOException("Could not update the document");
         }
     }
 
     @Override
     public void delete(String docId, Class<? extends IModel> entityClass) throws IOException {
-        Task<Void> deleteOperation = mDb.collection(entityClass.getSimpleName()).document(docId).delete();
+        try {
+            Task<Void> deleteOperation = mDb.collection(entityClass.getSimpleName()).document(docId).delete();
 
-        while (!deleteOperation.isComplete());
+            deleteOperation.addOnCompleteListener(command -> mThreadBus.add(true));
+            mThreadBus.take();
 
-        boolean isDeleted = deleteOperation.isSuccessful();
+            boolean isDeleted = deleteOperation.isSuccessful();
 
-        if (!isDeleted) {
+            if (!isDeleted) {
+                throw new IOException("Could not delete the document");
+            }
+        } catch (InterruptedException e) {
             throw new IOException("Could not delete the document");
         }
     }
