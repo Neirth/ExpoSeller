@@ -1,7 +1,16 @@
 <resources>
     <string name="app_name">ExpoSeller Client</string>
     <string name="terms_and_conditions_name">Terminos y condiciones</string>
-    <string name="terms_and_conditions_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices justo eget diam tincidunt, a finibus turpis blandit. Nunc accumsan nec mauris non tempor. Suspendisse potenti. Nunc facilisis sagittis urna ac efficitur. Duis posuere est nunc, a consectetur tellus mattis euismod. Pellentesque commodo metus sit amet metus lacinia, a condimentum lorem sodales. Cras suscipit vel felis eu blandit. Nulla luctus suscipit ex quis mollis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lorem justo, pharetra ac ipsum eget, egestas bibendum eros. Quisque elementum, dolor eu rhoncus tincidunt, ipsum tellus semper est, eget luctus mauris nunc non libero. Donec id dolor ipsum. Vivamus ut nisl velit. Sed fermentum pretium purus, porta ultricies massa lobortis in. Interdum et malesuada fames ac ante ipsum primis in faucibus. Suspendisse cursus erat accumsan nulla euismod faucibus.</string>
+    <string name="terms_and_conditions_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices
+        justo eget diam tincidunt, a finibus turpis blandit. Nunc accumsan nec mauris non tempor. Suspendisse potenti.
+        Nunc facilisis sagittis urna ac efficitur. Duis posuere est nunc, a consectetur tellus mattis euismod.
+        Pellentesque commodo metus sit amet metus lacinia, a condimentum lorem sodales. Cras suscipit vel felis eu
+        blandit. Nulla luctus suscipit ex quis mollis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+        lorem justo, pharetra ac ipsum eget, egestas bibendum eros. Quisque elementum, dolor eu rhoncus tincidunt, ipsum
+        tellus semper est, eget luctus mauris nunc non libero. Donec id dolor ipsum. Vivamus ut nisl velit. Sed
+        fermentum pretium purus, porta ultricies massa lobortis in. Interdum et malesuada fames ac ante ipsum primis in
+        faucibus. Suspendisse cursus erat accumsan nulla euismod faucibus.
+    </string>
     <string name="event_name">Concierto</string>
     <string name="artist_name">Artista</string>
     <string name="event_date">Fecha del evento</string>
@@ -19,5 +28,14 @@
     <string name="pickup_ticket_text1">¡Felicidades, su entrada ya está disponible!</string>
     <string name="pickup_ticket_text2">Escanea el código QR con tu aplicación de Apple Wallet® o compatibles.</string>
     <string name="concert_select">Selecciona un concierto</string>
-    <string name="buy_error">Ha ocurrido un error durante la compra del ticket, devolviendo el dinero depositado</string>
+    <string name="buy_error">Ha ocurrido un error durante la compra del ticket, devolviendo el dinero depositado
+    </string>
+    <string name="system_console">ExpoSeller - Consola de Administración</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ads">Anuncios</string>
+    <string name="settings">Ajustes</string>
+    <string name="exit">Salir</string>
 </resources>

@@ -6,9 +6,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+
+import java.util.concurrent.ExecutorService;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
@@ -20,6 +25,9 @@ public class AdsConcertActivity extends AppCompatActivity {
     private ImageView mIvAdsConcertView;
 
     private AdsConcertViewModel mAdsConcertViewModel;
+
+    @Inject
+    protected ExecutorService mExecutorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +45,17 @@ public class AdsConcertActivity extends AppCompatActivity {
         mAdsConcertViewModel = new ViewModelProvider(this).get(AdsConcertViewModel.class);
 
         mAdsConcertViewModel.pickRandomAdsList().observe(this, value -> {
-            while (true) {
-                value.forEach(adBanner -> {
+            mExecutorService.execute(() -> {
+                while (true) {
                     try {
-                        Glide.with(this).load(adBanner.getPhotoAd()).into(mIvAdsConcertView);
+                        value.forEach(adBanner -> Glide.with(this).load(adBanner.getPhotoAd()).into(mIvAdsConcertView));
 
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                });
-            }
+                }
+            });
         });
     }
 

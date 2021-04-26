@@ -35,7 +35,7 @@ public class AdsConcertViewModel extends ViewModel {
             try {
                 mutableAd.postValue(mUsersService.pickRandomAdsList());
             } catch (IOException e) {
-                mutableAd.setValue(Collections.emptyList());
+                mutableAd.postValue(Collections.emptyList());
             }
         });
 
