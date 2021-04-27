@@ -147,7 +147,7 @@
         <fragment
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:name="io.smartinez.exposeller.client.ui.adminconsole.fragment.adslist.AdsListFragment"
+                android:name=".fragment.adslist.AdsListFragment"
                 android:id="@+id/fgAdsList"
                 app:layout_constraintStart_toStartOf="@+id/glVerticalSeparator2"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
@@ -155,8 +155,24 @@
         <fragment
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:name="io.smartinez.exposeller.client.ui.adminconsole.fragment.userlist.UserListFragment"
+                android:name=".fragment.adsmgt.AdsMgt"
+                android:id="@+id/fgAdsMgt"
+                app:layout_constraintStart_toStartOf="@+id/glVerticalSeparator2"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <fragment
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:name=".fragment.userlist.UserListFragment"
                 android:id="@+id/fgUserList"
+                app:layout_constraintStart_toStartOf="@+id/glVerticalSeparator2"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <fragment
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:name=".fragment.usermgt.UserMgtFragment"
+                android:id="@+id/fgUserMgt"
                 app:layout_constraintStart_toStartOf="@+id/glVerticalSeparator2"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>

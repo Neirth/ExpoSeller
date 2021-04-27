@@ -1,4 +1,4 @@
-package io.smartinez.exposeller.client.ui.adminconsole.fragment.usermgt;
+package io.smartinez.exposeller.client.ui.adminconsole.fragment.concertsmgt;
 
 import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
@@ -10,24 +10,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import io.smartinez.exposeller.client.R;
 
-public class UserMgtFragment extends Fragment {
+public class ConcertsMgtFragment extends Fragment {
 
-    private UserMgtViewModel mViewModel;
+    private ConcertsMgtViewModel mViewModel;
 
-    public static UserMgtFragment newInstance() {
-        return new UserMgtFragment();
+    public static ConcertsMgtFragment newInstance() {
+        return new ConcertsMgtFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.user_mgt_fragment, container, false);
+        return inflater.inflate(R.layout.concerts_mgt_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(UserMgtViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(ConcertsMgtViewModel.class);
         // TODO: Use the ViewModel
     }
 

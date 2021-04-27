@@ -1,4 +1,4 @@
-package io.smartinez.exposeller.client.ui.adminconsole.fragment.userlist;
+package io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist;
 
 import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
@@ -10,24 +10,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import io.smartinez.exposeller.client.R;
 
-public class UserListFragment extends Fragment {
+public class ConcertsListFragment extends Fragment {
 
-    private UserListViewModel mViewModel;
+    private ConcertsListViewModel mViewModel;
 
-    public static UserListFragment newInstance() {
-        return new UserListFragment();
+    public static ConcertsListFragment newInstance() {
+        return new ConcertsListFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.user_list_fragment, container, false);
+        return inflater.inflate(R.layout.concerts_list_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(ConcertsListViewModel.class);
         // TODO: Use the ViewModel
     }
 

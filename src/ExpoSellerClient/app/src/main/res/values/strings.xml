@@ -38,4 +38,16 @@
     <string name="ads">Anuncios</string>
     <string name="settings">Ajustes</string>
     <string name="exit">Salir</string>
+    <string name="concert_form_title">Concert Form</string>
+    <string name="form_name">Nombre:</string>
+    <string name="form_economic_value">Valor economico:</string>
+    <string name="form_artist_name">Nombre del artista:</string>
+    <string name="form_date">Fecha:</string>
+    <string name="form_organization_name">Nombre del organizador:</string>
+    <string name="form_uri_photo">Foto de portada (Url):</string>
+    <string name="form_ads_title">Ads Form</string>
+    <string name="friendly_id">Friendly ID:</string>
+    <string name="estimate_date">Fecha Estimada:</string>
+    <string name="ads_list">Listado de anuncios</string>
+    <string name="concerts_list">Listado de Conciertos</string>
 </resources>
