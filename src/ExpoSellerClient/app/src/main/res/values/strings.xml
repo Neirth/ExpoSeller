@@ -33,8 +33,6 @@
     <string name="system_console">ExpoSeller - Consola de Administración</string>
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ads">Anuncios</string>
     <string name="settings">Ajustes</string>
     <string name="exit">Salir</string>
@@ -48,6 +46,7 @@
     <string name="form_ads_title">Ads Form</string>
     <string name="friendly_id">Friendly ID:</string>
     <string name="estimate_date">Fecha Estimada:</string>
-    <string name="ads_list">Listado de anuncios</string>
+    <string name="ads_list">Listado de Anuncios</string>
     <string name="concerts_list">Listado de Conciertos</string>
+    <string name="concerts">Conciertos</string>
 </resources>
