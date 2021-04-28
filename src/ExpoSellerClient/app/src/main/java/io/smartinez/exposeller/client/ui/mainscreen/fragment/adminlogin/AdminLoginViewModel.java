@@ -8,21 +8,47 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.smartinez.exposeller.client.service.AdminService;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 
 @HiltViewModel
 public class AdminLoginViewModel extends ViewModel {
     private AdminService mAdminService;
+    private ExecutorService mExecutorService;
 
     @Inject
-    public AdminLoginViewModel(AdminService adminService) {
+    public AdminLoginViewModel(AdminService adminService, ExecutorService executorService) {
         this.mAdminService = adminService;
+        this.mExecutorService = executorService;
     }
 
-    public void loginAdministrator(String email, String password) throws IOException {
-        mAdminService.loginAdministrator(email, password);
+    public CompletableFuture<Void> loginAdministrator(String email, String password) {
+        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+
+        mExecutorService.submit(() -> {
+            try {
+                mAdminService.loginAdministrator(email, password);
+                completableFuture.complete(null);
+            } catch (IOException e) {
+                completableFuture.completeExceptionally(e);
+            }
+        });
+
+        return completableFuture;
     }
 
-    public void logoutAdministrator() throws IOException {
-        mAdminService.logoutAdministrator();
+    public CompletableFuture<Void> logoutAdministrator() {
+        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+
+        mExecutorService.submit(() -> {
+            try {
+                mAdminService.logoutAdministrator();
+                completableFuture.complete(null);
+            } catch (IOException e) {
+                completableFuture.completeExceptionally(e);
+            }
+        });
+
+        return completableFuture;
     }
 }

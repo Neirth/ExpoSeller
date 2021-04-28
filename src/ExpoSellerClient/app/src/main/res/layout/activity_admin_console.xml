@@ -5,7 +5,7 @@
     android:id="@+id/clAdminConsole"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/activity_background"
+    android:background="@drawable/background_activity"
     tools:context=".ui.adminconsole.AdminConsoleActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout

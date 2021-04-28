@@ -1,5 +1,6 @@
 package io.smartinez.exposeller.client.repository.datasource;
 
+import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.hilt.android.scopes.ViewModelScoped;
+import io.smartinez.exposeller.client.ExpoSellerApplication;
 import io.smartinez.exposeller.client.domain.IModel;
 
 @Singleton
@@ -206,7 +208,16 @@ public class FirebaseDataSourceImpl implements IDataSource {
                 mAuth.signOut();
             }
 
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(command -> mThreadBus.add(true));
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(command -> {
+                if (command.isSuccessful()) {
+                    Log.d(ExpoSellerApplication.LOG_TAG, "Login successful with " + email);
+                } else {
+                    Log.d(ExpoSellerApplication.LOG_TAG, "Login fail " + command.getException());
+                }
+
+                mThreadBus.add(true);
+            });
+
             mThreadBus.take();
 
             boolean isLogged = mAuth.getCurrentUser() != null;

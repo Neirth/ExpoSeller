@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.checkschedules.CheckSchedulesActivity"
-        android:background="@drawable/activity_background"
+        android:background="@drawable/background_activity"
         android:orientation="horizontal"
         android:id="@+id/clCheckSchedules">
 

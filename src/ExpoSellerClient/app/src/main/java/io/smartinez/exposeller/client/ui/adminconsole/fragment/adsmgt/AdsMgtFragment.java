@@ -120,12 +120,4 @@ public class AdsMgtFragment extends Fragment {
 
         mBtnAdsFormCancel.setOnClickListener(v -> FragmentUtils.interchangeFragement(getActivity().getSupportFragmentManager(), R.id.fgAdminLogin, AdsMgtFragment.class));
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(AdsMgtViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }

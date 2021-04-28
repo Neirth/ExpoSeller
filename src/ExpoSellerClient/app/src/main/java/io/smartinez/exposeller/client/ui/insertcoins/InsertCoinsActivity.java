@@ -77,25 +77,29 @@ public class InsertCoinsActivity extends AppCompatActivity {
 
         mViewModel = new ViewModelProvider(this).get(InsertCoinsViewModel.class);
         mViewModel.buyTicket(this, mConcert, mTvInsertedValue, mTvReturnValue)
-            .whenComplete((uriTicket, ex) -> {
-                Intent intent = new Intent(InsertCoinsActivity.this, PickupTicketActivity.class);
-                intent.putExtra(PickupTicketActivity.EXTRA_TICKET, Uri.parse(uriTicket));
+            .thenApplyAsync(uriTicket -> {
+                runOnUiThread(() -> {
+                    Intent intent = new Intent(InsertCoinsActivity.this, PickupTicketActivity.class);
+                    intent.putExtra(PickupTicketActivity.EXTRA_TICKET, Uri.parse(uriTicket));
 
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
-                finish();
+                    finish();
+                });
+
+                return null;
             }).exceptionally(ex -> {
-                try {
-                    Toast.makeText(this, getText(R.string.buy_error), Toast.LENGTH_LONG).show();
+                runOnUiThread(() -> {
+                    try {
+                        Toast.makeText(this, getText(R.string.buy_error), Toast.LENGTH_LONG).show();
+                        mViewModel.cancelBuyTicket(null);
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                });
 
-                    mViewModel.cancelBuyTicket(null);
-                    ex.printStackTrace();
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-
-                return "";
+                return null;
             });
     }
 

@@ -64,11 +64,4 @@ public class ConcertsListFragment extends Fragment {
         mRvConcertsList = getActivity().findViewById(R.id.rvConcertsList);
         mIvConcertAdd = getActivity().findViewById(R.id.ivConcertAdd);
     }
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ConcertsListViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }

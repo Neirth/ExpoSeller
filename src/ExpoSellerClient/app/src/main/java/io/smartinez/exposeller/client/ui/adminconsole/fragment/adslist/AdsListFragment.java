@@ -65,12 +65,4 @@ public class AdsListFragment extends Fragment {
         mRvAdsList = getActivity().findViewById(R.id.rvAdsList);
         mIvAdsAdd = getActivity().findViewById(R.id.ivAdsAdd);
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(AdsListViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }

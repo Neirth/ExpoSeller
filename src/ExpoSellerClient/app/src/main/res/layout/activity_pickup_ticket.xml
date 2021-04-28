@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.pickupticket.PickupTicketActivity"
         android:orientation="horizontal"
-        android:background="@drawable/activity_background"
+        android:background="@drawable/background_activity"
         android:id="@+id/clPickupTicket">
 
     <ImageView

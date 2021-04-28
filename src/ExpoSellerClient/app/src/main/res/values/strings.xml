@@ -48,7 +48,7 @@
     <string name="ads_list">Listado de Anuncios</string>
     <string name="concerts_list">Listado de Conciertos</string>
     <string name="concerts">Conciertos</string>
-    <string name="admin_login_error">No se ha podido iniciar sesión, vuelvelo a intentar en unos minutos</string>
+    <string name="admin_login_error">No se ha podido iniciar sesión, comprueba usuario y contraseña sean correctos, y vuelvelo a intentar en unos minutos</string>
     <string name="admin_logout_exception">No se ha podido cerrar sesión, intentelo en unos minutos</string>
     <string name="admin_error_process">No se ha podido procesar la petición, intentelo de nuevo más tarde</string>
     <string name="admin_edit_ads">Editar anuncio</string>

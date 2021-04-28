@@ -105,7 +105,7 @@ public class ConcertsMgtFragment extends Fragment {
             mEtConcertPhotoTextUri.setText(mConcert.getPhotoConcert().getPath());
         } else {
             mTvTitleConcertForm.setText(R.string.admin_new_concert);
-            
+
             mConcert = null;
         }
 
@@ -135,12 +135,5 @@ public class ConcertsMgtFragment extends Fragment {
         });
 
         mBtnConcertFormCancel.setOnClickListener(v -> FragmentUtils.interchangeFragement(getActivity().getSupportFragmentManager(), R.id.fgAdminLogin, ConcertsListFragment.class));
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ConcertsMgtViewModel.class);
-        // TODO: Use the ViewModel
     }
 }
