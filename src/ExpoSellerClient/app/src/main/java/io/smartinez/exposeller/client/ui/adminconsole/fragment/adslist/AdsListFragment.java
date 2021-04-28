@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
+import io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist.ConcertsListViewModel;
+import org.jetbrains.annotations.NotNull;
 
 @AndroidEntryPoint
 public class AdsListFragment extends Fragment {
@@ -41,6 +43,14 @@ public class AdsListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.ads_list_fragment, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mViewModel = new ViewModelProvider(this).get(AdsListViewModel.class);
+
+        initView();
     }
 
     private void initView() {

@@ -1,6 +1,7 @@
 package io.smartinez.exposeller.client.repository.datasource;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,9 +22,11 @@ import javax.inject.Singleton;
 import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.domain.IModel;
 
-@ViewModelScoped
+@Singleton
 public class FirebaseDataSourceImpl implements IDataSource {
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
     private BlockingQueue<Boolean> mThreadBus = new LinkedBlockingDeque<>();
 
     @Inject
@@ -197,6 +200,29 @@ public class FirebaseDataSourceImpl implements IDataSource {
     }
 
     @Override
-    public void close() throws IOException {
+    public void loginDatabase(String email, String password) throws IOException {
+        try {
+            if(mAuth.getCurrentUser() != null){
+                mAuth.signOut();
+            }
+
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(command -> mThreadBus.add(true));
+            mThreadBus.take();
+
+            boolean isLogged = mAuth.getCurrentUser() != null;
+
+            if (!isLogged) {
+                throw new IOException("Could not login with this user");
+            }
+        } catch (InterruptedException e) {
+            throw new IOException("Could not login with this user");
+        }
+    }
+
+    @Override
+    public void logoutDatabase() throws IOException {
+        if(mAuth.getCurrentUser() != null){
+            mAuth.signOut();
+        }
     }
 }

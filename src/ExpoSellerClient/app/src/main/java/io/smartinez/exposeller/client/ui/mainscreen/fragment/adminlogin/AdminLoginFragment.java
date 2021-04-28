@@ -6,6 +6,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -18,7 +19,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.adminconsole.AdminConsoleActivity;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.ui.buytickets.BuyTicketsViewModel;
 import io.smartinez.exposeller.client.ui.mainscreen.MainScreenActivity;
+
+import java.io.IOException;
 
 @AndroidEntryPoint
 public class AdminLoginFragment extends Fragment {
@@ -43,8 +47,8 @@ public class AdminLoginFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(AdminLoginViewModel.class);
 
         initView();
@@ -62,11 +66,19 @@ public class AdminLoginFragment extends Fragment {
         mLoadAnimation = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
         mLoadAnimation.setDuration(1000);
 
-        mBtnAdminOk.setOnClickListener(v -> {
-            getActivity().findViewById(R.id.fgAdminLogin).setVisibility(View.GONE);
-            getActivity().findViewById(R.id.fgAdminLogin).startAnimation(mLoadAnimation);
+        mViewModel = new ViewModelProvider(this).get(AdminLoginViewModel.class);
 
-            startActivity(new Intent(getActivity(), AdminConsoleActivity.class));
+        mBtnAdminOk.setOnClickListener(v -> {
+            try {
+                mViewModel.loginAdministrator(mTvAdminEmail.getText().toString(), mTvAdminPassword.getText().toString());
+
+                getActivity().findViewById(R.id.fgAdminLogin).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.fgAdminLogin).startAnimation(mLoadAnimation);
+
+                startActivity(new Intent(getActivity(), AdminConsoleActivity.class));
+            } catch (IOException e) {
+                Toast.makeText(getContext(), R.string.admin_login_error, Toast.LENGTH_LONG).show();
+            }
         });
 
         mBtnAdminCancel.setOnClickListener(v -> {

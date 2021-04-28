@@ -28,8 +28,7 @@
     <string name="pickup_ticket_text1">¡Felicidades, su entrada ya está disponible!</string>
     <string name="pickup_ticket_text2">Escanea el código QR con tu aplicación de Apple Wallet® o compatibles.</string>
     <string name="concert_select">Selecciona un concierto</string>
-    <string name="buy_error">Ha ocurrido un error durante la compra del ticket, devolviendo el dinero depositado
-    </string>
+    <string name="buy_error">Ha ocurrido un error durante la compra del ticket, devolviendo el dinero depositado</string>
     <string name="system_console">ExpoSeller - Consola de Administración</string>
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
@@ -49,4 +48,11 @@
     <string name="ads_list">Listado de Anuncios</string>
     <string name="concerts_list">Listado de Conciertos</string>
     <string name="concerts">Conciertos</string>
+    <string name="admin_login_error">No se ha podido iniciar sesión, vuelvelo a intentar en unos minutos</string>
+    <string name="admin_logout_exception">No se ha podido cerrar sesión, intentelo en unos minutos</string>
+    <string name="admin_error_process">No se ha podido procesar la petición, intentelo de nuevo más tarde</string>
+    <string name="admin_edit_ads">Editar anuncio</string>
+    <string name="admin_new_ads">Nuevo anuncio</string>
+    <string name="admin_edit_concert">Editar concierto</string>
+    <string name="admin_new_concert">Nuevo concierto</string>
 </resources>

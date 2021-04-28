@@ -39,8 +39,8 @@ public class CheckSchedulesActivity extends AppCompatActivity {
     private ConstraintLayout mClCalendar;
     private CalendarView mCvCalendar;
 
-    private CheckSchedulesAdapter mConcertScheduleAdapter;
-    private CheckSchedulesViewModel mConcertScheduleViewModel;
+    private CheckSchedulesAdapter mAdapter;
+    private CheckSchedulesViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +73,10 @@ public class CheckSchedulesActivity extends AppCompatActivity {
         mCvCalendar = findViewById(R.id.cvCalendar);
 
         mBtnCancelOperation1.setOnClickListener(v -> CheckSchedulesActivity.this.onBackPressed());
-        mConcertScheduleViewModel = new ViewModelProvider(this).get(CheckSchedulesViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(CheckSchedulesViewModel.class);
 
-        mConcertScheduleAdapter = new CheckSchedulesAdapter();
-        mConcertScheduleAdapter.setOnAdapterClickListener(model -> {
+        mAdapter = new CheckSchedulesAdapter();
+        mAdapter.setOnAdapterClickListener(model -> {
             if (model instanceof Concert) {
                 Concert concert = (Concert) model;
 
@@ -89,15 +89,15 @@ public class CheckSchedulesActivity extends AppCompatActivity {
             }
         });
 
-        mRvConcertList.setAdapter(mConcertScheduleAdapter);
+        mRvConcertList.setAdapter(mAdapter);
 
         mCvCalendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             String monthStr = Month.of(month + 1).getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).toLowerCase();
 
             mTvTitleCheckSchedules.setText(String.format(getString(R.string.check_schedules), monthStr, year));
 
-            mConcertScheduleViewModel.searchConcertWithDay(new Date(view.getDate()))
-                                     .observe(this, concerts -> mConcertScheduleAdapter.setConcertList(concerts));
+            mViewModel.searchConcertWithDay(new Date(view.getDate()))
+                                     .observe(this, concerts -> mAdapter.setConcertList(concerts));
         });
 
         Calendar calendar = Calendar.getInstance();
@@ -108,8 +108,8 @@ public class CheckSchedulesActivity extends AppCompatActivity {
 
         mTvTitleCheckSchedules.setText(String.format(getString(R.string.check_schedules), monthStr, yearInt));
 
-        mConcertScheduleViewModel.searchConcertWithDay(new Date())
-                                 .observe(this, concerts -> mConcertScheduleAdapter.setConcertList(concerts));
+        mViewModel.searchConcertWithDay(new Date())
+                                 .observe(this, concerts -> mAdapter.setConcertList(concerts));
     }
 
     @Override

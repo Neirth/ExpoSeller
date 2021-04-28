@@ -1,10 +1,6 @@
 package io.smartinez.exposeller.client.ui.adminconsole;
 
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.provider.Settings;
-import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,12 +8,12 @@ import android.os.Bundle;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.adminconsole.fragment.adslist.AdsListFragment;
 import io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist.ConcertsListFragment;
-import io.smartinez.exposeller.client.util.FragmentsUtils;
+import io.smartinez.exposeller.client.util.FragmentUtils;
 import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
@@ -48,7 +44,9 @@ public class AdminConsoleActivity extends AppCompatActivity {
 
     private Guideline mGlVerticalSeparator2;
 
-    private View mFlFragmentSurface;
+    private FrameLayout mFlFragmentSurface;
+
+    private AdminConsoleViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,20 +87,13 @@ public class AdminConsoleActivity extends AppCompatActivity {
         mGlVerticalSeparator2 = findViewById(R.id.glVerticalSeparator2) ;
         mFlFragmentSurface = findViewById(R.id.flFragmentSurface);
 
-        mCvConcerts.setOnClickListener(v -> FragmentsUtils.interchangeFragement(getSupportFragmentManager(), R.id.flFragmentSurface, ConcertsListFragment.class));
-        mCvAds.setOnClickListener(v -> FragmentsUtils.interchangeFragement(getSupportFragmentManager(), R.id.flFragmentSurface, AdsListFragment.class));
+        mCvConcerts.setOnClickListener(v -> FragmentUtils.interchangeFragement(getSupportFragmentManager(), R.id.flFragmentSurface, ConcertsListFragment.class));
+        mCvAds.setOnClickListener(v -> FragmentUtils.interchangeFragement(getSupportFragmentManager(), R.id.flFragmentSurface, AdsListFragment.class));
 
-        mCvSystemSettings.setOnClickListener(v -> {
-            try {
-                startActivity(Intent.makeMainActivity(new ComponentName("com.android.iotlauncher", "com.android.iotlauncher.DefaultIoTLauncher")));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            } catch (ActivityNotFoundException e) {
-                startActivity(new Intent(Settings.ACTION_SETTINGS));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-        });
+        mViewModel = new ViewModelProvider(this).get(AdminConsoleViewModel.class);
 
-        mCvExit.setOnClickListener(v -> AdminConsoleActivity.this.onBackPressed());
+        mCvSystemSettings.setOnClickListener(v -> mViewModel.openSystemSettings(AdminConsoleActivity.this));
+        mCvExit.setOnClickListener(v -> mViewModel.exitAdminConsole(AdminConsoleActivity.this));
     }
 
     @Override

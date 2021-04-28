@@ -1,14 +1,16 @@
 package io.smartinez.exposeller.client.repository.datasource;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import io.smartinez.exposeller.client.domain.IModel;
 
-public interface IDataSource extends Closeable {
+public interface IDataSource{
     void insert(IModel entityObj) throws IOException;
+
+    void loginDatabase(String email, String password) throws IOException;
+    void logoutDatabase() throws IOException;
 
     List<IModel> getBySpecificDate(Date date, Class<? extends IModel> entityClass) throws IOException;
     List<IModel> getNotBeforeDate(Date date, Class<? extends IModel> entityClass) throws IOException;

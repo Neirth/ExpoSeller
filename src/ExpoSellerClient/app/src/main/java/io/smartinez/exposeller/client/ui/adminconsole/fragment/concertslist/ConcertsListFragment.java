@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
+import org.jetbrains.annotations.NotNull;
 
 @AndroidEntryPoint
 public class ConcertsListFragment extends Fragment {
@@ -41,6 +42,14 @@ public class ConcertsListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.concerts_list_fragment, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mViewModel = new ViewModelProvider(this).get(ConcertsListViewModel.class);
+
+        initView();
     }
 
     public void initView() {

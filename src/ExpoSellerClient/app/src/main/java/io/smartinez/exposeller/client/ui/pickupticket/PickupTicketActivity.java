@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.ui.insertcoins.InsertCoinsViewModel;
 import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
@@ -27,7 +29,7 @@ public class PickupTicketActivity extends AppCompatActivity {
     private TextView mTvPickupText2;
 
     private Uri mUriTicket;
-    private PickupTicketViewModel mPickupTicketViewModel;
+    private PickupTicketViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,9 @@ public class PickupTicketActivity extends AppCompatActivity {
         mTvPickupText1 = findViewById(R.id.tvPickupText1);
         mTvPickupText2 = findViewById(R.id.tvPickupText2);
 
-        mPickupTicketViewModel.generateTicketQrCode(this, mIvQrCode, mUriTicket);
+        mViewModel = new ViewModelProvider(this).get(PickupTicketViewModel.class);
+
+        mViewModel.generateTicketQrCode(this, mIvQrCode, mUriTicket);
     }
 
     @Override

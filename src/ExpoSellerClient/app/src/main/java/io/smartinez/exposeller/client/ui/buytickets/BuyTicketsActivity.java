@@ -25,8 +25,8 @@ public class BuyTicketsActivity extends AppCompatActivity {
     private ImageView mIvExpoSellerLogo5;
     private RecyclerView mRvBuyTickets;
 
-    private BuyTicketConcertAdapter mBuyTicketConcertAdapter;
-    private BuyTicketsViewModel mBuyTicketsViewModel;
+    private BuyTicketConcertAdapter mAdapter;
+    private BuyTicketsViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +53,10 @@ public class BuyTicketsActivity extends AppCompatActivity {
         mIvExpoSellerLogo5 = findViewById(R.id.ivExpoSellerLogo5);
         mRvBuyTickets = findViewById(R.id.rvBuyTickets);
 
-        mBuyTicketsViewModel = new ViewModelProvider(this).get(BuyTicketsViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(BuyTicketsViewModel.class);
 
-        mBuyTicketConcertAdapter = new BuyTicketConcertAdapter();
-        mBuyTicketConcertAdapter.setAdapterClickListener(model -> {
+        mAdapter = new BuyTicketConcertAdapter();
+        mAdapter.setAdapterClickListener(model -> {
             if (model instanceof Concert) {
                 Concert concert = (Concert) model;
 
@@ -69,8 +69,8 @@ public class BuyTicketsActivity extends AppCompatActivity {
             }
         });
 
-        mRvBuyTickets.setAdapter(mBuyTicketConcertAdapter);
-        mBuyTicketsViewModel.readConcertList().observe(this, value -> mBuyTicketConcertAdapter.setConcertList(value));
+        mRvBuyTickets.setAdapter(mAdapter);
+        mViewModel.readConcertList().observe(this, value -> mAdapter.setConcertList(value));
     }
 
     @Override

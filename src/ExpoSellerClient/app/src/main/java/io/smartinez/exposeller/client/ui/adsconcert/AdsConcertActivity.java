@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -24,7 +23,7 @@ public class AdsConcertActivity extends AppCompatActivity {
     private ConstraintLayout mClAdsConcert;
     private ImageView mIvAdsConcertView;
 
-    private AdsConcertViewModel mAdsConcertViewModel;
+    private AdsConcertViewModel mViewModel;
 
     @Inject
     protected ExecutorService mExecutorService;
@@ -42,9 +41,9 @@ public class AdsConcertActivity extends AppCompatActivity {
         mIvAdsConcertView = findViewById(R.id.ivAdsConcertView);
 
         mIvAdsConcertView.setOnClickListener(v -> AdsConcertActivity.this.onBackPressed());
-        mAdsConcertViewModel = new ViewModelProvider(this).get(AdsConcertViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(AdsConcertViewModel.class);
 
-        mAdsConcertViewModel.pickRandomAdsList().observe(this, value -> {
+        mViewModel.pickRandomAdsList().observe(this, value -> {
             mExecutorService.execute(() -> {
                 while (true) {
                     try {

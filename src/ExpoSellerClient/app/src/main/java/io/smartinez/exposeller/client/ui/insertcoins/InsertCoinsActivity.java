@@ -20,7 +20,6 @@ import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
 import io.smartinez.exposeller.client.ui.pickupticket.PickupTicketActivity;
-import io.smartinez.exposeller.client.ui.pickupticket.PickupTicketViewModel;
 import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
@@ -39,7 +38,7 @@ public class InsertCoinsActivity extends AppCompatActivity {
     private Button mBtnCancelOperation2;
 
     private Concert mConcert;
-    private InsertCoinsViewModel mInsertCoinsViewModel;
+    private InsertCoinsViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +75,8 @@ public class InsertCoinsActivity extends AppCompatActivity {
         mBtnCancelOperation2.setOnClickListener(v -> InsertCoinsActivity.this.onBackPressed());
         mTvConcertValue.setText(String.format(Locale.getDefault(),"%f", mConcert.getCost()));
 
-        mInsertCoinsViewModel = new ViewModelProvider(this).get(InsertCoinsViewModel.class);
-        mInsertCoinsViewModel.buyTicket(this, mConcert, mTvInsertedValue, mTvReturnValue)
+        mViewModel = new ViewModelProvider(this).get(InsertCoinsViewModel.class);
+        mViewModel.buyTicket(this, mConcert, mTvInsertedValue, mTvReturnValue)
             .whenComplete((uriTicket, ex) -> {
                 Intent intent = new Intent(InsertCoinsActivity.this, PickupTicketActivity.class);
                 intent.putExtra(PickupTicketActivity.EXTRA_TICKET, Uri.parse(uriTicket));
@@ -90,7 +89,7 @@ public class InsertCoinsActivity extends AppCompatActivity {
                 try {
                     Toast.makeText(this, getText(R.string.buy_error), Toast.LENGTH_LONG).show();
 
-                    mInsertCoinsViewModel.cancelBuyTicket(null);
+                    mViewModel.cancelBuyTicket(null);
                     ex.printStackTrace();
                 } catch (IOException exception) {
                     exception.printStackTrace();
