@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -41,16 +45,17 @@ public class ConcertsListAdapter extends RecyclerView.Adapter<ConcertsListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ConcertsListAdapter.ConcertsListViewHolder holder, int position) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
-
         if (mEntriesList != null) {
             Concert concert = mEntriesList.get(position);
 
             Glide.with(mContext).load(concert.getPhotoConcert()).into(holder.mIvPhotoArtist4);
 
-            holder.mTvFriendlyId4.setText(concert.getFriendlyId());
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT);
+            LocalDateTime dateConcertObj = concert.getEventDate().toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
+
+            holder.mTvFriendlyId4.setText(String.valueOf(concert.getFriendlyId()));
             holder.mTvConcertName4.setText(concert.getName());
-            holder.mTvEventDate3.setText(sdf.format(concert.getEventDate()));
+            holder.mTvEventDate3.setText(dateConcertObj.format(dateFormatter));
         }
     }
 

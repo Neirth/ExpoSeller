@@ -18,8 +18,8 @@ import io.smartinez.exposeller.client.service.UserService;
 
 @HiltViewModel
 public class CheckSchedulesViewModel extends ViewModel {
-    private UserService mUsersService;
-    private ExecutorService mExecutorService;
+    private final UserService mUsersService;
+    private final ExecutorService mExecutorService;
 
     @Inject
     public CheckSchedulesViewModel(UserService mUsersService, ExecutorService executorService) {

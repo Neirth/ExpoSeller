@@ -1,11 +1,15 @@
 package io.smartinez.exposeller.client.peripherals.ticketgenerator;
 
 import android.content.res.Resources;
+import android.net.Uri;
 import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.ryantenney.passkit4j.Pass;
+import com.ryantenney.passkit4j.PassResource;
 import com.ryantenney.passkit4j.PassSerializer;
 import com.ryantenney.passkit4j.model.Barcode;
 import com.ryantenney.passkit4j.model.BarcodeFormat;
@@ -16,11 +20,17 @@ import com.ryantenney.passkit4j.model.TextField;
 import com.ryantenney.passkit4j.sign.PassSigner;
 import com.ryantenney.passkit4j.sign.PassSignerImpl;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,16 +43,21 @@ import io.smartinez.exposeller.client.domain.Ticket;
 import io.smartinez.exposeller.client.repository.ConcertRepo;
 import io.smartinez.exposeller.client.util.Utilities;
 
-@ViewModelScoped
+@Singleton
 public class PassbookTicketGeneratorImpl implements ITicketGenerator {
-    private final TicketType ticketType = TicketType.VIRTUAL;
-    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    private final TicketType ticketType;
+    private final StorageReference storageRef;
 
-    private ConcertRepo mConcertRepo;
+    private final ConcertRepo mConcertRepo;
+    private final BlockingQueue<Boolean> mThreadBus;
 
     @Inject
     public PassbookTicketGeneratorImpl(ConcertRepo concertRepo) {
+        this.ticketType = TicketType.VIRTUAL;
+
         this.mConcertRepo = concertRepo;
+        this.mThreadBus = new LinkedBlockingDeque<>();
+        this.storageRef = FirebaseStorage.getInstance().getReference().child(Ticket.class.getSimpleName());
     }
 
     @Override
@@ -54,45 +69,58 @@ public class PassbookTicketGeneratorImpl implements ITicketGenerator {
     public String generateVirtualTicket(Ticket ticket) throws IOException {
         try {
             // Get concert data
-            Concert concert = mConcertRepo.getByDocId(ticket.getDocId());
+            Concert concert = mConcertRepo.getByDocId(ticket.getConcertId());
 
             // Prepare the resources instance
             Resources andRes = Utilities.getApplicationUsingReflection().getResources();
 
+            // Get classloader from thread
+            ClassLoader classLoader = getClass().getClassLoader();
+
+            // Prepare date formatter
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT);
+            LocalDateTime dateConcertObj = concert.getEventDate().toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
+
             // Generate the Passbook ticket
             Pass pass = new Pass()
-                    .passTypeIdentifier("io.smartinez.exposeller.ticket")
-                    .organizationName(concert.getOrganizationName())
-                    .description(concert.getName() + " - " + concert.getArtistName())
-                    .serialNumber(concert.getFriendlyId().toString())
-                    .relevantDate(concert.getEventDate())
-                    .barcode(new Barcode(BarcodeFormat.QR, concert.getFriendlyId().toString()))
-                    .backgroundColor(new Color(249, 118, 90))
-                    .foregroundColor(Color.BLACK)
-                    .passInformation(new EventTicket()
-                        .backFields(
-                            new TextField("terms", andRes.getString(R.string.terms_and_conditions_name), andRes.getString(R.string.terms_and_conditions_desc))
-                        )
-                        .primaryFields(
-                            new TextField("name", andRes.getString(R.string.event_name), concert.getName())
-                        )
-                        .secondaryFields(
-                            new TextField("artist", andRes.getString(R.string.artist_name), concert.getArtistName()),
-                            new DateField("date", andRes.getString(R.string.event_date), concert.getEventDate())
-                        )
-                    );
+                .passTypeIdentifier("io.smartinez.exposeller.ticket")
+                .organizationName(concert.getOrganizationName())
+                .description(concert.getName() + " - " + concert.getArtistName())
+                .serialNumber(ticket.getFriendlyId().toString())
+                .relevantDate(concert.getEventDate())
+                .barcode(new Barcode(BarcodeFormat.QR, ticket.getFriendlyId().toString()))
+                .labelColor(new Color(0, 0 ,0))
+                .files(
+                    new PassResource("logo.png", classLoader.getResourceAsStream("assets/eventticket/logo.png")),
+                    new PassResource("logo@2x.png", classLoader.getResourceAsStream("assets/eventticket/logo@2x.png")),
+                    new PassResource("background.png", classLoader.getResourceAsStream("assets/eventticket/background.png")),
+                    new PassResource("background@2x.png", classLoader.getResourceAsStream("assets/eventticket/background@2x.png"))
+                )
+                .passInformation(new EventTicket()
+                    .backFields(
+                        new TextField("terms", andRes.getString(R.string.terms_and_conditions_name), andRes.getString(R.string.terms_and_conditions_desc))
+                    )
+                    .primaryFields(
+                        new TextField("name", andRes.getString(R.string.event_name), concert.getName())
+                    )
+                    .auxiliaryFields(
+                        new TextField("artist", andRes.getString(R.string.artist_name), concert.getArtistName()),
+                        new TextField("date", andRes.getString(R.string.event_date), dateConcertObj.format(dateFormatter))
+                    )
+                );
 
             // Prepare the signer
             PassSigner signer = PassSignerImpl.builder()
-                                              .keystore(new FileInputStream("assets/certificates/Certificates.p12"), null)
-                                              .intermediateCertificate(new FileInputStream("assets/certificates/AppleWWDRCA.cer"))
-                                              .build();
+                .keystore(classLoader.getResourceAsStream("assets/certificates/Certificates.p12"), null)
+                .intermediateCertificate(classLoader.getResourceAsStream("assets/certificates/AppleWWDRCA.cer"))
+                .build();
 
             // Get the reference to file
-            StorageReference ticketCloudUri = storageRef.child(UUID.randomUUID().toString() + "/" + UUID.randomUUID().toString() + ".pkpass");
+            StorageReference ticketCloudUri = storageRef.child(UUID.randomUUID().toString())
+                .child(UUID.randomUUID().toString() + ".pkpass");
 
             // Prepare the buffer to receive the ticket file
-            try (ByteArrayOutputStream outputFile = new ByteArrayOutputStream()){
+            try (ByteArrayOutputStream outputFile = new ByteArrayOutputStream()) {
                 // Write to buffer the generated ticket
                 PassSerializer.writePkPassArchive(pass, signer, outputFile);
 
@@ -100,16 +128,30 @@ public class PassbookTicketGeneratorImpl implements ITicketGenerator {
                 outputFile.flush();
 
                 // Upload bytes to file
-                ticketCloudUri.putStream(new ByteArrayInputStream(outputFile.toByteArray()));
+               UploadTask uploadTask = ticketCloudUri.putStream(new ByteArrayInputStream(outputFile.toByteArray()));
+
+               // Wait to upload
+               uploadTask.addOnCompleteListener(command -> mThreadBus.add(true));
+               mThreadBus.take();
             }
 
-            // Return the path.
-            return ticketCloudUri.getDownloadUrl().getResult().getPath();
-        } catch (Exception e) {
-            Log.e(ExpoSellerApplication.LOG_TAG, "No could generate the ticket");
-            e.printStackTrace();
+            // Get the download url
+            Task<Uri> uriTask = ticketCloudUri.getDownloadUrl();
 
-            return null;
+            // Wait to task
+            uriTask.addOnCompleteListener(command -> mThreadBus.add(true));
+            mThreadBus.take();
+
+            if (uriTask.isSuccessful()) {
+                // Return the path.
+                return uriTask.getResult().toString();
+            } else {
+                throw new IOException("No could get the uri ticket");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
         }
     }
 

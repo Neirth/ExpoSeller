@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <application android:name=".ExpoSellerApplication"
+    <application android:icon="@mipmap/ic_launcher"
+                 android:roundIcon="@mipmap/ic_launcher_round"
+                 android:name=".ExpoSellerApplication"
                  android:label="@string/app_name">
 
         <uses-library android:name="com.google.android.things"
@@ -47,5 +49,4 @@
                   android:screenOrientation="landscape"
                   android:theme="@style/ExpoSeller.Theme.FullScreen"/>
     </application>
-
 </manifest>

@@ -2,38 +2,39 @@ package io.smartinez.exposeller.client.peripherals.insertcoins;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
 
 import java.io.IOException;
+import java.util.Observable;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.ExpoSellerApplication;
+import io.smartinez.exposeller.client.util.observable.DataObs;
 
-@ViewModelScoped
+@Singleton
 public class ButtonInsertCoinsImpl implements IInsertCoins {
-//    private PeripheralManager mPeripheralManager = PeripheralManager.getInstance();
-    private PeripheralManager mPeripheralManager = null;
+    private final DataObs<Float> mCountedValue;
+    private final PeripheralManager mPeripheralManager;
 
     @Inject
     public ButtonInsertCoinsImpl() {
+        this.mCountedValue = new DataObs<>(0.0f);
+        this.mPeripheralManager = PeripheralManager.getInstance();
     }
 
-    public LiveData<Float> checkInsertedValue() throws IOException {
+    public Observable checkInsertedValue() throws IOException {
         Gpio gpio = mPeripheralManager.openGpio("");
 
-        MutableLiveData<Float> countedValue = new MutableLiveData<>(0f);
+        Observable observable = new Observable();
 
         gpio.registerGpioCallback((gpioAux) -> {
             try {
                 if (gpioAux.getValue()) {
-                    countedValue.postValue(countedValue.getValue() + 0.50f);
+                    mCountedValue.postValue(mCountedValue.getValue() + 0.50f);
+                    observable.notifyObservers(mCountedValue.getValue());
                 }
 
                 return gpioAux.getValue();
@@ -42,11 +43,17 @@ public class ButtonInsertCoinsImpl implements IInsertCoins {
             }
         });
 
-        return countedValue;
+        return observable;
+    }
+
+    public boolean returnExcessAmount(float giveValue) throws IOException {
+        return returnExcessAmount(mCountedValue.getValue(), giveValue);
     }
 
     public boolean returnExcessAmount(float desiredValue, float giveValue) throws IOException {
         Log.d(ExpoSellerApplication.LOG_TAG, "I'm a dummy method, checking if giveValue is greater or equal than desired value");
+
+        mCountedValue.postValue(0.0f);
 
         return giveValue >= desiredValue;
     }

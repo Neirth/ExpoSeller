@@ -3,8 +3,8 @@ package io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.io.IOException;
 import java.util.List;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
@@ -16,8 +16,8 @@ import io.smartinez.exposeller.client.service.AdminService;
 
 @HiltViewModel
 public class ConcertsListViewModel extends ViewModel {
-    private AdminService mAdminService;
-    private ExecutorService mExecutorService;
+    private final AdminService mAdminService;
+    private final ExecutorService mExecutorService;
 
     @Inject
     public ConcertsListViewModel(AdminService adminService, ExecutorService executorService) {

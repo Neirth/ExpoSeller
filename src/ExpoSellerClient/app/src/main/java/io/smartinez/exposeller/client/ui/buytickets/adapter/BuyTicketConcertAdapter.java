@@ -14,8 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
@@ -43,11 +47,12 @@ public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConce
 
             holder.mTvConcertName2.setText(concert.getName());
             holder.mTvArtistName2.setText(concert.getArtistName());
-            holder.mTvConcertValue2.setText(concert.getCost() + "€");
+            holder.mTvConcertValue2.setText(String.format(Locale.getDefault(), "%.2f", concert.getCost()) + " €");
 
-            DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(mContext.getApplicationContext());
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT);
+            LocalDateTime dateConcertObj = concert.getEventDate().toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
 
-            holder.mTvConcertDate2.setText(dateFormat.format(concert.getEventDate()));
+            holder.mTvConcertDate2.setText(dateConcertObj.format(dateFormatter));
         }
     }
 
@@ -57,6 +62,7 @@ public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConce
 
     public void setConcertList(List<Concert> concertsList) {
         this.mConcertList = concertsList;
+        notifyDataSetChanged();
     }
 
     public OnAdapterClickListener getAdapterClickListener() {
@@ -65,8 +71,6 @@ public class BuyTicketConcertAdapter extends RecyclerView.Adapter<BuyTicketConce
 
     public void setAdapterClickListener(OnAdapterClickListener mOnAdapterClickListener) {
         this.mOnAdapterClickListener = mOnAdapterClickListener;
-
-        notifyDataSetChanged();
     }
 
     @Override

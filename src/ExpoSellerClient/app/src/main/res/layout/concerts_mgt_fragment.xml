@@ -51,7 +51,8 @@
                     android:id="@+id/etConcertTextValue"
                     android:layout_marginStart="16dp" app:layout_constraintStart_toEndOf="@+id/tvConcertTextValue"
                     app:layout_constraintTop_toTopOf="@+id/tvConcertTextValue"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvConcertTextValue" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvConcertTextValue"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="16dp"/>
             <TextView
                     android:text="@string/form_artist_name"
@@ -68,7 +69,8 @@
                     android:id="@+id/etArtistTextName"
                     android:layout_marginStart="16dp" app:layout_constraintStart_toEndOf="@+id/tvArtistTextName"
                     app:layout_constraintTop_toTopOf="@+id/tvArtistTextName"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvArtistTextName" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvArtistTextName"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="16dp"/>
             <TextView
                     android:text="@string/form_date"
@@ -83,6 +85,7 @@
                     android:inputType="date"
                     android:ems="10"
                     android:id="@+id/etConcertDate"
+                    android:focusable="false"
                     app:layout_constraintTop_toTopOf="@+id/tvConciertDate"
                     app:layout_constraintBottom_toBottomOf="@+id/tvConciertDate" android:layout_marginStart="16dp"
                     app:layout_constraintStart_toEndOf="@+id/tvConciertDate" app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +105,8 @@
                     android:id="@+id/etOrganizationTextName"
                     android:layout_marginStart="16dp" app:layout_constraintStart_toEndOf="@+id/tvOrganizationTextName"
                     app:layout_constraintTop_toTopOf="@+id/tvOrganizationTextName"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvOrganizationTextName" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvOrganizationTextName"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="16dp"/>
             <TextView
                     android:text="@string/form_uri_photo"
@@ -126,24 +130,28 @@
                     android:id="@+id/etConcertPhotoTextUri"
                     android:layout_marginStart="16dp" app:layout_constraintStart_toEndOf="@+id/ivConcertPhotoTextUri"
                     app:layout_constraintTop_toTopOf="@+id/ivConcertPhotoTextUri"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivConcertPhotoTextUri" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivConcertPhotoTextUri"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="16dp"/>
             <Button
-                    android:text="@android:string/ok"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" android:id="@+id/btnConcertFormOk"
-                    app:layout_constraintTop_toBottomOf="@+id/etConcertPhotoTextUri"
-                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintEnd_toStartOf="@+id/btnConcertFormCancel"
-                    android:background="@color/black" android:textColor="@color/white" android:layout_marginTop="32dp"/>
-            <Button
                     android:text="@android:string/cancel"
-                    android:layout_width="0dp"
+                    android:layout_width="206dp"
                     android:layout_height="wrap_content" android:id="@+id/btnConcertFormCancel"
+                    android:background="@color/black"
+                    android:textColor="@color/text_button_foreground_color"
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toStartOf="@+id/btnConcertFormOk" android:layout_marginTop="32dp"
                     app:layout_constraintTop_toBottomOf="@+id/etConcertPhotoTextUri"
-                    app:layout_constraintStart_toEndOf="@+id/btnConcertFormOk" app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintEnd_toEndOf="parent" android:background="@color/black"
-                    android:textColor="@color/white" android:layout_marginTop="32dp"/>
+                    app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"/>
+            <Button
+                    android:text="@android:string/ok"
+                    android:layout_width="206dp"
+                    android:layout_height="wrap_content" android:id="@+id/btnConcertFormOk"
+                    android:background="@color/black" android:textColor="@color/text_button_foreground_color"
+                    app:layout_constraintStart_toEndOf="@+id/btnConcertFormCancel"
+                    app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etConcertPhotoTextUri" android:layout_marginTop="32dp"
+                    app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

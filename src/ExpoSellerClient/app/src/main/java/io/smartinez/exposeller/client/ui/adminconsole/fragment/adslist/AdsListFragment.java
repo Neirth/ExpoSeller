@@ -1,5 +1,7 @@
 package io.smartinez.exposeller.client.ui.adminconsole.fragment.adslist;
 
+import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,17 +21,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
-import io.smartinez.exposeller.client.domain.AdBanner;
+import io.smartinez.exposeller.client.domain.Advertisement;
 import io.smartinez.exposeller.client.service.AdminService;
 import io.smartinez.exposeller.client.ui.adminconsole.fragment.adslist.adapter.AdsListAdapter;
 import io.smartinez.exposeller.client.ui.adminconsole.fragment.adsmgt.AdsMgtFragment;
 import io.smartinez.exposeller.client.util.FragmentUtils;
 
+import io.smartinez.exposeller.client.util.Utilities;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -49,6 +53,8 @@ public class AdsListFragment extends Fragment {
     private ImageView mIvAdsAdd;
     private AdsListAdapter mAdapter;
 
+    private Calendar mCalendar = Calendar.getInstance();
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -56,11 +62,12 @@ public class AdsListFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(AdsListViewModel.class);
 
         initView();
+        initRecyclerView();
     }
 
     private void initView() {
@@ -75,6 +82,43 @@ public class AdsListFragment extends Fragment {
         mRvAdsList = getActivity().findViewById(R.id.rvAdsList);
         mIvAdsAdd = getActivity().findViewById(R.id.ivAdsAdd);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
+
+        DatePickerDialog.OnDateSetListener onDateListener = (view, year, monthOfYear, dayOfMonth) -> {
+            mCalendar.set(Calendar.YEAR, year);
+            mCalendar.set(Calendar.MONTH, monthOfYear);
+            mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            mEtAdsDate1.setText(sdf.format(mCalendar.getTime()));
+        };
+
+        mEtAdsDate1.setOnClickListener(v -> {
+            Utilities.hideKeyboard(getContext(), v);
+            new DatePickerDialog(getActivity(), onDateListener, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+
+        mIvAdsAdd.setOnClickListener(v -> FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface,AdsMgtFragment.class));
+
+        mIvSearchDate1.setOnClickListener(v -> {
+            if (mEtAdsDate1.getText().length() >= 1) {
+                try {
+                    Date desiredDate = sdf.parse(mEtAdsDate1.getText().toString());
+
+                    mViewModel.searchListAdBanners(AdminService.TypeSearch.TIME_BASED, desiredDate.getTime());
+                } catch (ParseException e) {
+                    Utilities.showToast(getActivity(), R.string.admin_error_process);
+                }
+            }
+        });
+
+        mIvSearchFreindlyId1.setOnClickListener(v -> {
+            if (mEtFriendlyId1.getText().length() >= 1) {
+                mViewModel.searchListAdBanners(AdminService.TypeSearch.FRIENDLY_ID, Integer.parseInt(mEtFriendlyId1.getText().toString()));
+            }
+        });
+    }
+
+    private void initRecyclerView() {
         mAdapter = new AdsListAdapter();
 
         mViewModel.getListAdBanner().observe(getViewLifecycleOwner(), adBanners -> mAdapter.setEntriesList(adBanners));
@@ -83,48 +127,26 @@ public class AdsListFragment extends Fragment {
         mRvAdsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mAdapter.setOnAdapterClickEditListener(model -> {
-            if (model instanceof AdBanner) {
-                AdBanner auxConcert = (AdBanner) model;
+            if (model instanceof Advertisement) {
+                Advertisement auxConcert = (Advertisement) model;
 
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AdsMgtFragment.EXTRA_DATA, auxConcert);
 
-                FragmentUtils.interchangeFragement(getActivity().getSupportFragmentManager(), R.id.fgAdminLogin, AdsMgtFragment.class, bundle);
+                FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface,AdsMgtFragment.class, bundle);
             }
         });
 
         mAdapter.setOnAdapterClickDeleteListener(model -> {
             try {
-                if (model instanceof AdBanner) {
-                    AdBanner auxAdBanner = (AdBanner) model;
+                if (model instanceof Advertisement) {
+                    Advertisement auxAdvertisement = (Advertisement) model;
 
-                    mViewModel.getAdBannerRepo().delete(auxAdBanner);
+                    mViewModel.getAdBannerRepo().delete(auxAdvertisement);
                     mViewModel.notifyListChanges();
                 }
             } catch (IOException e) {
-                Toast.makeText(getContext(), R.string.admin_entry_delete_error, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        mIvAdsAdd.setOnClickListener(v -> FragmentUtils.interchangeFragement(getActivity().getSupportFragmentManager(), R.id.fgAdminLogin, AdsMgtFragment.class));
-
-        mIvSearchDate1.setOnClickListener(v -> {
-            if (mEtAdsDate1.getText().length() >= 1) {
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
-
-                    Date desiredDate = sdf.parse(mEtAdsDate1.getText().toString());
-
-                    mViewModel.searchListAdBanners(AdminService.TypeSearch.TIME_BASED, desiredDate.getTime());
-                } catch (ParseException e) {
-                    Toast.makeText(getContext(), R.string.admin_error_process, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        mIvSearchFreindlyId1.setOnClickListener(v -> {
-            if (mEtFriendlyId1.getText().length() >= 1) {
-                mViewModel.searchListAdBanners(AdminService.TypeSearch.FRIENDLY_ID, Integer.parseInt(mEtFriendlyId1.getText().toString()));
+                Utilities.showToast(getActivity(), R.string.admin_entry_delete_error);
             }
         });
 

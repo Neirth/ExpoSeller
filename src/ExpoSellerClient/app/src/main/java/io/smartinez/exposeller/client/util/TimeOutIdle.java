@@ -17,10 +17,14 @@ public class TimeOutIdle {
     }
 
     public synchronized static void stopIdleHandler() {
-        mHandler.removeCallbacks(mIdleRunnable);
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     public synchronized static void startIdleHandler() {
         mHandler.postDelayed(mIdleRunnable, 60 * 1000);
+    }
+
+    public synchronized static void startIdleHandler(long milliseconds) {
+        mHandler.postDelayed(mIdleRunnable, milliseconds);
     }
 }

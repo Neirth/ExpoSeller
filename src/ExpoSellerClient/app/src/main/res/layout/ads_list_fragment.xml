@@ -46,21 +46,22 @@
                 android:inputType="textPersonName"
                 android:ems="10"
                 android:id="@+id/etAdsDate1"
+                android:focusable="false"
                 app:layout_constraintStart_toEndOf="@+id/tvAdsDate1"
                 app:layout_constraintTop_toTopOf="@+id/tvAdsDate1"
                 app:layout_constraintBottom_toBottomOf="@+id/tvAdsDate1" android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/ivSearchDate1" android:layout_marginEnd="16dp"/>
         <ImageView
                 android:src="@drawable/ic_baseline_search_24"
-                android:layout_width="48dp"
-                android:layout_height="48dp" android:id="@+id/ivSearchFreindlyId1"
+                android:layout_width="32dp"
+                android:layout_height="32dp" android:id="@+id/ivSearchFreindlyId1"
                 app:layout_constraintTop_toTopOf="@+id/etFriendlyId1"
                 app:layout_constraintBottom_toBottomOf="@+id/etFriendlyId1"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"/>
         <ImageView
                 android:src="@drawable/ic_baseline_search_24"
-                android:layout_width="48dp"
-                android:layout_height="48dp" android:id="@+id/ivSearchDate1"
+                android:layout_width="32dp"
+                android:layout_height="32dp" android:id="@+id/ivSearchDate1"
                 app:layout_constraintBottom_toBottomOf="@+id/etAdsDate1"
                 app:layout_constraintTop_toTopOf="@+id/etAdsDate1"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"/>
@@ -74,8 +75,8 @@
                 android:id="@+id/rvAdsList" tools:listitem="@layout/item_admin_adbanner"/>
         <ImageView
                 android:src="@drawable/ic_baseline_add_24"
-                android:layout_width="48dp"
-                android:layout_height="48dp" android:id="@+id/ivAdsAdd" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="32dp"
+                android:layout_height="32dp" android:id="@+id/ivAdsAdd" app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

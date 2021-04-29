@@ -1,11 +1,11 @@
 package io.smartinez.exposeller.client.ui.insertcoins;
 
+import android.graphics.Color;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
+import io.smartinez.exposeller.client.ui.buytickets.BuyTicketsActivity;
+import io.smartinez.exposeller.client.ui.mainscreen.MainScreenActivity;
 import io.smartinez.exposeller.client.ui.pickupticket.PickupTicketActivity;
 import io.smartinez.exposeller.client.util.TimeOutIdle;
 
@@ -53,15 +55,13 @@ public class InsertCoinsActivity extends AppCompatActivity {
             Intent intent = new Intent(InsertCoinsActivity.this, AdsConcertActivity.class);
             startActivity(intent);
 
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
             finish();
         });
 
         TimeOutIdle.startIdleHandler();
     }
 
-    public void initView() {
+    private void initView() {
         mClInsertCoins = findViewById(R.id.clInsertCoins);
         mIvInsertCoins = findViewById(R.id.ivInsertCoins);
         mTvInsertImportValue = findViewById(R.id.tvInsertImportValue);
@@ -73,17 +73,20 @@ public class InsertCoinsActivity extends AppCompatActivity {
         mBtnCancelOperation2 = findViewById(R.id.btnCancelOperation2);
 
         mBtnCancelOperation2.setOnClickListener(v -> InsertCoinsActivity.this.onBackPressed());
-        mTvConcertValue.setText(String.format(Locale.getDefault(),"%f", mConcert.getCost()));
+
+        mTvConcertValue.setText(String.format(Locale.getDefault(), getString(R.string.concert_value), mConcert.getCost()));
+        mTvConcertChoice.setText(String.format(Locale.getDefault(), getString(R.string.concert_choice), mConcert.getName()));
+        mTvInsertedValue.setText(String.format(Locale.getDefault(), getString(R.string.inserted_value), 0.0));
+        mTvReturnValue.setText(String.format(Locale.getDefault(), getString(R.string.return_value), 0.0));
 
         mViewModel = new ViewModelProvider(this).get(InsertCoinsViewModel.class);
         mViewModel.buyTicket(this, mConcert, mTvInsertedValue, mTvReturnValue)
-            .thenApplyAsync(uriTicket -> {
+            .thenApply(uriTicket -> {
+                mBtnCancelOperation2.setClickable(false);
+
                 runOnUiThread(() -> {
                     Intent intent = new Intent(InsertCoinsActivity.this, PickupTicketActivity.class);
-                    intent.putExtra(PickupTicketActivity.EXTRA_TICKET, Uri.parse(uriTicket));
-
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    startActivity(intent.putExtra(PickupTicketActivity.EXTRA_TICKET, uriTicket));
 
                     finish();
                 });
@@ -92,7 +95,14 @@ public class InsertCoinsActivity extends AppCompatActivity {
             }).exceptionally(ex -> {
                 runOnUiThread(() -> {
                     try {
-                        Toast.makeText(this, getText(R.string.buy_error), Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(this, R.string.buy_error, Toast.LENGTH_SHORT);
+                        toast.getView().setBackgroundColor(getResources().getColor(R.color.darken_grey_transparent));
+
+                        TextView toastMessage = toast.getView().findViewById(android.R.id.message);
+                        toastMessage.setTextColor(Color.WHITE);
+
+                        toast.show();
+
                         mViewModel.cancelBuyTicket(null);
                     } catch (IOException exception) {
                         exception.printStackTrace();
@@ -105,9 +115,22 @@ public class InsertCoinsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(0, android.R.anim.fade_out);
-        finish();
+        try {
+            mViewModel.cancelBuyTicket(null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            super.onBackPressed();
+
+            Intent intent = new Intent(InsertCoinsActivity.this, MainScreenActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        TimeOutIdle.stopIdleHandler();
     }
 
     @Override

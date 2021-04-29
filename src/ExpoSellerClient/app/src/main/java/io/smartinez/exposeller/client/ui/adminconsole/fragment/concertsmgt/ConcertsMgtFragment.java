@@ -1,7 +1,8 @@
 package io.smartinez.exposeller.client.ui.adminconsole.fragment.concertsmgt;
 
 import android.app.DatePickerDialog;
-import android.net.Uri;
+import android.app.TimePickerDialog;
+import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
@@ -12,17 +13,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist.ConcertsListFragment;
-import io.smartinez.exposeller.client.ui.mainscreen.fragment.adminlogin.AdminLoginViewModel;
 import io.smartinez.exposeller.client.util.FragmentUtils;
+import io.smartinez.exposeller.client.util.TimeUtils;
+import io.smartinez.exposeller.client.util.Utilities;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 @AndroidEntryPoint
 public class ConcertsMgtFragment extends Fragment {
@@ -55,11 +63,12 @@ public class ConcertsMgtFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ConcertsMgtViewModel.class);
 
         initView();
+        initButtonActions();
     }
 
     public void initView() {
@@ -80,60 +89,106 @@ public class ConcertsMgtFragment extends Fragment {
         mBtnConcertFormOk = getActivity().findViewById(R.id.btnConcertFormOk);
         mBtnConcertFormCancel = getActivity().findViewById(R.id.btnConcertFormCancel);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
+        Glide.with(this).load(mEtConcertPhotoTextUri.getText().toString()).into(mIvConcertPhotoTextUri);
 
-        DatePickerDialog.OnDateSetListener onDateListener = (view, year, monthOfYear, dayOfMonth) -> {
+        mCalendar.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT);
+
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, hour, minute) -> {
+            mCalendar.set(Calendar.HOUR_OF_DAY, hour);
+            mCalendar.set(Calendar.MINUTE, minute);
+
+            LocalDateTime dateConcertObj = mCalendar.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
+
+            mEtConcertDate.setText(dateConcertObj.format(dateFormatter));
+        };
+
+        DatePickerDialog.OnDateSetListener onDateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
             mCalendar.set(Calendar.YEAR, year);
             mCalendar.set(Calendar.MONTH, monthOfYear);
             mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-            mEtConcertDate.setText(sdf.format(mCalendar.getTime()));
+            new TimePickerDialog(getActivity(), onTimeSetListener, mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), true).show();
         };
 
-        mEtConcertDate.setOnClickListener(v -> new DatePickerDialog(getActivity(), onDateListener, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show());
+        mEtConcertDate.setOnClickListener(v -> {
+            Utilities.hideKeyboard(getActivity(), v);
+            new DatePickerDialog(getActivity(), onDateSetListener, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
 
-        if (getArguments() != null) {
+        mEtConcertPhotoTextUri.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (event == null || !event.isShiftPressed()) {
+                    Glide.with(this).load(mEtConcertPhotoTextUri.getText().toString()).into(mIvConcertPhotoTextUri);
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        if (getArguments() != null && getArguments().getParcelable(ConcertsMgtFragment.EXTRA_DATA) != null) {
             mConcert = getArguments().getParcelable(ConcertsMgtFragment.EXTRA_DATA);
 
             mTvTitleConcertForm.setText(R.string.admin_edit_concert);
 
+            LocalDateTime dateConcertObj = mConcert.getEventDate().toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
+
             mEtConcertName.setText(mConcert.getName());
             mEtConcertTextValue.setText(String.valueOf(mConcert.getCost()));
             mEtArtistTextName.setText(mConcert.getArtistName());
-            mEtConcertDate.setText(sdf.format(mConcert.getEventDate()));
+            mEtConcertDate.setText(dateConcertObj.format(dateFormatter));
             mEtOrganizationTextName.setText(mConcert.getOrganizationName());
-            mEtConcertPhotoTextUri.setText(mConcert.getPhotoConcert().getPath());
+            mEtConcertPhotoTextUri.setText(mConcert.getPhotoConcert());
+
+            mCalendar.setTime(mConcert.getEventDate());
         } else {
             mTvTitleConcertForm.setText(R.string.admin_new_concert);
 
             mConcert = null;
         }
+    }
 
+    private void initButtonActions() {
         mBtnConcertFormOk.setOnClickListener(v -> {
             try {
                 if (mConcert != null && mConcert.getDocId() != null) {
                     mConcert.setName(mEtConcertName.getText().toString());
                     mConcert.setCost(Float.parseFloat(mEtConcertTextValue.getText().toString()));
-                    mConcert.setPhotoConcert(Uri.parse(mEtConcertPhotoTextUri.getText().toString()));
+                    mConcert.setPhotoConcert(mEtConcertPhotoTextUri.getText().toString());
                     mConcert.setArtistName(mEtArtistTextName.getText().toString());
                     mConcert.setEventDate(mCalendar.getTime());
                     mConcert.setOrganizationName(mEtOrganizationTextName.getText().toString());
 
-                    mViewModel.getConcertRepo().update(mConcert);
+                    mViewModel.getExecutorService().submit(() -> {
+                        try {
+                            mViewModel.getConcertRepo().update(mConcert);
+                            getActivity().runOnUiThread(() -> FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface, ConcertsListFragment.class));
+                        } catch (IOException e) {
+                            getActivity().runOnUiThread(() -> Utilities.showToast(getActivity(), R.string.admin_error_process));
+                        }
+                    });
                 } else {
-                    mConcert = new Concert(null, mEtConcertName.getText().toString(), Float.parseFloat(mEtConcertTextValue.getText().toString()),
-                            Uri.parse(mEtConcertPhotoTextUri.getText().toString()), mEtArtistTextName.getText().toString(), mCalendar.getTime(),
-                            null, mEtOrganizationTextName.getText().toString());
+                    mConcert = new Concert(null, mEtConcertName.getText().toString(),
+                            Float.parseFloat(mEtConcertTextValue.getText().toString()), mEtConcertPhotoTextUri.getText().toString(),
+                            mEtArtistTextName.getText().toString(), mCalendar.getTime(), null, mEtOrganizationTextName.getText().toString());
 
-                    mViewModel.getConcertRepo().insert(mConcert);
+                    mViewModel.getExecutorService().submit(() -> {
+                        try {
+                            mConcert.setFriendlyId(mViewModel.generateTicketFriendlyId());
+                            mViewModel.getConcertRepo().insert(mConcert);
+                            getActivity().runOnUiThread(() -> FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface, ConcertsListFragment.class));
+                        } catch (IOException e) {
+                            getActivity().runOnUiThread(() -> Utilities.showToast(getActivity(), R.string.admin_error_process));
+                        }
+                    });
                 }
-
-                FragmentUtils.interchangeFragement(getActivity().getSupportFragmentManager(), R.id.fgAdminLogin, ConcertsListFragment.class);
-            } catch (IOException e) {
-                Toast.makeText(getActivity(), R.string.admin_error_process, Toast.LENGTH_LONG).show();
+            } catch (NumberFormatException e) {
+                Utilities.showToast(getActivity(), R.string.admin_error_process);
             }
         });
 
-        mBtnConcertFormCancel.setOnClickListener(v -> FragmentUtils.interchangeFragement(getActivity().getSupportFragmentManager(), R.id.fgAdminLogin, ConcertsListFragment.class));
+        mBtnConcertFormCancel.setOnClickListener(v -> FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface, ConcertsListFragment.class));
     }
 }

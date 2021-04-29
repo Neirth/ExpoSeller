@@ -13,9 +13,9 @@ import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
-@ViewModelScoped
+@Singleton
 public class ConcertRepo implements IRepository<Concert> {
-    private IDataSource mDataSource;
+    private final IDataSource mDataSource;
 
     @Inject
     public ConcertRepo(IDataSource dataSource) {

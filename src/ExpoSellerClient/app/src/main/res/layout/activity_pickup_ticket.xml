@@ -17,7 +17,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="64dp"
             app:layout_constraintTop_toBottomOf="@+id/ivExpoSellerLogo4"
-            android:layout_marginTop="32dp" />
+            android:layout_marginTop="16dp"/>
 
     <TextView
             android:text="@string/pickup_ticket"
@@ -27,6 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="52dp"
             android:fontFamily="sans-serif-medium"
+            android:textColor="@color/text_activity_foreground_color"
             app:layout_constraintStart_toEndOf="@+id/ivExpoSellerLogo4"
             android:layout_marginStart="16dp" />
 
@@ -48,9 +49,9 @@
             android:layout_marginStart="32dp"
             app:layout_constraintStart_toEndOf="@+id/ivPickupTicket"
             app:layout_constraintTop_toBottomOf="@+id/tvPickupText2"
-            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="@+id/tvPickupText2"
-            android:layout_marginEnd="32dp" />
+            android:layout_marginEnd="32dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="32dp"/>
 
     <TextView
             android:text="@string/pickup_ticket_text1"
@@ -58,6 +59,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvPickupText1"
             android:layout_marginStart="32dp"
+            android:textColor="@color/text_activity_foreground_color"
             app:layout_constraintStart_toEndOf="@+id/ivPickupTicket"
             app:layout_constraintTop_toTopOf="@+id/ivPickupTicket"
             android:fontFamily="sans-serif-medium" />
@@ -70,6 +72,15 @@
             android:layout_marginStart="32dp"
             app:layout_constraintStart_toEndOf="@+id/ivPickupTicket"
             android:layout_marginTop="8dp"
+            android:textColor="@color/text_activity_foreground_color"
             app:layout_constraintTop_toBottomOf="@+id/tvPickupText1"
-            android:fontFamily="sans-serif-thin" />
+            android:fontFamily="sans-serif-light" />
+    <TextView
+            android:text="@string/printing_ticket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/tvPrintingTicket"
+            android:textColor="@color/text_activity_foreground_color"
+            app:layout_constraintStart_toStartOf="@+id/ivQrCode" app:layout_constraintEnd_toEndOf="@+id/ivQrCode"
+            app:layout_constraintTop_toTopOf="@+id/ivQrCode" android:fontFamily="sans-serif-light"
+            app:layout_constraintBottom_toBottomOf="@+id/ivQrCode" android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,16 +3,10 @@ package io.smartinez.exposeller.client.repository.datasource;
 import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.*;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
@@ -20,19 +14,22 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.ExpoSellerApplication;
 import io.smartinez.exposeller.client.domain.IModel;
+import io.smartinez.exposeller.client.util.TimeUtils;
+import io.smartinez.exposeller.client.util.Utilities;
 
 @Singleton
 public class FirebaseDataSourceImpl implements IDataSource {
-    private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-    private BlockingQueue<Boolean> mThreadBus = new LinkedBlockingDeque<>();
+    private final FirebaseAuth mAuth;
+    private final FirebaseFirestore mDb;
+    private final BlockingQueue<Boolean> mThreadBus;
 
     @Inject
     public FirebaseDataSourceImpl() {
+        this.mDb = FirebaseFirestore.getInstance();
+        this.mAuth = FirebaseAuth.getInstance();
+        this.mThreadBus = new LinkedBlockingDeque<>();
     }
 
     @Override
@@ -58,7 +55,14 @@ public class FirebaseDataSourceImpl implements IDataSource {
     @Override
     public List<IModel> getBySpecificDate(Date date, Class<? extends IModel> entityClass) throws IOException {
         try {
-            Query queryDate = mDb.collection(entityClass.getSimpleName()).whereEqualTo("eventDate", date);
+            CollectionReference collectionRef = mDb.collection(entityClass.getSimpleName());
+
+            Date dateWithoutTime = TimeUtils.removeTimeFromDate(date);
+            Date lastMinuteTime = TimeUtils.endOfDay(dateWithoutTime);
+
+            Query queryDate = collectionRef.orderBy("eventDate", Query.Direction.ASCENDING)
+                    .startAt(dateWithoutTime).endAt(lastMinuteTime);
+
             Task<QuerySnapshot> querySnapshotTask = queryDate.get();
 
             querySnapshotTask.addOnCompleteListener(command -> mThreadBus.add(true));
@@ -75,7 +79,12 @@ public class FirebaseDataSourceImpl implements IDataSource {
                     result = Collections.emptyList();
                 }
 
-                return result.stream().map(entityClass::cast).collect(Collectors.toList());
+                return result.stream().map(obj -> {
+                    IModel entity = obj.toObject(entityClass);
+                    entity.setDocId(obj.getId());
+
+                    return entity;
+                }).collect(Collectors.toList());
             } else {
                 throw new IOException("No could complete the operation");
             }
@@ -87,7 +96,9 @@ public class FirebaseDataSourceImpl implements IDataSource {
     @Override
     public List<IModel> getNotBeforeDate(Date date, Class<? extends IModel> entityClass) throws IOException {
         try {
-            Query queryDate = mDb.collection(entityClass.getSimpleName()).whereGreaterThan("eventDate", date);
+            Query queryDate = mDb.collection(entityClass.getSimpleName()).orderBy("eventDate", Query.Direction.ASCENDING)
+                    .startAt(TimeUtils.removeTimezone(date));
+
             Task<QuerySnapshot> querySnapshotTask = queryDate.get();
 
             querySnapshotTask.addOnCompleteListener(command -> mThreadBus.add(true));
@@ -104,7 +115,12 @@ public class FirebaseDataSourceImpl implements IDataSource {
                     result = Collections.emptyList();
                 }
 
-                return result.stream().map(entityClass::cast).collect(Collectors.toList());
+                return result.stream().map(obj -> {
+                    IModel entity = obj.toObject(entityClass);
+                    entity.setDocId(obj.getId());
+
+                    return entity;
+                }).collect(Collectors.toList());
             } else {
                 throw new IOException("No could complete the operation");
             }
@@ -127,7 +143,10 @@ public class FirebaseDataSourceImpl implements IDataSource {
                 DocumentSnapshot docSnap = taskDocSnap.getResult();
 
                 if (docSnap != null && docSnap.exists()) {
-                    return docSnap.toObject(entityClass);
+                    IModel entity = docSnap.toObject(entityClass);
+                    entity.setDocId(docSnap.getId());
+
+                    return entity;
                 } else {
                     throw new IllegalAccessException("Entity not found in the database");
                 }
@@ -142,7 +161,7 @@ public class FirebaseDataSourceImpl implements IDataSource {
     @Override
     public IModel getByFriendlyId(String friendlyId, Class<? extends IModel> entityClass) throws IllegalAccessException, IOException {
         try {
-            Query queryFriendlyId = mDb.collection(entityClass.getSimpleName()).whereEqualTo("friendlyId", friendlyId);
+            Query queryFriendlyId = mDb.collection(entityClass.getSimpleName()).whereEqualTo("friendlyId", Integer.parseInt(friendlyId));
 
             Task<QuerySnapshot> querySnapshotTask = queryFriendlyId.get();
 
@@ -153,7 +172,10 @@ public class FirebaseDataSourceImpl implements IDataSource {
                 QuerySnapshot queryResult = querySnapshotTask.getResult();
 
                 if (queryResult != null && !queryResult.isEmpty()) {
-                    return queryResult.getDocuments().get(0).toObject(entityClass);
+                    IModel entity = queryResult.getDocuments().get(0).toObject(entityClass);
+                    entity.setDocId(queryResult.getDocuments().get(0).getId());
+
+                    return entity;
                 } else {
                     throw new IllegalAccessException("Entity not found in the database");
                 }
@@ -236,4 +258,6 @@ public class FirebaseDataSourceImpl implements IDataSource {
             mAuth.signOut();
         }
     }
+
+
 }

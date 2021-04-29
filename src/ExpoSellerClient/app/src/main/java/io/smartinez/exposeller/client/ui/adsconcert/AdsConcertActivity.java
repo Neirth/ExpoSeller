@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.mainscreen.MainScreenActivity;
+import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
 public class AdsConcertActivity extends AppCompatActivity {
@@ -24,9 +25,6 @@ public class AdsConcertActivity extends AppCompatActivity {
     private ImageView mIvAdsConcertView;
 
     private AdsConcertViewModel mViewModel;
-
-    @Inject
-    protected ExecutorService mExecutorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,37 +34,29 @@ public class AdsConcertActivity extends AppCompatActivity {
         initView();
     }
 
-    public void initView() {
+    private void initView() {
         mClAdsConcert = findViewById(R.id.clAdsConcert);
         mIvAdsConcertView = findViewById(R.id.ivAdsConcertView);
 
         mIvAdsConcertView.setOnClickListener(v -> AdsConcertActivity.this.onBackPressed());
+
         mViewModel = new ViewModelProvider(this).get(AdsConcertViewModel.class);
+        mViewModel.pickRandomAdsList().observe(this, value -> mViewModel.setListAdvertisement(value));
 
-        mViewModel.pickRandomAdsList().observe(this, value -> {
-            mExecutorService.execute(() -> {
-                while (true) {
-                    try {
-                        value.forEach(adBanner -> Glide.with(this).load(adBanner.getPhotoAd()).into(mIvAdsConcertView));
-
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        });
+        mViewModel.runIdleAdvertisment(this, mIvAdsConcertView);
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
         Intent intent = new Intent(AdsConcertActivity.this, MainScreenActivity.class);
         startActivity(intent);
 
-        overridePendingTransition(0, android.R.anim.fade_out);
+        super.onBackPressed();
+    }
 
-        finish();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        TimeOutIdle.stopIdleHandler();
     }
 }

@@ -14,6 +14,9 @@ public class Ticket implements IModel, Parcelable {
     private Boolean isUsed;
     private Date eventDate;
 
+    public Ticket() {
+    }
+
     public Ticket(String docId, String concertId, Integer friendlyId, Boolean isUsed, Date eventDate) {
         this.docId = docId;
         this.concertId = concertId;

@@ -1,23 +1,22 @@
 package io.smartinez.exposeller.client.domain;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.Date;
 
-public class AdBanner implements IModel, Parcelable {
+public class Advertisement implements IModel, Parcelable {
     private String docId;
     private String name;
     private String photoAd;
     private Integer friendlyId;
     private Date eventDate;
 
-    public AdBanner() {
+    public Advertisement() {
     }
 
-    public AdBanner(String docId, String name, String photoAd, Integer friendlyId, Date eventDate) {
+    public Advertisement(String docId, String name, String photoAd, Integer friendlyId, Date eventDate) {
         this.docId = docId;
         this.name = name;
         this.photoAd = photoAd;
@@ -71,7 +70,7 @@ public class AdBanner implements IModel, Parcelable {
         this.eventDate = eventDate;
     }
 
-    protected AdBanner(Parcel in) {
+    protected Advertisement(Parcel in) {
         docId = in.readString();
         name = in.readString();
         photoAd = in.readString();
@@ -100,15 +99,15 @@ public class AdBanner implements IModel, Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<AdBanner> CREATOR = new Parcelable.Creator<AdBanner>() {
+    public static final Parcelable.Creator<Advertisement> CREATOR = new Parcelable.Creator<Advertisement>() {
         @Override
-        public AdBanner createFromParcel(Parcel in) {
-            return new AdBanner(in);
+        public Advertisement createFromParcel(Parcel in) {
+            return new Advertisement(in);
         }
 
         @Override
-        public AdBanner[] newArray(int size) {
-            return new AdBanner[size];
+        public Advertisement[] newArray(int size) {
+            return new Advertisement[size];
         }
     };
 }

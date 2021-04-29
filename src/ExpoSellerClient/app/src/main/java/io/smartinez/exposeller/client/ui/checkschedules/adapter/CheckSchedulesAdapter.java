@@ -41,7 +41,7 @@ public class CheckSchedulesAdapter extends RecyclerView.Adapter<CheckSchedulesAd
             Glide.with(mContext).load(concert.getPhotoConcert()).into(holder.mIvPhotoArtist3);
             holder.mTvArtistName3.setText(concert.getArtistName());
             holder.mTvConcertName3.setText(concert.getName());
-            holder.mTvPriceName3.setText(concert.getCost() + "€");
+            holder.mTvPriceName3.setText(String.format("%.2f", concert.getCost()) + " €");
         }
     }
 
@@ -56,6 +56,7 @@ public class CheckSchedulesAdapter extends RecyclerView.Adapter<CheckSchedulesAd
 
     public void setConcertList(List<Concert> mConcertList) {
         this.mConcertList = mConcertList;
+        notifyDataSetChanged();
     }
 
     public OnAdapterClickListener getOnAdapterClickListener() {

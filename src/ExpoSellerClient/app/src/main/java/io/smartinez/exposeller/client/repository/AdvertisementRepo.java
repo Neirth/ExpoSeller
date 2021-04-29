@@ -12,11 +12,11 @@ import io.smartinez.exposeller.client.domain.Advertisement;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
 @Singleton
-public class AdBannerRepo implements IRepository<Advertisement> {
+public class AdvertisementRepo implements IRepository<Advertisement> {
     private final IDataSource mDataSource;
 
     @Inject
-    public AdBannerRepo(IDataSource dataSource) {
+    public AdvertisementRepo(IDataSource dataSource) {
         this.mDataSource = dataSource;
     }
 

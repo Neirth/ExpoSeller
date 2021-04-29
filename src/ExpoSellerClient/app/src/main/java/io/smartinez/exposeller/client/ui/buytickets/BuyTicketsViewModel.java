@@ -17,8 +17,8 @@ import io.smartinez.exposeller.client.service.UserService;
 
 @HiltViewModel
 public class BuyTicketsViewModel extends ViewModel {
-    private UserService mUsersService;
-    private ExecutorService mExecutorService;
+    private final UserService mUsersService;
+    private final ExecutorService mExecutorService;
 
     @Inject
     public BuyTicketsViewModel(UserService mUsersService, ExecutorService executorService) {

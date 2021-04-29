@@ -1,6 +1,7 @@
 package io.smartinez.exposeller.client.ui.mainscreen.fragment.adminlogin;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.firebase.database.collection.LLRBNode;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.ExpoSellerApplication;
 import io.smartinez.exposeller.client.R;
@@ -86,11 +88,20 @@ public class AdminLoginFragment extends Fragment {
                         return null;
                     });
             } else {
-                Toast.makeText(getContext(), R.string.admin_login_validation_error, Toast.LENGTH_SHORT).show();
+                Toast toast = Toast.makeText(getContext(), R.string.admin_login_validation_error, Toast.LENGTH_SHORT);
+                toast.getView().setBackgroundColor(getResources().getColor(R.color.darken_grey_transparent));
+
+                TextView toastMessage = toast.getView().findViewById(android.R.id.message);
+                toastMessage.setTextColor(Color.WHITE);
+
+                toast.show();
             }
         });
 
         mBtnAdminCancel.setOnClickListener(v -> {
+            mEtAdminEmail.setText("");
+            mEtAdminPassword.setText("");
+
             getActivity().findViewById(R.id.fgAdminLogin).setVisibility(View.GONE);
             getActivity().findViewById(R.id.fgAdminLogin).startAnimation(mLoadAnimation);
         });

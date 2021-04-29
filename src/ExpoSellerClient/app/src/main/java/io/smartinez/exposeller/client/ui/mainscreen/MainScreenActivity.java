@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 
-import androidx.fragment.app.Fragment;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.ExpoSellerApplication;
 import io.smartinez.exposeller.client.R;
@@ -45,15 +44,13 @@ public class MainScreenActivity extends AppCompatActivity {
             Intent intent = new Intent(MainScreenActivity.this, AdsConcertActivity.class);
             startActivity(intent);
 
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
             finish();
         });
 
         TimeOutIdle.startIdleHandler();
     }
 
-    public void initView() {
+    private void initView() {
         mClMainScreen = findViewById(R.id.clMainScreen);
         mBtnCheckSchedules = findViewById(R.id.btnCheckSchedules);
         mBtnBuyTickets = findViewById(R.id.btnBuyTickets);
@@ -70,14 +67,16 @@ public class MainScreenActivity extends AppCompatActivity {
             Intent intent = new Intent(MainScreenActivity.this, BuyTicketsActivity.class);
             startActivity(intent);
 
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            TimeOutIdle.stopIdleHandler();
+            finish();
         });
 
         mBtnCheckSchedules.setOnClickListener(v -> {
             Intent intent = new Intent(MainScreenActivity.this, CheckSchedulesActivity.class);
             startActivity(intent);
 
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            TimeOutIdle.stopIdleHandler();
+            finish();
         });
 
         mIvAdminLogin.setOnClickListener(v -> {
@@ -100,6 +99,12 @@ public class MainScreenActivity extends AppCompatActivity {
         }
 
         Log.d(ExpoSellerApplication.LOG_TAG, "Ignoring back button pressed because is a Main IoT Application...");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        TimeOutIdle.stopIdleHandler();
     }
 
     @Override

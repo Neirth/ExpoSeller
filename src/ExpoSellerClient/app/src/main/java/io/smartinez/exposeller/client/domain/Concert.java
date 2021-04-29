@@ -10,13 +10,16 @@ public class Concert implements IModel, Parcelable {
     private String docId;
     private String name;
     private Float cost;
-    private Uri photoConcert;
+    private String photoConcert;
     private String artistName;
     private Date eventDate;
     private Integer friendlyId;
     private String organizationName;
 
-    public Concert(String docId, String name, Float cost, Uri photoConcert, String artistName, Date eventDate, Integer friendlyId, String organizationName) {
+    public Concert() {
+    }
+
+    public Concert(String docId, String name, Float cost, String photoConcert, String artistName, Date eventDate, Integer friendlyId, String organizationName) {
         this.docId = docId;
         this.name = name;
         this.cost = cost;
@@ -55,11 +58,11 @@ public class Concert implements IModel, Parcelable {
         this.cost = cost;
     }
 
-    public Uri getPhotoConcert() {
+    public String getPhotoConcert() {
         return photoConcert;
     }
 
-    public void setPhotoConcert(Uri photoConcert) {
+    public void setPhotoConcert(String photoConcert) {
         this.photoConcert = photoConcert;
     }
 
@@ -101,7 +104,7 @@ public class Concert implements IModel, Parcelable {
         docId = in.readString();
         name = in.readString();
         cost = in.readByte() == 0x00 ? null : in.readFloat();
-        photoConcert = (Uri) in.readValue(Uri.class.getClassLoader());
+        photoConcert = in.readString();
         artistName = in.readString();
         long tmpEventDate = in.readLong();
         eventDate = tmpEventDate != -1 ? new Date(tmpEventDate) : null;
@@ -124,7 +127,7 @@ public class Concert implements IModel, Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeFloat(cost);
         }
-        dest.writeValue(photoConcert);
+        dest.writeString(photoConcert);
         dest.writeString(artistName);
         dest.writeLong(eventDate != null ? eventDate.getTime() : -1L);
         if (friendlyId == null) {

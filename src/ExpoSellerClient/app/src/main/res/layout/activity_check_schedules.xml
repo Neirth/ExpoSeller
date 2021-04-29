@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/glVerticalSeparator"
             app:layout_constraintGuide_percent="0.5"
-            android:orientation="vertical" />
+            android:orientation="vertical" android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="0dp"
@@ -27,7 +27,7 @@
             android:layout_marginBottom="8dp"
             android:id="@+id/rvConcertList"
             tools:listitem="@layout/item_calendar_schedules"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="16dp" android:visibility="visible"/>
 
     <androidx.constraintlayout.widget.Guideline
             android:layout_width="wrap_content"
@@ -63,7 +63,8 @@
             android:layout_marginEnd="16dp"
             android:textAlignment="center"
             android:gravity="center"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="@color/text_activity_foreground_color" />
 
     <Button
             android:text="@string/cancel_operation"
@@ -77,7 +78,7 @@
             android:layout_marginBottom="16dp"
             android:textColor="@color/white"
             android:background="@drawable/component_background"
-            android:fontFamily="sans-serif-thin" />
+            android:fontFamily="sans-serif-light" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -100,7 +101,7 @@
                 android:layout_height="250dp"
                 android:id="@+id/cvCalendar"
 
-                android:weekSeparatorLineColor="@color/transparent_white"
+                android:weekSeparatorLineColor="@color/primary_color"
 
                 android:gravity="center_vertical"
                 app:layout_constraintStart_toStartOf="parent"
@@ -110,5 +111,14 @@
                 android:dateTextAppearance="@style/CalenderViewDateCustomText"
                 android:weekDayTextAppearance="@style/CalenderViewWeekCustomText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+            android:text="@string/not_found_concert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/tvNotFoundConcerts1"
+            android:textColor="@color/text_activity_foreground_color"
+            app:layout_constraintEnd_toEndOf="@+id/rvConcertList"
+            app:layout_constraintStart_toStartOf="@+id/rvConcertList"
+            app:layout_constraintTop_toTopOf="@+id/rvConcertList"
+            app:layout_constraintBottom_toBottomOf="@+id/rvConcertList" tools:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

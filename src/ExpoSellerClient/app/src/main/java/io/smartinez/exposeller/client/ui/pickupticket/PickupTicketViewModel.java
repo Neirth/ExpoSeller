@@ -1,7 +1,6 @@
 package io.smartinez.exposeller.client.ui.pickupticket;
 
 import android.content.Context;
-import android.net.Uri;
 import android.widget.ImageView;
 
 import androidx.lifecycle.ViewModel;
@@ -12,8 +11,11 @@ import javax.inject.Inject;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.smartinez.exposeller.client.peripherals.ticketgenerator.TicketType;
 import io.smartinez.exposeller.client.service.UserService;
 
+@HiltViewModel
 public class PickupTicketViewModel extends ViewModel {
     private UserService mUsersService;
 
@@ -22,10 +24,13 @@ public class PickupTicketViewModel extends ViewModel {
         this.mUsersService = mUsersService;
     }
 
-    public void generateTicketQrCode(Context context, ImageView imageView, Uri uriTicket) {
-        QRGEncoder qrgEncoder = new QRGEncoder(uriTicket.getPath(), null, QRGContents.Type.TEXT, 128);
+    public void generateTicketQrCode(Context context, ImageView imageView, String uriTicket) {
+        QRGEncoder qrgEncoder = new QRGEncoder(uriTicket, null, QRGContents.Type.TEXT, 128);
 
         Glide.with(context).load(qrgEncoder.getBitmap()).into(imageView);
     }
 
+    public TicketType getTicketImplType() {
+        return mUsersService.getTicketImplType();
+    }
 }

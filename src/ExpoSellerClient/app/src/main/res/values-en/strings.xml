@@ -19,10 +19,10 @@
     <string name="buy_tickets">Buy tickets</string>
     <string name="cancel_operation">Cancel Operation</string>
     <string name="check_schedules">Concerts in the month of %s of %d</string>
-    <string name="insert_coins">Enter the estimated amount in currencies</string>
-    <string name="return_value">Amount to return: %s</string>
-    <string name="inserted_value">Amount entered: %s</string>
-    <string name="concert_value">Amount estimate: %s</string>
+    <string name="insert_coins">Enter the estimated amount in coins</string>
+    <string name="return_value">Amount to return: %.2f €</string>
+    <string name="inserted_value">Amount entered: %.2f €</string>
+    <string name="concert_value">Amount estimate: %.2f €</string>
     <string name="concert_choice">Concert chosen: %s</string>
     <string name="insert_import_value_title">Enter the estimated amount</string>
     <string name="pickup_ticket">Collect your ticket</string>
@@ -58,4 +58,8 @@
     <string name="admin_new_concert">New concert</string>
     <string name="admin_login_validation_error">Please insert the required fields before continuing</string>
     <string name="admin_entry_delete_error">Could not delete the requested entry, please try again in a few minutes</string>
+    <string name="not_found_concert">No concerts found</string>
+    <string name="printing_ticket">Your ticket is being printed…</string>
+    <string name="no_seeing_advertisements">No ads are being shown</string>
+    <string name="pass_time_calendar_error">Cannot buy a ticket from a date in the past</string>
 </resources>

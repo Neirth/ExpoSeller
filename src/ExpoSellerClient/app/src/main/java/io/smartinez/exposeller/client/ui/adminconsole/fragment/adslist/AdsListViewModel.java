@@ -10,14 +10,14 @@ import java.util.concurrent.ExecutorService;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import io.smartinez.exposeller.client.domain.AdBanner;
-import io.smartinez.exposeller.client.repository.AdBannerRepo;
+import io.smartinez.exposeller.client.domain.Advertisement;
+import io.smartinez.exposeller.client.repository.AdvertisementRepo;
 import io.smartinez.exposeller.client.service.AdminService;
 
 @HiltViewModel
 public class AdsListViewModel extends ViewModel {
-    private AdminService mAdminService;
-    private ExecutorService mExecutorService;
+    private final AdminService mAdminService;
+    private final ExecutorService mExecutorService;
 
     @Inject
     public AdsListViewModel(AdminService adminService, ExecutorService executorService) {
@@ -25,14 +25,14 @@ public class AdsListViewModel extends ViewModel {
         this.mExecutorService = executorService;
     }
 
-    public AdBannerRepo getAdBannerRepo() {
+    public AdvertisementRepo getAdBannerRepo() {
         return mAdminService.getAdBannerRepo();
     }
 
     public void searchListAdBanners(AdminService.TypeSearch typeSearch, long parameter) {
         mExecutorService.submit(() -> {
             try {
-                mAdminService.searchListModels(AdBanner.class, typeSearch, parameter);
+                mAdminService.searchListModels(Advertisement.class, typeSearch, parameter);
             } catch (IOException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -49,7 +49,7 @@ public class AdsListViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<AdBanner>> getListAdBanner() {
+    public LiveData<List<Advertisement>> getListAdBanner() {
         return mAdminService.getListAdBanner();
     }
 }

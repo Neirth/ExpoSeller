@@ -17,7 +17,7 @@
             android:background="@drawable/component_background">
 
         <ImageView
-                android:layout_height="128dp"
+                android:layout_height="80dp"
                 tools:srcCompat="@tools:sample/avatars"
                 android:id="@+id/ivPhotoArtist2"
                 card_view:layout_constraintStart_toStartOf="parent"
@@ -27,81 +27,79 @@
                 android:layout_width="0dp"
                 android:scaleType="centerCrop"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginEnd="8dp"/>
 
         <TextView
                 android:text="{{artist_name}}"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvArtistName2"
-                card_view:layout_constraintStart_toEndOf="@+id/ivArtistName2"
+                android:textColor="@color/text_button_foreground_color"
+                android:fontFamily="sans-serif-light"
                 card_view:layout_constraintTop_toTopOf="@+id/ivArtistName2"
-                android:layout_marginStart="8dp"
-                android:textColor="@color/white"
-                android:fontFamily="sans-serif-thin" />
+                card_view:layout_constraintBottom_toBottomOf="@+id/ivArtistName2"
+                card_view:layout_constraintStart_toEndOf="@+id/ivArtistName2" android:layout_marginStart="16dp"
+                card_view:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"/>
 
         <TextView
                 android:text="{{concert_date}}"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvConcertDate2"
-                card_view:layout_constraintStart_toEndOf="@+id/ivConcertDate2"
-                android:layout_marginStart="8dp"
+                android:textColor="@color/text_button_foreground_color"
+                android:fontFamily="sans-serif-light"
+                card_view:layout_constraintBottom_toBottomOf="@+id/ivConcertDate2"
                 card_view:layout_constraintTop_toTopOf="@+id/ivConcertDate2"
-                android:textColor="@color/white"
-                android:fontFamily="sans-serif-thin" />
+                card_view:layout_constraintStart_toEndOf="@+id/ivConcertDate2" android:layout_marginStart="16dp"
+                card_view:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"/>
 
         <TextView
                 android:text="{{concert_value}}"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvConcertValue2"
-                card_view:layout_constraintStart_toEndOf="@+id/ivConcertValue2"
-                android:layout_marginStart="8dp"
+                android:textColor="@color/text_button_foreground_color"
+                android:fontFamily="sans-serif-light"
                 card_view:layout_constraintTop_toTopOf="@+id/ivConcertValue2"
-                android:textColor="@color/white"
-                android:fontFamily="sans-serif-thin" />
-
+                card_view:layout_constraintStart_toEndOf="@+id/ivConcertValue2" android:layout_marginStart="16dp"
+                card_view:layout_constraintBottom_toBottomOf="@+id/ivConcertValue2"
+                card_view:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"/>
         <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 card_view:srcCompat="@drawable/ic_baseline_person_24"
                 android:id="@+id/ivArtistName2"
-                tools:layout_editor_absoluteX="20dp"
-                card_view:layout_constraintTop_toBottomOf="@+id/tvConcertName2"
-                android:layout_marginTop="16dp" />
+                card_view:layout_constraintStart_toStartOf="parent" android:layout_marginTop="16dp"
+                card_view:layout_constraintTop_toBottomOf="@+id/tvConcertName2" android:layout_marginStart="16dp"/>
 
         <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 card_view:srcCompat="@drawable/ic_baseline_calendar_today_24"
                 android:id="@+id/ivConcertDate2"
-                card_view:layout_constraintStart_toStartOf="@+id/ivArtistName2"
-                android:layout_marginTop="8dp"
-                card_view:layout_constraintTop_toBottomOf="@+id/ivArtistName2" />
+                card_view:layout_constraintStart_toStartOf="parent" android:layout_marginTop="16dp"
+                card_view:layout_constraintTop_toBottomOf="@+id/ivArtistName2" android:layout_marginStart="16dp"/>
 
         <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 card_view:srcCompat="@drawable/ic_baseline_euro_24"
                 android:id="@+id/ivConcertValue2"
+                card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toBottomOf="@+id/ivConcertDate2"
-                card_view:layout_constraintStart_toStartOf="@+id/ivConcertDate2"
-                android:layout_marginTop="8dp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="32dp" />
-
+                card_view:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp" android:layout_marginBottom="16dp"/>
         <TextView
                 android:text="{{concert_name}}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvConcertName2"
-                android:textColor="@color/white"
+                android:textColor="@color/text_button_foreground_color"
                 android:fontFamily="sans-serif-medium"
                 card_view:layout_constraintTop_toBottomOf="@+id/ivPhotoArtist2"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 card_view:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp" />
+                android:layout_marginStart="16dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

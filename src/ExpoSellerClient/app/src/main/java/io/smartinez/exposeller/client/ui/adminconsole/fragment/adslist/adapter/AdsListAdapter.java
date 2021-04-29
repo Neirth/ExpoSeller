@@ -15,12 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import io.smartinez.exposeller.client.R;
-import io.smartinez.exposeller.client.domain.AdBanner;
+import io.smartinez.exposeller.client.domain.Advertisement;
 import io.smartinez.exposeller.client.util.listener.OnAdapterClickDeleteListener;
 import io.smartinez.exposeller.client.util.listener.OnAdapterClickEditListener;
 
@@ -29,7 +33,7 @@ public class AdsListAdapter extends RecyclerView.Adapter<AdsListAdapter.AdsListV
     private OnAdapterClickDeleteListener mClickDeleteListener;
     private Context mContext;
 
-    private List<AdBanner> mEntriesList = Collections.emptyList();
+    private List<Advertisement> mEntriesList = Collections.emptyList();
 
     @NonNull
     @Override
@@ -41,16 +45,17 @@ public class AdsListAdapter extends RecyclerView.Adapter<AdsListAdapter.AdsListV
 
     @Override
     public void onBindViewHolder(@NonNull AdsListViewHolder holder, int position) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
-
         if (mEntriesList != null) {
-            AdBanner adBanner = mEntriesList.get(position);
+            Advertisement advertisement = mEntriesList.get(position);
 
-            Glide.with(mContext).load(adBanner.getPhotoAd()).into(holder.mIvPhotoArtist5);
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT);
+            LocalDateTime adBannerDateObj = advertisement.getEventDate().toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
 
-            holder.mTvFriendlyId5.setText(adBanner.getFriendlyId());
-            holder.mTvAdBannerName5.setText(adBanner.getName());
-            holder.mTvEventDate3.setText(sdf.format(adBanner.getEventDate()));
+            Glide.with(mContext).load(advertisement.getPhotoAd()).into(holder.mIvPhotoArtist5);
+
+            holder.mTvFriendlyId5.setText(String.valueOf(advertisement.getFriendlyId()));
+            holder.mTvAdBannerName5.setText(advertisement.getName());
+            holder.mTvEventDate3.setText(adBannerDateObj.format(dateFormatter));
         }
     }
 
@@ -59,11 +64,11 @@ public class AdsListAdapter extends RecyclerView.Adapter<AdsListAdapter.AdsListV
         return mEntriesList.size();
     }
 
-    public List<AdBanner> getEntriesList() {
+    public List<Advertisement> getEntriesList() {
         return mEntriesList;
     }
 
-    public void setEntriesList (List<AdBanner> entriesList) {
+    public void setEntriesList (List<Advertisement> entriesList) {
         mEntriesList = entriesList;
 
         notifyDataSetChanged();

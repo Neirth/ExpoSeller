@@ -43,7 +43,6 @@ public class AdminConsoleActivity extends AppCompatActivity {
     private TextView mTvExit;
 
     private Guideline mGlVerticalSeparator2;
-
     private FrameLayout mFlFragmentSurface;
 
     private AdminConsoleViewModel mViewModel;
@@ -93,12 +92,13 @@ public class AdminConsoleActivity extends AppCompatActivity {
         mViewModel = new ViewModelProvider(this).get(AdminConsoleViewModel.class);
 
         mCvSystemSettings.setOnClickListener(v -> mViewModel.openSystemSettings(AdminConsoleActivity.this));
-        mCvExit.setOnClickListener(v -> mViewModel.exitAdminConsole(AdminConsoleActivity.this));
+        mCvExit.setOnClickListener(v -> AdminConsoleActivity.this.onBackPressed());
     }
 
     @Override
     public void onBackPressed() {
+        mViewModel.exitAdminConsole(AdminConsoleActivity.this);
+
         super.onBackPressed();
-        overridePendingTransition(0, android.R.anim.fade_out);
     }
 }

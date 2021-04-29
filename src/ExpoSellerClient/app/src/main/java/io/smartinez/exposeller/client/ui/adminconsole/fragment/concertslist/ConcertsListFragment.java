@@ -1,5 +1,6 @@
 package io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist;
 
+import android.app.DatePickerDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
@@ -21,16 +22,18 @@ import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.service.AdminService;
-import io.smartinez.exposeller.client.ui.adminconsole.fragment.adsmgt.AdsMgtFragment;
 import io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist.adapter.ConcertsListAdapter;
 import io.smartinez.exposeller.client.ui.adminconsole.fragment.concertsmgt.ConcertsMgtFragment;
 import io.smartinez.exposeller.client.util.FragmentUtils;
 
+import io.smartinez.exposeller.client.util.TimeUtils;
+import io.smartinez.exposeller.client.util.Utilities;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -50,6 +53,8 @@ public class ConcertsListFragment extends Fragment {
     private ImageView mIvConcertAdd;
     private ConcertsListAdapter mAdapter;
 
+    private Calendar mCalendar = Calendar.getInstance();
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -57,14 +62,15 @@ public class ConcertsListFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ConcertsListViewModel.class);
 
         initView();
+        initRecyclerView();
     }
 
-    public void initView() {
+    private void initView() {
         mClConcertLayout = getActivity().findViewById(R.id.clConcertLayout);
         mTvConcertListTitle = getActivity().findViewById(R.id.tvConcertListTitle);
         mTvFriendlyId2 = getActivity().findViewById(R.id.tvFriendlyId2);
@@ -76,11 +82,46 @@ public class ConcertsListFragment extends Fragment {
         mRvConcertsList = getActivity().findViewById(R.id.rvConcertsList);
         mIvConcertAdd = getActivity().findViewById(R.id.ivConcertAdd);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
+
+        DatePickerDialog.OnDateSetListener onDateListener = (view, year, monthOfYear, dayOfMonth) -> {
+            mCalendar.set(Calendar.YEAR, year);
+            mCalendar.set(Calendar.MONTH, monthOfYear);
+            mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            mEtDate2.setText(sdf.format(TimeUtils.removeTimeFromDate(mCalendar.getTime())));
+        };
+
+        mEtDate2.setOnClickListener(v -> {
+            Utilities.hideKeyboard(getContext(), v);
+            new DatePickerDialog(getActivity(), onDateListener, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+
+        mIvSearchDate2.setOnClickListener(v -> {
+            if (mEtDate2.getText().length() >= 1) {
+                try {
+                    Date desiredDate = sdf.parse(mEtDate2.getText().toString());
+
+                    mViewModel.searchListConcerts(AdminService.TypeSearch.TIME_BASED, desiredDate.getTime());
+                } catch (ParseException e) {
+                    Utilities.showToast(getActivity(), R.string.admin_error_process);
+                }
+            }
+        });
+
+        mIvSearchFreindlyId2.setOnClickListener(v -> {
+            if (mEtFriendlyId2.getText().length() >= 1) {
+                mViewModel.searchListConcerts(AdminService.TypeSearch.FRIENDLY_ID, Integer.parseInt(mEtFriendlyId2.getText().toString()));
+            }
+        });
+    }
+
+    private void initRecyclerView() {
         mAdapter = new ConcertsListAdapter();
 
-        mViewModel.getListConcerts().observe(getViewLifecycleOwner(), concerts -> mAdapter.setEntriesList(concerts));
         mRvConcertsList.setAdapter(mAdapter);
         mRvConcertsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mViewModel.getListConcerts().observe(getViewLifecycleOwner(), concerts -> mAdapter.setEntriesList(concerts));
 
         mAdapter.setOnAdapterClickEditListener(model -> {
             if (model instanceof Concert) {
@@ -89,7 +130,7 @@ public class ConcertsListFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ConcertsMgtFragment.EXTRA_DATA, auxConcert);
 
-                FragmentUtils.interchangeFragement(getActivity().getSupportFragmentManager(), R.id.fgAdminLogin, ConcertsMgtFragment.class, bundle);
+                FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface, ConcertsMgtFragment.class, bundle);
             }
         });
 
@@ -102,33 +143,11 @@ public class ConcertsListFragment extends Fragment {
                     mViewModel.notifyListChanges();
                 }
             } catch (IOException e) {
-                Toast.makeText(getContext(), R.string.admin_entry_delete_error, Toast.LENGTH_SHORT).show();
+                Utilities.showToast(getActivity(), R.string.admin_entry_delete_error);
             }
         });
 
-        mIvConcertAdd.setOnClickListener(v -> FragmentUtils.interchangeFragement(getActivity().getSupportFragmentManager(), R.id.fgAdminLogin, AdsMgtFragment.class));
-
-        mIvSearchDate2.setOnClickListener(v -> {
-            if (mEtDate2.getText().length() >= 1) {
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
-
-                    Date desiredDate = sdf.parse(mEtDate2.getText().toString());
-
-                    mViewModel.searchListConcerts(AdminService.TypeSearch.TIME_BASED, desiredDate.getTime());
-                } catch (ParseException e) {
-                    Toast.makeText(getContext(), R.string.admin_error_process, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        mIvSearchFreindlyId2.setOnClickListener(v -> {
-            if (mEtFriendlyId2.getText().length() >= 1) {
-                mViewModel.searchListConcerts(AdminService.TypeSearch.FRIENDLY_ID, Integer.parseInt(mEtFriendlyId2.getText().toString()));
-            }
-        });
-
+        mIvConcertAdd.setOnClickListener(v -> FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface, ConcertsMgtFragment.class));
         mViewModel.searchListConcerts(AdminService.TypeSearch.NOT_BEFORE, 0);
-
     }
 }

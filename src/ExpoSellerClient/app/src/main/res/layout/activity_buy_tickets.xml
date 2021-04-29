@@ -18,7 +18,8 @@
             android:layout_marginTop="56dp"
             android:fontFamily="sans-serif-medium"
             app:layout_constraintStart_toEndOf="@+id/ivExpoSellerLogo5"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:textColor="@color/text_activity_foreground_color"/>
 
     <ImageView
             android:layout_width="96dp"
@@ -45,4 +46,14 @@
             android:id="@+id/rvBuyTickets"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp" />
+
+    <TextView
+            android:text="@string/not_found_concert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/tvNotFoundConcerts2"
+            android:textColor="@color/text_activity_foreground_color"
+            app:layout_constraintEnd_toEndOf="@+id/rvBuyTickets"
+            app:layout_constraintStart_toStartOf="@+id/rvBuyTickets"
+            app:layout_constraintTop_toTopOf="@+id/rvBuyTickets"
+            app:layout_constraintBottom_toBottomOf="@+id/rvBuyTickets" android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,6 @@ package io.smartinez.exposeller.client.ui.adminconsole;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
 import android.widget.Toast;
@@ -17,7 +16,7 @@ import java.io.IOException;
 
 @HiltViewModel
 public class AdminConsoleViewModel extends ViewModel {
-    private AdminService mAdminService;
+    private final AdminService mAdminService;
 
     @Inject
     public AdminConsoleViewModel(AdminService adminService) {
@@ -37,7 +36,6 @@ public class AdminConsoleViewModel extends ViewModel {
     public void exitAdminConsole(Activity activity) {
         try {
             mAdminService.logoutAdministrator();
-            activity.onBackPressed();
         } catch (IOException e) {
             Toast.makeText(activity, R.string.admin_logout_exception, Toast.LENGTH_LONG).show();
         }

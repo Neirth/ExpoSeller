@@ -6,18 +6,28 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_color</item>
+        <item name="colorAccent">@color/primary_color</item>
     </style>
 
-    <style name="WindowAnimationTransition">
-        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
-        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    <style name="WindowAnimationTransition" parent="android:Animation">
         <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowContentTransitions">true</item>
+        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
     </style>
 
-    <style name="CalenderViewCustom" parent="Theme.AppCompat">
-        <item name="colorAccent">@color/transparent_white</item>
-        <item name="android:fontFamily">sans-serif-thin</item>
+    <style name="CalenderViewCustom" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:textColor">@color/black</item>
+        <item name="colorAccent">@color/primary_color</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
     <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
@@ -25,8 +35,5 @@
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 
-    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:fontFamily">sans-serif-thin</item>
-    </style>
+    <style name="Theme.App" parent="android:Theme.Material.Light.NoActionBar.Fullscreen" />
 </resources>

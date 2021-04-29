@@ -1,4 +1,4 @@
-package io.smartinez.exposeller.client.util;
+package io.smartinez.exposeller.client.util.observable;
 
 import java.util.Observable;
 import java.util.concurrent.atomic.AtomicReference;

@@ -1,20 +1,19 @@
 package io.smartinez.exposeller.client.repository;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.domain.Ticket;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
-@ViewModelScoped
+@Singleton
 public class TicketRepo implements IRepository<Ticket> {
-    private IDataSource mDataSource;
+    private final IDataSource mDataSource;
 
     @Inject
     public TicketRepo(IDataSource dataSource) {
@@ -38,7 +37,7 @@ public class TicketRepo implements IRepository<Ticket> {
 
     @Override
     public List<Ticket> getBySpecificDate(Date dateConcerts) throws IOException {
-        return Arrays.asList((Ticket[]) mDataSource.getBySpecificDate(dateConcerts, Ticket.class).toArray());
+        return mDataSource.getBySpecificDate(dateConcerts, Ticket.class).stream().map(Ticket.class::cast).collect(Collectors.toList());
     }
 
     @Override
