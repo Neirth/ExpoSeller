@@ -23,7 +23,7 @@ import io.smartinez.exposeller.client.repository.TicketRepo;
 import io.smartinez.exposeller.client.util.Utilities;
 import io.smartinez.exposeller.client.util.listener.CheckoutCompleteListener;
 
-
+@ViewModelScoped
 public class UserService {
     private final TicketRepo mTicketRepo;
     private ITicketGenerator mTicketGenerator;

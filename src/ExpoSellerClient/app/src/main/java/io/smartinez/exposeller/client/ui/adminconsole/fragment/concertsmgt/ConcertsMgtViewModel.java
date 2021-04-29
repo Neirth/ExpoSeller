@@ -10,8 +10,6 @@ import io.smartinez.exposeller.client.service.AdminService;
 
 @HiltViewModel
 public class ConcertsMgtViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
-
     private AdminService mAdminService;
 
     @Inject

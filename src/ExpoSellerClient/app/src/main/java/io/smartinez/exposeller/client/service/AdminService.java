@@ -1,19 +1,41 @@
 package io.smartinez.exposeller.client.service;
 
+import android.os.Bundle;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import javax.inject.Inject;
 
+import dagger.hilt.android.scopes.ViewModelScoped;
+import io.smartinez.exposeller.client.domain.AdBanner;
+import io.smartinez.exposeller.client.domain.Concert;
+import io.smartinez.exposeller.client.domain.IModel;
 import io.smartinez.exposeller.client.repository.AdBannerRepo;
 import io.smartinez.exposeller.client.repository.ConcertRepo;
 import io.smartinez.exposeller.client.repository.TicketRepo;
 import io.smartinez.exposeller.client.repository.datasource.IDataSource;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
+@ViewModelScoped
 public class AdminService {
     private IDataSource mDataSource;
     private AdBannerRepo mAdBannerRepo;
     private ConcertRepo mConcertRepo;
     private TicketRepo mTicketRepo;
+
+    private MutableLiveData<List<Concert>> mListConcerts;
+    private MutableLiveData<List<AdBanner>> mListAdBanner;
+
+    private Bundle mLastSearchEntity = null;
+
+    public enum TypeSearch {
+        FRIENDLY_ID, TIME_BASED, NOT_BEFORE;
+    }
 
     @Inject
     public AdminService(IDataSource dataSource, AdBannerRepo adBannerRepo, ConcertRepo concertRepo, TicketRepo ticketRepo) {
@@ -21,6 +43,9 @@ public class AdminService {
         this.mAdBannerRepo = adBannerRepo;
         this.mConcertRepo = concertRepo;
         this.mTicketRepo = ticketRepo;
+
+        this.mListConcerts = new MutableLiveData<>();
+        this.mListAdBanner = new MutableLiveData<>();
     }
 
     public void loginAdministrator(String email, String password) throws IOException {
@@ -37,5 +62,89 @@ public class AdminService {
 
     public ConcertRepo getConcertRepo() {
         return this.mConcertRepo;
+    }
+
+    public void searchListModels(Class<? extends IModel> model, TypeSearch typeSearch, long parameter) throws IOException, IllegalAccessException {
+        if (model == Concert.class) {
+            if (typeSearch == TypeSearch.FRIENDLY_ID) {
+                mListConcerts.postValue(Collections.singletonList(mConcertRepo.getByFriendlyId(String.valueOf(parameter))));
+
+                mLastSearchEntity = new Bundle();
+                mLastSearchEntity.putString("CLASS_TYPE", model.getSimpleName());
+                mLastSearchEntity.putString("SEARCH_TYPE", TypeSearch.FRIENDLY_ID.name());
+                mLastSearchEntity.putLong(TypeSearch.FRIENDLY_ID.name(), parameter);
+            } else if (typeSearch == TypeSearch.TIME_BASED) {
+                mListConcerts.postValue(mConcertRepo.getBySpecificDate(new Date(parameter)));
+
+                mLastSearchEntity = new Bundle();
+                mLastSearchEntity.putString("CLASS_TYPE", model.getSimpleName());
+                mLastSearchEntity.putString("SEARCH_TYPE", TypeSearch.FRIENDLY_ID.name());
+                mLastSearchEntity.putLong(TypeSearch.FRIENDLY_ID.name(), parameter);
+            } else if (typeSearch == TypeSearch.NOT_BEFORE) {
+                Date nowTime = new Date();
+
+                mListConcerts.postValue(mConcertRepo.getBySpecificDate(nowTime));
+
+                mLastSearchEntity = new Bundle();
+                mLastSearchEntity.putString("CLASS_TYPE", model.getSimpleName());
+                mLastSearchEntity.putString("SEARCH_TYPE", TypeSearch.NOT_BEFORE.name());
+                mLastSearchEntity.putLong(TypeSearch.NOT_BEFORE.name(), nowTime.getTime());
+            }
+        } else if (model == AdBanner.class) {
+            if (typeSearch == TypeSearch.FRIENDLY_ID) {
+                mListAdBanner.postValue(Collections.singletonList(mAdBannerRepo.getByFriendlyId(String.valueOf(parameter))));
+
+                mLastSearchEntity = new Bundle();
+                mLastSearchEntity.putString("CLASS_TYPE", model.getSimpleName());
+                mLastSearchEntity.putString("SEARCH_TYPE", TypeSearch.FRIENDLY_ID.name());
+                mLastSearchEntity.putLong(TypeSearch.FRIENDLY_ID.name(), parameter);
+            } else if (typeSearch == TypeSearch.TIME_BASED) {
+                mListAdBanner.postValue(mAdBannerRepo.getBySpecificDate(new Date(parameter)));
+
+                mLastSearchEntity = new Bundle();
+                mLastSearchEntity.putString("CLASS_TYPE", model.getSimpleName());
+                mLastSearchEntity.putString("SEARCH_TYPE", TypeSearch.FRIENDLY_ID.name());
+                mLastSearchEntity.putLong(TypeSearch.FRIENDLY_ID.name(), parameter);
+            } else if (typeSearch == TypeSearch.NOT_BEFORE) {
+                Date nowTime = new Date();
+
+                mListAdBanner.postValue(mAdBannerRepo.getBySpecificDate(nowTime));
+
+                mLastSearchEntity = new Bundle();
+                mLastSearchEntity.putString("CLASS_TYPE", model.getSimpleName());
+                mLastSearchEntity.putString("SEARCH_TYPE", TypeSearch.NOT_BEFORE.name());
+                mLastSearchEntity.putLong(TypeSearch.NOT_BEFORE.name(), nowTime.getTime());
+            }
+        }
+    }
+
+    public void notifyListChanges() throws IOException, IllegalAccessException {
+        if(mLastSearchEntity != null) {
+            if (mLastSearchEntity.getString("CLASS_TYPE") == Concert.class.getSimpleName()) {
+                if (mLastSearchEntity.getString("SEARCH_TYPE") == TypeSearch.FRIENDLY_ID.name()) {
+                    mListConcerts.postValue(Collections.singletonList(mConcertRepo.getByFriendlyId(String.valueOf(mLastSearchEntity.getLong(TypeSearch.FRIENDLY_ID.name())))));
+                } else if (mLastSearchEntity.getString("SEARCH_TYPE") == TypeSearch.TIME_BASED.name()) {
+                    mListConcerts.postValue(mConcertRepo.getBySpecificDate(new Date(mLastSearchEntity.getLong(TypeSearch.TIME_BASED.name()))));
+                } else if (mLastSearchEntity.getString("SEARCH_TYPE") == TypeSearch.NOT_BEFORE.name()) {
+                    mListConcerts.postValue(mConcertRepo.getNotBeforeDate(new Date(mLastSearchEntity.getLong(TypeSearch.NOT_BEFORE.name()))));
+                }
+            } else if (mLastSearchEntity.getString("CLASS_TYPE") == AdBanner.class.getSimpleName()) {
+                if (mLastSearchEntity.getString("SEARCH_TYPE") == TypeSearch.FRIENDLY_ID.name()) {
+                    mListAdBanner.postValue(Collections.singletonList(mAdBannerRepo.getByFriendlyId(String.valueOf(mLastSearchEntity.getLong(TypeSearch.FRIENDLY_ID.name())))));
+                } else if (mLastSearchEntity.getString("SEARCH_TYPE") == TypeSearch.TIME_BASED.name()) {
+                    mListAdBanner.postValue(mAdBannerRepo.getBySpecificDate(new Date(mLastSearchEntity.getLong(TypeSearch.TIME_BASED.name()))));
+                } else if (mLastSearchEntity.getString("SEARCH_TYPE") == TypeSearch.NOT_BEFORE.name()) {
+                    mListAdBanner.postValue(mAdBannerRepo.getNotBeforeDate(new Date(mLastSearchEntity.getLong(TypeSearch.NOT_BEFORE.name()))));
+                }
+            }
+        }
+    }
+
+    public MutableLiveData<List<Concert>> getListConcerts() {
+        return mListConcerts;
+    }
+
+    public MutableLiveData<List<AdBanner>> getListAdBanner() {
+        return mListAdBanner;
     }
 }

@@ -55,4 +55,6 @@
     <string name="admin_new_ads">Nuevo anuncio</string>
     <string name="admin_edit_concert">Editar concierto</string>
     <string name="admin_new_concert">Nuevo concierto</string>
+    <string name="admin_login_validation_error">Inserta los campos obligatorios antes de continuar</string>
+    <string name="admin_entry_delete_error">No se ha podido eliminar la entrada solicitada, intentelo en unos minutos</string>
 </resources>

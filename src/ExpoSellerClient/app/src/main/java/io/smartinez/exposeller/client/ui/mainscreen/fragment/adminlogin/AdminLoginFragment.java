@@ -1,8 +1,5 @@
 package io.smartinez.exposeller.client.ui.mainscreen.fragment.adminlogin;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.animation.Animation;
@@ -23,13 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.ExpoSellerApplication;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.adminconsole.AdminConsoleActivity;
-import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
-import io.smartinez.exposeller.client.ui.buytickets.BuyTicketsViewModel;
-import io.smartinez.exposeller.client.ui.mainscreen.MainScreenActivity;
-import io.smartinez.exposeller.client.util.Utilities;
-
-import java.io.IOException;
-import java.util.Objects;
 
 @AndroidEntryPoint
 public class AdminLoginFragment extends Fragment {
@@ -79,26 +69,30 @@ public class AdminLoginFragment extends Fragment {
 
         mViewModel = new ViewModelProvider(this).get(AdminLoginViewModel.class);
 
-        mBtnAdminOk.setOnClickListener(v -> mViewModel.loginAdministrator(mEtAdminEmail.getText().toString(), mEtAdminPassword.getText().toString())
-            .thenApplyAsync(result -> {
-                requireActivity().runOnUiThread(() -> {
-                    Log.d(ExpoSellerApplication.LOG_TAG, "The callback is called!");
-                    getView().findViewById(R.id.fgAdminLogin).setVisibility(View.GONE);
-                    getView().findViewById(R.id.fgAdminLogin).startAnimation(mLoadAnimation);
+        mBtnAdminOk.setOnClickListener(v -> {
+            if (mEtAdminEmail.getText().length() >= 1 && mEtAdminPassword.getText().length() >= 1) {
+                mViewModel.loginAdministrator(mEtAdminEmail.getText().toString(), mEtAdminPassword.getText().toString())
+                    .thenApplyAsync(result -> {
+                        requireActivity().runOnUiThread(() -> {
+                            Log.d(ExpoSellerApplication.LOG_TAG, "The callback is called!");
+                            getView().findViewById(R.id.fgAdminLogin).setVisibility(View.GONE);
+                            getView().findViewById(R.id.fgAdminLogin).startAnimation(mLoadAnimation);
 
-                    mEtAdminEmail.setText("");
-                    mEtAdminPassword.setText("");
+                            mEtAdminEmail.setText("");
+                            mEtAdminPassword.setText("");
 
-                    startActivity(new Intent(getContext(), AdminConsoleActivity.class));
-                });
+                            startActivity(new Intent(getContext(), AdminConsoleActivity.class));
+                        });
 
-                return null;
-            }).exceptionally(ex -> {
-                requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), R.string.admin_login_error, Toast.LENGTH_LONG).show());
-
-                return null;
-            })
-        );
+                        return null;
+                    }).exceptionally(ex -> {
+                        requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), R.string.admin_login_error, Toast.LENGTH_SHORT).show());
+                        return null;
+                    });
+            } else {
+                Toast.makeText(getContext(), R.string.admin_login_validation_error, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mBtnAdminCancel.setOnClickListener(v -> {
             getActivity().findViewById(R.id.fgAdminLogin).setVisibility(View.GONE);

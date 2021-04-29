@@ -34,7 +34,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tvFriendlyId2" android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/ivSearchFreindlyId2" android:layout_marginEnd="16dp"/>
         <ImageView
-                android:src="@drawable/ic_outline_search_24"
+                android:src="@drawable/ic_baseline_search_24"
                 android:layout_width="48dp"
                 android:layout_height="48dp" android:id="@+id/ivSearchFreindlyId2"
                 app:layout_constraintTop_toTopOf="@+id/etFriendlyId2"
@@ -58,7 +58,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tvDate2" android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/ivSearchDate2" android:layout_marginEnd="16dp"/>
         <ImageView
-                android:src="@drawable/ic_outline_search_24"
+                android:src="@drawable/ic_baseline_search_24"
                 android:layout_width="48dp"
                 android:layout_height="48dp" android:id="@+id/ivSearchDate2"
                 app:layout_constraintBottom_toBottomOf="@+id/etDate2"
@@ -71,9 +71,9 @@
                 app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp" android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
-                android:id="@+id/rvConcertsList"/>
+                android:id="@+id/rvConcertsList" tools:listitem="@layout/item_admin_concert"/>
         <ImageView
-                android:src="@drawable/ic_outline_add_24"
+                android:src="@drawable/ic_baseline_add_24"
                 android:layout_width="48dp"
                 android:layout_height="48dp" android:id="@+id/ivConcertAdd"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"

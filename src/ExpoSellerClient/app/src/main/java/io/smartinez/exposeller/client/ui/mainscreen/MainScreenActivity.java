@@ -91,6 +91,14 @@ public class MainScreenActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (mFgAdminLogin.getVisibility() != View.GONE) {
+            Animation mLoadAnimation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
+            mLoadAnimation.setDuration(1000);
+
+            mFgAdminLogin.setVisibility(View.GONE);
+            mFgAdminLogin.startAnimation(mLoadAnimation);
+        }
+
         Log.d(ExpoSellerApplication.LOG_TAG, "Ignoring back button pressed because is a Main IoT Application...");
     }
 
