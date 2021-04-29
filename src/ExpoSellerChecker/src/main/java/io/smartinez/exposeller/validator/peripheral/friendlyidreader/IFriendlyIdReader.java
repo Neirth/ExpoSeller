@@ -1,6 +1,6 @@
-package io.smartinez.exposeller.checker.peripheral.friendlyidreader;
+package io.smartinez.exposeller.validator.peripheral.friendlyidreader;
 
-import io.smartinez.exposeller.checker.util.listener.OnScannedCodeListener;
+import io.smartinez.exposeller.validator.listener.OnScannedCodeListener;
 
 public interface IFriendlyIdReader {
     void detectFriendlyId(OnScannedCodeListener onScannedCodeListener);

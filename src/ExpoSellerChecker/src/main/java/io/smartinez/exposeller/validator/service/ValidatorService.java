@@ -1,17 +1,15 @@
-package io.smartinez.exposeller.checker.service;
+package io.smartinez.exposeller.validator.service;
 
-import io.smartinez.exposeller.checker.peripheral.validator.IValidator;
-import io.smartinez.exposeller.checker.peripheral.friendlyidreader.IFriendlyIdReader;
+import io.smartinez.exposeller.validator.peripheral.validator.IValidator;
+import io.smartinez.exposeller.validator.peripheral.friendlyidreader.IFriendlyIdReader;
 
-import javax.annotation.ManagedBean;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
-@RequestScoped
+@ApplicationScoped
 public class ValidatorService {
-    private IValidator mValidator;
-    private IFriendlyIdReader mFriendlyIdReader;
+    private final IValidator mValidator;
+    private final IFriendlyIdReader mFriendlyIdReader;
 
     @Inject
     public ValidatorService(IValidator validator, IFriendlyIdReader friendlyIdReader) {
@@ -19,7 +17,7 @@ public class ValidatorService {
         this.mFriendlyIdReader = friendlyIdReader;
     }
 
-    public void startValidator(Runnable successCallback, Runnable errorCallback) {
+    public void startValidator(Runnable successCallback, Runnable errorCallback, Runnable resetCallback) {
         mFriendlyIdReader.detectFriendlyId(friendlyId -> {
             boolean isValidated = mValidator.checkFriendlyId(friendlyId);
 
@@ -28,6 +26,9 @@ public class ValidatorService {
             } else {
                 errorCallback.run();
             }
+
+            Thread.sleep(2000);
+            resetCallback.run();
         });
     }
 }
