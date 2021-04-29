@@ -10,11 +10,14 @@ import java.util.Date;
 public class AdBanner implements IModel, Parcelable {
     private String docId;
     private String name;
-    private Uri photoAd;
+    private String photoAd;
     private Integer friendlyId;
     private Date eventDate;
 
-    public AdBanner(String docId, String name, Uri photoAd, Integer friendlyId, Date eventDate) {
+    public AdBanner() {
+    }
+
+    public AdBanner(String docId, String name, String photoAd, Integer friendlyId, Date eventDate) {
         this.docId = docId;
         this.name = name;
         this.photoAd = photoAd;
@@ -42,11 +45,11 @@ public class AdBanner implements IModel, Parcelable {
         this.name = name;
     }
 
-    public Uri getPhotoAd() {
+    public String getPhotoAd() {
         return photoAd;
     }
 
-    public void setPhotoAd(Uri photoAd) {
+    public void setPhotoAd(String photoAd) {
         this.photoAd = photoAd;
     }
 
@@ -71,7 +74,7 @@ public class AdBanner implements IModel, Parcelable {
     protected AdBanner(Parcel in) {
         docId = in.readString();
         name = in.readString();
-        photoAd = (Uri) in.readValue(Uri.class.getClassLoader());
+        photoAd = in.readString();
         friendlyId = in.readByte() == 0x00 ? null : in.readInt();
         long tmpEventDate = in.readLong();
         eventDate = tmpEventDate != -1 ? new Date(tmpEventDate) : null;
@@ -86,7 +89,7 @@ public class AdBanner implements IModel, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(docId);
         dest.writeString(name);
-        dest.writeValue(photoAd);
+        dest.writeString(photoAd);
         if (friendlyId == null) {
             dest.writeByte((byte) (0x00));
         } else {

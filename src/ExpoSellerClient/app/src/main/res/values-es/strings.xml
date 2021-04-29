@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">ExpoSeller Client</string>
+    <string name="terms_and_conditions_name">Terminos y condiciones</string>
+    <string name="terms_and_conditions_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices
+        justo eget diam tincidunt, a finibus turpis blandit. Nunc accumsan nec mauris non tempor. Suspendisse potenti.
+        Nunc facilisis sagittis urna ac efficitur. Duis posuere est nunc, a consectetur tellus mattis euismod.
+        Pellentesque commodo metus sit amet metus lacinia, a condimentum lorem sodales. Cras suscipit vel felis eu
+        blandit. Nulla luctus suscipit ex quis mollis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+        lorem justo, pharetra ac ipsum eget, egestas bibendum eros. Quisque elementum, dolor eu rhoncus tincidunt, ipsum
+        tellus semper est, eget luctus mauris nunc non libero. Donec id dolor ipsum. Vivamus ut nisl velit. Sed
+        fermentum pretium purus, porta ultricies massa lobortis in. Interdum et malesuada fames ac ante ipsum primis in
+        faucibus. Suspendisse cursus erat accumsan nulla euismod faucibus.
+    </string>
+    <string name="event_name">Concierto</string>
+    <string name="artist_name">Artista</string>
+    <string name="event_date">Fecha del evento</string>
+    <string name="check_dates">Consultar horarios</string>
+    <string name="buy_tickets">Comprar Entradas</string>
+    <string name="cancel_operation">Cancelar Operación</string>
+    <string name="check_schedules">Conciertos en el mes de %s de %d</string>
+    <string name="insert_coins">Introduzca el importe estimado en monedas</string>
+    <string name="return_value">Cantidad a devolver: %s</string>
+    <string name="inserted_value">Importe introducido: %s</string>
+    <string name="concert_value">Importe estimado: %s</string>
+    <string name="concert_choice">Concierto escogido: %s</string>
+    <string name="insert_import_value_title">Introduzca el importe estimado</string>
+    <string name="pickup_ticket">Recoja su entrada</string>
+    <string name="pickup_ticket_text1">¡Felicidades, su entrada ya está disponible!</string>
+    <string name="pickup_ticket_text2">Escanea el código QR con tu aplicación de Apple Wallet® o compatibles.</string>
+    <string name="concert_select">Selecciona un concierto</string>
+    <string name="buy_error">Ha ocurrido un error durante la compra del ticket, devolviendo el dinero depositado</string>
+    <string name="system_console">ExpoSeller - Consola de Administración</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="ads">Anuncios</string>
+    <string name="settings">Ajustes</string>
+    <string name="exit">Salir</string>
+    <string name="concert_form_title">Concert Form</string>
+    <string name="form_name">Nombre:</string>
+    <string name="form_economic_value">Valor economico:</string>
+    <string name="form_artist_name">Nombre del artista:</string>
+    <string name="form_date">Fecha:</string>
+    <string name="form_organization_name">Nombre del organizador:</string>
+    <string name="form_uri_photo">Foto de portada (Url):</string>
+    <string name="form_ads_title">Ads Form</string>
+    <string name="friendly_id">Friendly ID:</string>
+    <string name="estimate_date">Fecha Estimada:</string>
+    <string name="ads_list">Listado de Anuncios</string>
+    <string name="concerts_list">Listado de Conciertos</string>
+    <string name="concerts">Conciertos</string>
+    <string name="admin_login_error">No se ha podido iniciar sesión, comprueba usuario y contraseña sean correctos, y vuelvelo a intentar en unos minutos</string>
+    <string name="admin_logout_exception">No se ha podido cerrar sesión, intentelo en unos minutos</string>
+    <string name="admin_error_process">No se ha podido procesar la petición, intentelo de nuevo más tarde</string>
+    <string name="admin_edit_ads">Editar anuncio</string>
+    <string name="admin_new_ads">Nuevo anuncio</string>
+    <string name="admin_edit_concert">Editar concierto</string>
+    <string name="admin_new_concert">Nuevo concierto</string>
+    <string name="admin_login_validation_error">Inserta los campos obligatorios antes de continuar</string>
+    <string name="admin_entry_delete_error">No se ha podido eliminar la entrada solicitada, intentelo en unos minutos</string>
+</resources>
