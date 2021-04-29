@@ -1,18 +1,18 @@
 package io.smartinez.exposeller.client.peripherals.texttospeech;
 
-import android.app.Application;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.hilt.android.scopes.ViewModelScoped;
 import io.smartinez.exposeller.client.ExpoSellerApplication;
 import io.smartinez.exposeller.client.util.Utilities;
 
-@ViewModelScoped
+@Singleton
 public class TextToSpeechImpl implements ITextToSpeech, TextToSpeech.OnInitListener {
     private TextToSpeech mTextToSpeech;
     private boolean mIsInitialized = false;

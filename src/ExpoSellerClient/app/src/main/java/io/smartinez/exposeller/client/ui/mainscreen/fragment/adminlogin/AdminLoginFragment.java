@@ -34,10 +34,6 @@ public class AdminLoginFragment extends Fragment {
     private Button mBtnAdminCancel;
     private Animation mLoadAnimation;
 
-    public static AdminLoginFragment newInstance() {
-        return new AdminLoginFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.admin_login_fragment, container, false);

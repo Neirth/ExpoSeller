@@ -1,44 +1,52 @@
 package io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist;
 
-import android.os.Bundle;
-
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import io.smartinez.exposeller.client.domain.AdBanner;
 import io.smartinez.exposeller.client.domain.Concert;
-import io.smartinez.exposeller.client.domain.IModel;
 import io.smartinez.exposeller.client.repository.ConcertRepo;
 import io.smartinez.exposeller.client.service.AdminService;
 
 @HiltViewModel
 public class ConcertsListViewModel extends ViewModel {
     private AdminService mAdminService;
+    private ExecutorService mExecutorService;
 
     @Inject
-    public ConcertsListViewModel(AdminService adminService) {
+    public ConcertsListViewModel(AdminService adminService, ExecutorService executorService) {
         this.mAdminService = adminService;
+        this.mExecutorService = executorService;
     }
 
     public ConcertRepo getConcertRepo() {
         return mAdminService.getConcertRepo();
     }
 
-    public void searchListModels(AdminService.TypeSearch typeSearch, long parameter) throws IOException, IllegalAccessException {
-        mAdminService.searchListModels(Concert.class, typeSearch, parameter);
+    public void searchListConcerts(AdminService.TypeSearch typeSearch, long parameter) {
+        mExecutorService.submit(() -> {
+            try {
+                mAdminService.searchListModels(Concert.class, typeSearch, parameter);
+            } catch (IOException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-    public void notifyListChanges() throws IOException, IllegalAccessException {
-        mAdminService.notifyListChanges();
+    public void notifyListChanges() {
+        mExecutorService.submit(() -> {
+            try {
+                mAdminService.notifyListChanges();
+            } catch (IOException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public LiveData<List<Concert>> getListConcerts() {

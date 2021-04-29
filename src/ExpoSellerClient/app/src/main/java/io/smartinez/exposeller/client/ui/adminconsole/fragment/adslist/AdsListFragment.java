@@ -20,13 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.AdBanner;
-import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.service.AdminService;
 import io.smartinez.exposeller.client.ui.adminconsole.fragment.adslist.adapter.AdsListAdapter;
 import io.smartinez.exposeller.client.ui.adminconsole.fragment.adsmgt.AdsMgtFragment;
-import io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist.ConcertsListViewModel;
-import io.smartinez.exposeller.client.ui.adminconsole.fragment.concertslist.adapter.ConcertsListAdapter;
-import io.smartinez.exposeller.client.ui.adminconsole.fragment.concertsmgt.ConcertsMgtFragment;
 import io.smartinez.exposeller.client.util.FragmentUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,10 +48,6 @@ public class AdsListFragment extends Fragment {
     private RecyclerView mRvAdsList;
     private ImageView mIvAdsAdd;
     private AdsListAdapter mAdapter;
-
-    public static AdsListFragment newInstance() {
-        return new AdsListFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -109,7 +101,7 @@ public class AdsListFragment extends Fragment {
                     mViewModel.getAdBannerRepo().delete(auxAdBanner);
                     mViewModel.notifyListChanges();
                 }
-            } catch (IOException | IllegalAccessException e) {
+            } catch (IOException e) {
                 Toast.makeText(getContext(), R.string.admin_entry_delete_error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -123,8 +115,8 @@ public class AdsListFragment extends Fragment {
 
                     Date desiredDate = sdf.parse(mEtAdsDate1.getText().toString());
 
-                    mViewModel.searchListModels(AdminService.TypeSearch.TIME_BASED, desiredDate.getTime());
-                } catch (ParseException |IllegalAccessException | IOException e) {
+                    mViewModel.searchListAdBanners(AdminService.TypeSearch.TIME_BASED, desiredDate.getTime());
+                } catch (ParseException e) {
                     Toast.makeText(getContext(), R.string.admin_error_process, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -132,18 +124,10 @@ public class AdsListFragment extends Fragment {
 
         mIvSearchFreindlyId1.setOnClickListener(v -> {
             if (mEtFriendlyId1.getText().length() >= 1) {
-                try {
-                    mViewModel.searchListModels(AdminService.TypeSearch.FRIENDLY_ID, Integer.parseInt(mEtFriendlyId1.getText().toString()));
-                } catch (IllegalAccessException | IOException e) {
-                    Toast.makeText(getContext(), R.string.admin_error_process, Toast.LENGTH_SHORT).show();
-                }
+                mViewModel.searchListAdBanners(AdminService.TypeSearch.FRIENDLY_ID, Integer.parseInt(mEtFriendlyId1.getText().toString()));
             }
         });
 
-        try {
-            mViewModel.searchListModels(AdminService.TypeSearch.NOT_BEFORE, 0);
-        } catch (IllegalAccessException | IOException e) {
-            Toast.makeText(getContext(), R.string.admin_error_process, Toast.LENGTH_SHORT).show();
-        }
+        mViewModel.searchListAdBanners(AdminService.TypeSearch.NOT_BEFORE, 0);
     }
 }

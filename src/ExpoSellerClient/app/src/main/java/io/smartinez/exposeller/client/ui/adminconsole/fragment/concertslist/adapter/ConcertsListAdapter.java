@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,7 +29,7 @@ public class ConcertsListAdapter extends RecyclerView.Adapter<ConcertsListAdapte
     private OnAdapterClickDeleteListener mClickDeleteListener;
     private Context mContext;
 
-    private List<Concert> mEntriesList;
+    private List<Concert> mEntriesList = Collections.emptyList();
 
     @NonNull
     @Override

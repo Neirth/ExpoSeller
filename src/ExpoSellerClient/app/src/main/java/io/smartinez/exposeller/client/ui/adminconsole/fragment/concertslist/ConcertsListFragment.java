@@ -50,10 +50,6 @@ public class ConcertsListFragment extends Fragment {
     private ImageView mIvConcertAdd;
     private ConcertsListAdapter mAdapter;
 
-    public static ConcertsListFragment newInstance() {
-        return new ConcertsListFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -105,11 +101,11 @@ public class ConcertsListFragment extends Fragment {
                     mViewModel.getConcertRepo().delete(auxConcert);
                     mViewModel.notifyListChanges();
                 }
-            } catch (IOException | IllegalAccessException e) {
+            } catch (IOException e) {
                 Toast.makeText(getContext(), R.string.admin_entry_delete_error, Toast.LENGTH_SHORT).show();
             }
         });
-        
+
         mIvConcertAdd.setOnClickListener(v -> FragmentUtils.interchangeFragement(getActivity().getSupportFragmentManager(), R.id.fgAdminLogin, AdsMgtFragment.class));
 
         mIvSearchDate2.setOnClickListener(v -> {
@@ -119,8 +115,8 @@ public class ConcertsListFragment extends Fragment {
 
                     Date desiredDate = sdf.parse(mEtDate2.getText().toString());
 
-                    mViewModel.searchListModels(AdminService.TypeSearch.TIME_BASED, desiredDate.getTime());
-                } catch (ParseException |IllegalAccessException | IOException e) {
+                    mViewModel.searchListConcerts(AdminService.TypeSearch.TIME_BASED, desiredDate.getTime());
+                } catch (ParseException e) {
                     Toast.makeText(getContext(), R.string.admin_error_process, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -128,18 +124,11 @@ public class ConcertsListFragment extends Fragment {
 
         mIvSearchFreindlyId2.setOnClickListener(v -> {
             if (mEtFriendlyId2.getText().length() >= 1) {
-                try {
-                    mViewModel.searchListModels(AdminService.TypeSearch.FRIENDLY_ID, Integer.parseInt(mEtFriendlyId2.getText().toString()));
-                } catch (IllegalAccessException | IOException e) {
-                    Toast.makeText(getContext(), R.string.admin_error_process, Toast.LENGTH_SHORT).show();
-                }
+                mViewModel.searchListConcerts(AdminService.TypeSearch.FRIENDLY_ID, Integer.parseInt(mEtFriendlyId2.getText().toString()));
             }
         });
 
-        try {
-            mViewModel.searchListModels(AdminService.TypeSearch.NOT_BEFORE, 0);
-        } catch (IllegalAccessException | IOException e) {
-            Toast.makeText(getContext(), R.string.admin_error_process, Toast.LENGTH_SHORT).show();
-        }
+        mViewModel.searchListConcerts(AdminService.TypeSearch.NOT_BEFORE, 0);
+
     }
 }
