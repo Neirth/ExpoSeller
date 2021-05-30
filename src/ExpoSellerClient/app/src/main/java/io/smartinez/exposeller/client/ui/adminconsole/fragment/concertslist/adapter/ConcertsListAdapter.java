@@ -14,14 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
@@ -29,60 +27,114 @@ import io.smartinez.exposeller.client.util.listener.OnAdapterClickDeleteListener
 import io.smartinez.exposeller.client.util.listener.OnAdapterClickEditListener;
 
 public class ConcertsListAdapter extends RecyclerView.Adapter<ConcertsListAdapter.ConcertsListViewHolder> {
-    private OnAdapterClickEditListener mClickEditListener;
-    private OnAdapterClickDeleteListener mClickDeleteListener;
+    // Context
     private Context mContext;
 
-    private List<Concert> mEntriesList = Collections.emptyList();
+    // Callbacks
+    private OnAdapterClickEditListener mClickEditListener;
+    private OnAdapterClickDeleteListener mClickDeleteListener;
 
+    // List of entities
+    private List<Concert> mEntitiesList = Collections.emptyList();
+
+    /**
+     * Method to create the instance of view holder
+     *
+     * @param parent The view group
+     * @param viewType The view type
+     * @return The view holder instanced
+     */
     @NonNull
     @Override
-    public ConcertsListAdapter.ConcertsListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ConcertsListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Set the context instance
         mContext = parent.getContext();
 
+        // Instance a new viewholder
         return new ConcertsListViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_admin_concert, parent, false));
     }
 
+    /**
+     * Method to bind data and entity into viewholder
+     *
+     * @param holder The instance of viewholder
+     * @param position The position in the list
+     */
     @Override
-    public void onBindViewHolder(@NonNull ConcertsListAdapter.ConcertsListViewHolder holder, int position) {
-        if (mEntriesList != null) {
-            Concert concert = mEntriesList.get(position);
+    public void onBindViewHolder(@NonNull ConcertsListViewHolder holder, int position) {
+        if (mEntitiesList != null) {
+            // Get the entity object
+            Concert concert = mEntitiesList.get(position);
 
-            Glide.with(mContext).load(concert.getPhotoConcert()).into(holder.mIvPhotoArtist4);
-
+            // Get the formatter instance
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT);
             LocalDateTime dateConcertObj = concert.getEventDate().toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
 
+            // Load image into imageview
+            Glide.with(mContext).load(concert.getPhotoConcert()).into(holder.mIvPhotoArtist4);
+
+            // Bind data into textview
             holder.mTvFriendlyId4.setText(String.valueOf(concert.getFriendlyId()));
             holder.mTvConcertName4.setText(concert.getName());
             holder.mTvEventDate3.setText(dateConcertObj.format(dateFormatter));
         }
     }
 
+    /**
+     * Method to return the item count of the list
+     *
+     * @return The item count of the list
+     */
     @Override
     public int getItemCount() {
-        return mEntriesList.size();
+        return mEntitiesList.size();
     }
 
-    public List<Concert> getEntriesList() {
-        return mEntriesList;
+    /**
+     * Method for get the list instance
+     *
+     * @return The list instance
+     */
+    public List<Concert> getEntitiesList() {
+        return mEntitiesList;
     }
 
-    public void setEntriesList (List<Concert> entriesList) {
-        mEntriesList = entriesList;
+    /**
+     * Method to set the list of entities
+     *
+     * @param entitiesList The list of entities
+     */
+    public void setEntitiesList(List<Concert> entitiesList) {
+        // Set the elements in the list
+        mEntitiesList = entitiesList;
 
+        // Notify the data set is changed
         notifyDataSetChanged();
     }
 
+    /**
+     * Method to set on click edit callback
+     *
+     * @param clickEditListener The edit callback
+     */
     public void setOnAdapterClickEditListener(OnAdapterClickEditListener clickEditListener) {
         this.mClickEditListener = clickEditListener;
     }
 
+    /**
+     * Method to set on click delete callback
+     *
+     * @param clickDeleteListener The delete callback
+     */
     public void setOnAdapterClickDeleteListener(OnAdapterClickDeleteListener clickDeleteListener){
         this.mClickDeleteListener = clickDeleteListener;
     }
 
-    public class ConcertsListViewHolder extends RecyclerView.ViewHolder{
+    /**
+     * The view holder class
+     */
+    public class ConcertsListViewHolder extends RecyclerView.ViewHolder {
+        // Elements of viewholder
         private CardView mCvAdminConcert;
         private ConstraintLayout mClConcertCalendar;
         private ImageView mIvPhotoArtist4;
@@ -93,12 +145,18 @@ public class ConcertsListAdapter extends RecyclerView.Adapter<ConcertsListAdapte
         private ImageView mIvDeleteConcert4;
 
         public ConcertsListViewHolder(@NonNull View itemView) {
+            // Call to parent constructor
             super(itemView);
 
+            // Initialize the view holder
             initView();
         }
 
+        /**
+         * Private method for initialize the view holder
+         */
         private void initView() {
+            // Bind the elements of the view holder
             mCvAdminConcert = itemView.findViewById(R.id.cvAdminConcert);
             mClConcertCalendar = itemView.findViewById(R.id.clConcertCalendar);
             mIvPhotoArtist4 = itemView.findViewById(R.id.ivPhotoArtist4);
@@ -108,19 +166,22 @@ public class ConcertsListAdapter extends RecyclerView.Adapter<ConcertsListAdapte
             mIvEditConcert4 = itemView.findViewById(R.id.ivEditConcert4);
             mIvDeleteConcert4 = itemView.findViewById(R.id.ivDeleteConcert4);
 
+            // Bind the callback edit
             itemView.setOnClickListener(v -> {
                 if (mClickEditListener != null)
-                    mClickEditListener.onAdapterClickEditListener(mEntriesList.get(getBindingAdapterPosition()));
+                    mClickEditListener.onAdapterClickEditListener(mEntitiesList.get(getBindingAdapterPosition()));
             });
 
+            // Bind the callback edit
             mIvEditConcert4.setOnClickListener(v -> {
                 if (mClickEditListener != null)
-                    mClickEditListener.onAdapterClickEditListener(mEntriesList.get(getBindingAdapterPosition()));
+                    mClickEditListener.onAdapterClickEditListener(mEntitiesList.get(getBindingAdapterPosition()));
             });
 
+            // Bind the callback delete
             mIvDeleteConcert4.setOnClickListener(v -> {
                 if (mClickDeleteListener != null)
-                    mClickDeleteListener.onAdapterClickDeleteListener(mEntriesList.get(getBindingAdapterPosition()));
+                    mClickDeleteListener.onAdapterClickDeleteListener(mEntitiesList.get(getBindingAdapterPosition()));
             });
         }
     }

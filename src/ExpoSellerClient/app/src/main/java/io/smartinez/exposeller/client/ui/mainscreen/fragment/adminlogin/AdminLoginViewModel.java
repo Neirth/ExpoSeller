@@ -13,7 +13,10 @@ import java.util.concurrent.ExecutorService;
 
 @HiltViewModel
 public class AdminLoginViewModel extends ViewModel {
+    // Instance for use case admin
     private AdminService mAdminService;
+
+    // Instance for executor service
     private ExecutorService mExecutorService;
 
     @Inject
@@ -22,33 +25,32 @@ public class AdminLoginViewModel extends ViewModel {
         this.mExecutorService = executorService;
     }
 
+    /**
+     * Method to call administrator login
+     *
+     * @param email Email of administrator
+     * @param password Password of administrator
+     * @return Return a future object
+     */
     public CompletableFuture<Void> loginAdministrator(String email, String password) {
+        // Prepare a future operation instance
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
 
+        // Run in background the operation
         mExecutorService.submit(() -> {
             try {
+                // Run the login administration operation
                 mAdminService.loginAdministrator(email, password);
+
+                // Return the future operation
                 completableFuture.complete(null);
             } catch (IOException e) {
+                // Return the future operation exceptionally
                 completableFuture.completeExceptionally(e);
             }
         });
 
-        return completableFuture;
-    }
-
-    public CompletableFuture<Void> logoutAdministrator() {
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-
-        mExecutorService.submit(() -> {
-            try {
-                mAdminService.logoutAdministrator();
-                completableFuture.complete(null);
-            } catch (IOException e) {
-                completableFuture.completeExceptionally(e);
-            }
-        });
-
+        // Return the future operation object
         return completableFuture;
     }
 }

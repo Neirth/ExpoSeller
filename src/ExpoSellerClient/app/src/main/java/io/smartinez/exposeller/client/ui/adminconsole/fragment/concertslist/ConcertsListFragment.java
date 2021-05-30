@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
@@ -39,8 +38,7 @@ import java.util.Locale;
 
 @AndroidEntryPoint
 public class ConcertsListFragment extends Fragment {
-    private ConcertsListViewModel mViewModel;
-
+    // Elements of fragment
     private ConstraintLayout mClConcertLayout;
     private TextView mTvConcertListTitle;
     private TextView mTvFriendlyId2;
@@ -51,26 +49,54 @@ public class ConcertsListFragment extends Fragment {
     private ImageView mIvSearchDate2;
     private RecyclerView mRvConcertsList;
     private ImageView mIvConcertAdd;
+
+    // Adapter of the recycler view
     private ConcertsListAdapter mAdapter;
 
+    // View Model instance
+    private ConcertsListViewModel mViewModel;
+
+    // Calendar instance
     private Calendar mCalendar = Calendar.getInstance();
 
+    /**
+     * Method to create the view instance
+     *
+     * @param inflater The inflater instance
+     * @param container The parent view
+     * @param savedInstanceState A saved instance of the fragment
+     * @return The view instance
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.concerts_list_fragment, container, false);
     }
 
+    /**
+     * Method to initialize the components of the fragment
+     *
+     * @param view The view instance
+     * @param savedInstanceState A saved instance of the fragment
+     */
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable Bundle savedInstanceState) {
+        // Call to parent method
         super.onViewCreated(view, savedInstanceState);
+
+        // Instance the view model
         mViewModel = new ViewModelProvider(this).get(ConcertsListViewModel.class);
 
+        // Initialize the components of the fragment
         initView();
         initRecyclerView();
     }
 
+    /**
+     * Private method to initialize the components of the fragment
+     */
     private void initView() {
+        // Bind the elements of the fragment
         mClConcertLayout = getActivity().findViewById(R.id.clConcertLayout);
         mTvConcertListTitle = getActivity().findViewById(R.id.tvConcertListTitle);
         mTvFriendlyId2 = getActivity().findViewById(R.id.tvFriendlyId2);
@@ -82,33 +108,40 @@ public class ConcertsListFragment extends Fragment {
         mRvConcertsList = getActivity().findViewById(R.id.rvConcertsList);
         mIvConcertAdd = getActivity().findViewById(R.id.ivConcertAdd);
 
+        // Prepare the date format instance
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
 
+        // Prepare the onDateSet callback
         DatePickerDialog.OnDateSetListener onDateListener = (view, year, monthOfYear, dayOfMonth) -> {
+            // Set the values into calendar instance
             mCalendar.set(Calendar.YEAR, year);
             mCalendar.set(Calendar.MONTH, monthOfYear);
             mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
+            // Modify the text of edit text
             mEtDate2.setText(sdf.format(TimeUtils.removeTimeFromDate(mCalendar.getTime())));
         };
 
+        // Set onClick callback to edittext
         mEtDate2.setOnClickListener(v -> {
+            // Hide the keyboard
             Utilities.hideKeyboard(getContext(), v);
+
+            // Open new date picker dialog
             new DatePickerDialog(getActivity(), onDateListener, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
+        // Set onClick callback to add entities button
+        mIvConcertAdd.setOnClickListener(v -> FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface, ConcertsMgtFragment.class));
+
+        // Set onClick callback to search date button
         mIvSearchDate2.setOnClickListener(v -> {
             if (mEtDate2.getText().length() >= 1) {
-                try {
-                    Date desiredDate = sdf.parse(mEtDate2.getText().toString());
-
-                    mViewModel.searchListConcerts(AdminService.TypeSearch.TIME_BASED, desiredDate.getTime());
-                } catch (ParseException e) {
-                    Utilities.showToast(getActivity(), R.string.admin_error_process);
-                }
+                mViewModel.searchListConcerts(AdminService.TypeSearch.TIME_BASED, mCalendar.getTime().getTime());
             }
         });
 
+        // Set onClick callback to search friendly id button
         mIvSearchFreindlyId2.setOnClickListener(v -> {
             if (mEtFriendlyId2.getText().length() >= 1) {
                 mViewModel.searchListConcerts(AdminService.TypeSearch.FRIENDLY_ID, Integer.parseInt(mEtFriendlyId2.getText().toString()));
@@ -116,30 +149,46 @@ public class ConcertsListFragment extends Fragment {
         });
     }
 
+    /**
+     * Private method for initialize the recycler view
+     */
     private void initRecyclerView() {
+        // Prepare a new instance of adapter
         mAdapter = new ConcertsListAdapter();
 
+        // Observe the list of entities
+        mViewModel.getListConcerts().observe(getViewLifecycleOwner(), concerts -> mAdapter.setEntitiesList(concerts));
+
+        // Set the adapter into recycler view with linear layout
         mRvConcertsList.setAdapter(mAdapter);
         mRvConcertsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mViewModel.getListConcerts().observe(getViewLifecycleOwner(), concerts -> mAdapter.setEntriesList(concerts));
 
+        // Set the callback edit to adapter
         mAdapter.setOnAdapterClickEditListener(model -> {
             if (model instanceof Concert) {
+                // Cast the entity
                 Concert auxConcert = (Concert) model;
 
+                // Prepare a bundle with entity
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ConcertsMgtFragment.EXTRA_DATA, auxConcert);
 
+                // Transfer data into a new fragment
                 FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface, ConcertsMgtFragment.class, bundle);
             }
         });
 
+        // Set the callback delete to adapter
         mAdapter.setOnAdapterClickDeleteListener(model -> {
             try {
                 if (model instanceof Concert) {
+                    // Cast the entity
                     Concert auxConcert = (Concert) model;
 
+                    // Delete the entity
                     mViewModel.getConcertRepo().delete(auxConcert);
+
+                    // Notify the dataset is changed
                     mViewModel.notifyListChanges();
                 }
             } catch (IOException e) {
@@ -147,7 +196,7 @@ public class ConcertsListFragment extends Fragment {
             }
         });
 
-        mIvConcertAdd.setOnClickListener(v -> FragmentUtils.interchangeFragement(getParentFragmentManager(), R.id.flFragmentSurface, ConcertsMgtFragment.class));
+        // Search entities with actual date
         mViewModel.searchListConcerts(AdminService.TypeSearch.NOT_BEFORE, 0);
     }
 }

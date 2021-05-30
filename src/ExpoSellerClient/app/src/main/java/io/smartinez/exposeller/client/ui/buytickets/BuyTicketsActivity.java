@@ -23,90 +23,136 @@ import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
 public class BuyTicketsActivity extends AppCompatActivity {
+    // Elements of view
     private ConstraintLayout mClBuyTickets;
     private TextView mTvInsertImportValue2;
     private ImageView mIvExpoSellerLogo5;
     private RecyclerView mRvBuyTickets;
     private TextView mTvNotFoundConcerts2;
 
+    // Instance of adapter
     private BuyTicketConcertAdapter mAdapter;
+
+    // Instance of view model
     private BuyTicketsViewModel mViewModel;
 
+    /**
+     * Method to inflate the view
+     *
+     * @param savedInstanceState The bundle with saved instance data
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Call parent method
         super.onCreate(savedInstanceState);
+
+        // Inflate the view
         setContentView(R.layout.activity_buy_tickets);
 
+        // Initialize the view
         initView();
         initRecyclerView();
 
+        // Prepare the timeout idle
         TimeOutIdle.initIdleHandler(() -> {
-            Intent intent = new Intent(BuyTicketsActivity.this, AdsConcertActivity.class);
-            startActivity(intent);
+            // Start a new activity
+            startActivity(new Intent(BuyTicketsActivity.this, AdsConcertActivity.class));
 
+            // Finish the actual activity
             finish();
         });
 
+        // Start idle timeout
         TimeOutIdle.startIdleHandler();
-
-        mClBuyTickets.sendAccessibilityEvent(AccessibilityEvent.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION);
     }
 
+    /**
+     * Private method to init the view
+     */
     private void initView() {
+        // Bind elements of view
         mClBuyTickets = findViewById(R.id.clBuyTickets);
         mTvInsertImportValue2 = findViewById(R.id.tvInsertImportValue2);
         mIvExpoSellerLogo5 = findViewById(R.id.ivExpoSellerLogo5);
         mRvBuyTickets = findViewById(R.id.rvBuyTickets);
         mTvNotFoundConcerts2 = findViewById(R.id.tvNotFoundConcerts2);
 
+        // Instance a view model
         mViewModel = new ViewModelProvider(this).get(BuyTicketsViewModel.class);
     }
 
+    /**
+     * Private method to init the recycler view
+     */
     private void initRecyclerView() {
+        // Instance the adapter
         mAdapter = new BuyTicketConcertAdapter();
+
+        // Set callback to adapter
         mAdapter.setAdapterClickListener(model -> {
             if (model instanceof Concert) {
+                // Cast the entity
                 Concert concert = (Concert) model;
 
+                // Start activity with extra parameters
                 Intent intent = new Intent(BuyTicketsActivity.this, InsertCoinsActivity.class);
                 startActivity(intent.putExtra(InsertCoinsActivity.EXTRA_CONCERT, concert));
 
+                // Finish actual activity
                 finish();
             }
         });
 
+        // Set the adapter to recycler view
         mRvBuyTickets.setAdapter(mAdapter);
+
+        // Read the concert list
         mViewModel.readConcertList().observe(this, value -> {
+            // Detect if the concert list is empty or not
             if (value.size() >= 1) {
                 mTvNotFoundConcerts2.setVisibility(View.GONE);
             } else {
                 mTvNotFoundConcerts2.setVisibility(View.VISIBLE);
             }
 
+            // Set the concert list
             mAdapter.setConcertList(value);
         });
     }
 
-
+    /**
+     * Method to detect if back pressed
+     */
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(BuyTicketsActivity.this, MainScreenActivity.class);
-        startActivity(intent);
+        // Start a new activity
+        startActivity(new Intent(BuyTicketsActivity.this, MainScreenActivity.class));
 
+        // Call to parent method
         super.onBackPressed();
     }
 
+    /**
+     * Method to detect if the activity is pause
+     */
     @Override
     protected void onPause() {
+        // Call to parent method
         super.onPause();
+
+        // Stop the idle time
         TimeOutIdle.stopIdleHandler();
     }
 
+    /**
+     * Method to detect the user interactions
+     */
     @Override
     public void onUserInteraction() {
+        // Call to parent method
         super.onUserInteraction();
 
-        TimeOutIdle.stopIdleHandler();
-        TimeOutIdle.startIdleHandler();
+        // Reset the idle time
+        TimeOutIdle.resetIdleHandle();
     }
 }

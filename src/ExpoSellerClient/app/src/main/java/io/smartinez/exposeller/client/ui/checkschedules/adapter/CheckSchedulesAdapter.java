@@ -1,5 +1,6 @@
 package io.smartinez.exposeller.client.ui.checkschedules.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,61 +16,108 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+import java.util.Locale;
 
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.util.listener.OnAdapterClickListener;
 
 public class CheckSchedulesAdapter extends RecyclerView.Adapter<CheckSchedulesAdapter.CheckSchedulesViewHolder> {
-    private List<Concert> mConcertList;
-    private OnAdapterClickListener mOnAdapterClickListener;
+    // Context instance
     private Context mContext;
 
+    // Callback of adapter
+    private OnAdapterClickListener mOnAdapterClickListener;
+
+    // List of entities
+    private List<Concert> mConcertList;
+
+    /**
+     * Method to create the instance of view holder
+     *
+     * @param parent The view group
+     * @param viewType The view type
+     * @return The view holder instanced
+     */
     @NonNull
     @Override
     public CheckSchedulesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Set the context instance
         mContext = parent.getContext();
 
+        // Instance a new viewholder
         return new CheckSchedulesViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_calendar_schedules, parent, false));
     }
 
+    /**
+     * Method to bind data and entity into viewholder
+     *
+     * @param holder The instance of viewholder
+     * @param position The position in the list
+     */
     @Override
+    @SuppressLint("SetTextI18n")
     public void onBindViewHolder(@NonNull CheckSchedulesViewHolder holder, int position) {
         if (mConcertList != null) {
+            // Get the entity object
             Concert concert = mConcertList.get(position);
 
-            Glide.with(mContext).load(concert.getPhotoConcert()).into(holder.mIvPhotoArtist3);
+            // Bind data into textview
             holder.mTvArtistName3.setText(concert.getArtistName());
             holder.mTvConcertName3.setText(concert.getName());
-            holder.mTvPriceName3.setText(String.format("%.2f", concert.getCost()) + " €");
+            holder.mTvPriceName3.setText(String.format(Locale.getDefault(), "%.2f", concert.getCost()) + " €");
+
+            // Load image into imageview
+            Glide.with(mContext).load(concert.getPhotoConcert()).into(holder.mIvPhotoArtist3);
         }
     }
 
+    /**
+     * Method to return the item count of the list
+     *
+     * @return The item count of the list
+     */
     @Override
     public int getItemCount() {
         return mConcertList != null ? mConcertList.size() : 0;
     }
 
+    /**
+     * Method for get the list instance
+     *
+     * @return The list instance
+     */
     public List<Concert> getConcertList() {
         return mConcertList;
     }
 
-    public void setConcertList(List<Concert> mConcertList) {
-        this.mConcertList = mConcertList;
+    /**
+     * Method to set the list of entities
+     *
+     * @param concertList The list of entities
+     */
+    public void setConcertList(List<Concert> concertList) {
+        // Set the list of concerts
+        this.mConcertList = concertList;
+
+        // Notify the dataset has changed
         notifyDataSetChanged();
     }
 
-    public OnAdapterClickListener getOnAdapterClickListener() {
-        return mOnAdapterClickListener;
+    /**
+     * Method to set on click callback
+     *
+     * @param onAdapterClickListener The click callback
+     */
+    public void setOnAdapterClickListener(OnAdapterClickListener onAdapterClickListener) {
+        this.mOnAdapterClickListener = onAdapterClickListener;
     }
 
-    public void setOnAdapterClickListener(OnAdapterClickListener mOnAdapterClickListener) {
-        this.mOnAdapterClickListener = mOnAdapterClickListener;
-
-        notifyDataSetChanged();
-    }
-
+    /**
+     * The view holder class
+     */
     public class CheckSchedulesViewHolder extends RecyclerView.ViewHolder {
+        // Elements of viewholder
         private CardView mCvConcertCalendar;
         private ConstraintLayout mClConcertCalendar;
         private ImageView mIvPhotoArtist3;
@@ -78,19 +126,27 @@ public class CheckSchedulesAdapter extends RecyclerView.Adapter<CheckSchedulesAd
         private TextView mTvPriceName3;
 
         public CheckSchedulesViewHolder(@NonNull View itemView) {
+            // Call to parent constructor
             super(itemView);
 
+            // Initialize the view holder
             initHolder();
-            itemView.setOnClickListener(v -> mOnAdapterClickListener.onAdapaterClickListener(mConcertList.get(getBindingAdapterPosition())));
         }
 
+        /**
+         * Private method for initialize the view holder
+         */
         public void initHolder() {
+            // Bind the elements of the view holder
             mCvConcertCalendar = itemView.findViewById(R.id.cvConcertCalendar);
             mClConcertCalendar = itemView.findViewById(R.id.clConcertCalendar);
             mIvPhotoArtist3 = itemView.findViewById(R.id.ivPhotoArtist3);
             mTvConcertName3 = itemView.findViewById(R.id.tvConcertName3);
             mTvArtistName3 = itemView.findViewById(R.id.tvArtistName3);
             mTvPriceName3 = itemView.findViewById(R.id.tvPriceName3);
+
+            // Bind the callback click
+            itemView.setOnClickListener(v -> mOnAdapterClickListener.onAdapaterClickListener(mConcertList.get(getBindingAdapterPosition())));
         }
     }
 }

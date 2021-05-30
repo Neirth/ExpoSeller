@@ -17,7 +17,10 @@ import io.smartinez.exposeller.client.service.UserService;
 
 @HiltViewModel
 public class BuyTicketsViewModel extends ViewModel {
+    // Instance for use case user
     private final UserService mUsersService;
+
+    // Instance for executor service
     private final ExecutorService mExecutorService;
 
     @Inject
@@ -26,9 +29,16 @@ public class BuyTicketsViewModel extends ViewModel {
         this.mExecutorService = executorService;
     }
 
+    /**
+     * Method to get a live data with concert list
+     *
+     * @return The live data list
+     */
     public LiveData<List<Concert>> readConcertList() {
+        // Instance a mutable live data
         MutableLiveData<List<Concert>> concertList = new MutableLiveData<>();
 
+        // Run background the query
         mExecutorService.execute(() -> {
             try {
                 concertList.postValue(mUsersService.readConcertList());
@@ -37,6 +47,7 @@ public class BuyTicketsViewModel extends ViewModel {
             }
         });
 
+        // Return the live data
         return concertList;
     }
 }

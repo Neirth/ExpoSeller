@@ -21,42 +21,66 @@ import io.smartinez.exposeller.client.util.TimeOutIdle;
 
 @AndroidEntryPoint
 public class AdsConcertActivity extends AppCompatActivity {
+    // Elements of the view
     private ConstraintLayout mClAdsConcert;
     private ImageView mIvAdsConcertView;
 
+    // Instance of View Model
     private AdsConcertViewModel mViewModel;
 
+    /**
+     * Method to inflate the view
+     *
+     * @param savedInstanceState The bundle with saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Call to parent constructor
         super.onCreate(savedInstanceState);
+
+        // Inflate the view
         setContentView(R.layout.activity_ads_concert);
 
+        // Initialize the view
         initView();
     }
 
+    /**
+     * Private method to initialize the view
+     */
     private void initView() {
+        // Bind the elements
         mClAdsConcert = findViewById(R.id.clAdsConcert);
         mIvAdsConcertView = findViewById(R.id.ivAdsConcertView);
 
+        // Set callback for click
         mIvAdsConcertView.setOnClickListener(v -> AdsConcertActivity.this.onBackPressed());
 
+        // Initialize the view model
         mViewModel = new ViewModelProvider(this).get(AdsConcertViewModel.class);
+
+        // Pick random elements from list and observe it
         mViewModel.pickRandomAdsList().observe(this, value -> mViewModel.setListAdvertisement(value));
 
+        // Run the idle advertisements
         mViewModel.runIdleAdvertisment(this, mIvAdsConcertView);
     }
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(AdsConcertActivity.this, MainScreenActivity.class);
-        startActivity(intent);
+        // Start a new activity
+        startActivity(new Intent(AdsConcertActivity.this, MainScreenActivity.class));
 
+        // Call to parent method
         super.onBackPressed();
     }
 
     @Override
     protected void onPause() {
+        // Call to parent method
         super.onPause();
+
+        // Stop Idle time
         TimeOutIdle.stopIdleHandler();
     }
 }

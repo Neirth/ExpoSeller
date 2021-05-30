@@ -2,7 +2,6 @@ package io.smartinez.exposeller.client.peripherals.ticketgenerator;
 
 import android.content.res.Resources;
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
@@ -14,16 +13,12 @@ import com.ryantenney.passkit4j.PassSerializer;
 import com.ryantenney.passkit4j.model.Barcode;
 import com.ryantenney.passkit4j.model.BarcodeFormat;
 import com.ryantenney.passkit4j.model.Color;
-import com.ryantenney.passkit4j.model.DateField;
 import com.ryantenney.passkit4j.model.EventTicket;
 import com.ryantenney.passkit4j.model.TextField;
 import com.ryantenney.passkit4j.sign.PassSigner;
 import com.ryantenney.passkit4j.sign.PassSignerImpl;
 
 import java.io.*;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -35,8 +30,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.hilt.android.scopes.ViewModelScoped;
-import io.smartinez.exposeller.client.ExpoSellerApplication;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.domain.Concert;
 import io.smartinez.exposeller.client.domain.Ticket;
@@ -60,11 +53,24 @@ public class PassbookTicketGeneratorImpl implements ITicketGenerator {
         this.storageRef = FirebaseStorage.getInstance().getReference().child(Ticket.class.getSimpleName());
     }
 
+    /**
+     * Method to convert a Ticket Object to Physical Ticket Object
+     *
+     * @param ticket The ticket
+     * @throws IOException Exception in case you cannot initialize the components
+     */
     @Override
-    public boolean generatePhysicalTicket(Ticket ticket) throws IOException {
+    public void generatePhysicalTicket(Ticket ticket) throws IOException {
         throw new UnsupportedOperationException("The implementation doesn't support this");
     }
 
+    /**
+     * Method to convert Ticket Object to Virtual Ticket Object
+     *
+     * @param ticket The ticket
+     * @return The uri from virtual ticket
+     * @throws IOException Exception in case you cannot initialize the components
+     */
     @Override
     public String generateVirtualTicket(Ticket ticket) throws IOException {
         try {
@@ -155,11 +161,23 @@ public class PassbookTicketGeneratorImpl implements ITicketGenerator {
         }
     }
 
+    /**
+     * Method to convert a Ticket Object to Physical Ticket Object and Virtual Ticket Object
+     *
+     * @param ticket The ticket
+     * @return The uri from virtual ticket
+     * @throws IOException Exception in case you cannot initialize the components
+     */
     @Override
     public String generateHybridTicket(Ticket ticket) throws IOException {
         throw new UnsupportedOperationException("The implementation doesn't support this");
     }
 
+    /**
+     * Method to obtain the type of implementation we are using
+     *
+     * @return The implementation type
+     */
     @Override
     public TicketType getImplementationType() {
         return ticketType;

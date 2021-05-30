@@ -35,25 +35,41 @@ public class UserService {
         this.mAdvertisementRepo = advertisementRepo;
     }
 
+    /**
+     * Wrapper to IInsertCoins method to check the insert value
+     *
+     * @return Observable of inserted value
+     * @throws IOException Exception in case you cannot initialize physical components.
+     */
     public Observable checkInsertCoins() throws IOException {
         return mInsertCoins.checkInsertedValue();
     }
 
+    /**
+     * Wrapper to IInsertCoins method to return the inserted value
+     *
+     * @return The state of operation
+     * @throws IOException Exception in case you cannot initialize physical components.
+     */
     public boolean returnValueCoins(float desiredValue) throws IOException {
         return mInsertCoins.returnExcessAmount(desiredValue);
     }
 
-    public boolean returnValueCoins(float desiredValue, float giveValue) throws IOException {
-        return mInsertCoins.returnExcessAmount(desiredValue, giveValue);
-    }
-
+    /**
+     * Method to buy and get a ticket
+     *
+     * @param ticket The ticket object
+     * @param checkoutComplete The checkoutComplete callback
+     * @throws IOException Exception in case you cannot initialize physical components.
+     */
     public void buyTicket(Ticket ticket, CheckoutCompleteListener checkoutComplete) throws IOException {
-        int friendlyId = generateTicketFriendlyId();
-
+        // Insert the ticket in the database
         mTicketRepo.insert(ticket);
 
+        // Prepare the result variable
         String result = "";
 
+        // Get the implementation type
         switch (mTicketGenerator.getImplementationType()) {
             case HYBRID:
                 result = mTicketGenerator.generateHybridTicket(ticket);
@@ -66,51 +82,76 @@ public class UserService {
                 break;
         }
 
+        // Execute the callback of checkout complete
         checkoutComplete.checkoutComplete(result);
     }
 
+    /**
+     * Method to pick random advertisement list
+     *
+     * @return The shuffled advertisement list
+     * @throws IOException In case of not being able to access the database
+     */
     public List<Advertisement> pickRandomAdsList() throws IOException {
         List<Advertisement> advertisements = mAdvertisementRepo.getNotBeforeDate(new Date());
-        List<Advertisement> randomAdvertisements = new ArrayList<>();
 
-        if (!advertisements.isEmpty()) {
-            Collections.shuffle(advertisements);
+        Collections.shuffle(advertisements);
 
-            int listSize = (advertisements.size() >= 5) ? 5 : advertisements.size();
-
-            for (int i = 0; i < listSize; i++) {
-                randomAdvertisements.add(advertisements.get(i));
-                advertisements.remove(i);
-            }
-        }
-
-        return randomAdvertisements;
+        return advertisements;
     }
 
+    /**
+     * Method to read the concert list
+     *
+     * @return The concert list
+     * @throws IOException In case of not being able to access the database
+     */
     public List<Concert> readConcertList() throws IOException {
         return mConcertRepo.getNotBeforeDate(new Date());
     }
 
+    /**
+     * Method to search concert in a specific date
+     *
+     * @param date The date for search
+     * @return The concert list
+     * @throws IOException In case of not being able to access the database
+     */
     public List<Concert> searchConcertWithDay(Date date) throws IOException {
         return mConcertRepo.getBySpecificDate(date);
     }
 
+    /**
+     * Method for generate the friendly id for tickets
+     *
+     * @return The free friendly id
+     * @throws IOException In case of not being able to access the database
+     */
     public int generateTicketFriendlyId() throws IOException {
+        // Prepare the friendlyId
         int friendlyId = 0;
 
         try {
             while (true) {
+                // Generate a random friendly id
                 friendlyId = Utilities.generateRandomFriendlyId();
 
+                // Check if no exist, if no exist, the method throw a exception.
                 mTicketRepo.getByFriendlyId(String.valueOf(friendlyId));
             }
         } catch (IllegalAccessException e) {
-            // Ignoring the consequences because the value is free
+            // INFO: Ignoring the consequences because the value is free
         }
 
+        // Return the value
         return friendlyId;
     }
 
+    /**
+     * Method to recover the implementation type of ticket generator
+     *
+     * @return The ticket generator implementation type
+     */
     public TicketType getTicketImplType() {
         return mTicketGenerator.getImplementationType();
     }

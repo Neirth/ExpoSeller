@@ -17,7 +17,7 @@
             android:background="@drawable/component_background">
 
         <ImageView
-                android:layout_height="80dp"
+                android:layout_height="100dp"
                 tools:srcCompat="@tools:sample/avatars"
                 android:id="@+id/ivPhotoArtist2"
                 card_view:layout_constraintStart_toStartOf="parent"
@@ -69,8 +69,9 @@
                 android:layout_height="16dp"
                 card_view:srcCompat="@drawable/ic_baseline_person_24"
                 android:id="@+id/ivArtistName2"
-                card_view:layout_constraintStart_toStartOf="parent" android:layout_marginTop="16dp"
-                card_view:layout_constraintTop_toBottomOf="@+id/tvConcertName2" android:layout_marginStart="16dp"/>
+                card_view:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp" android:layout_marginTop="48dp"
+                card_view:layout_constraintTop_toBottomOf="@+id/ivPhotoArtist2"/>
 
         <ImageView
                 android:layout_width="16dp"
@@ -97,7 +98,7 @@
                 android:textColor="@color/text_button_foreground_color"
                 android:fontFamily="sans-serif-medium"
                 card_view:layout_constraintTop_toBottomOf="@+id/ivPhotoArtist2"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 card_view:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"/>
 

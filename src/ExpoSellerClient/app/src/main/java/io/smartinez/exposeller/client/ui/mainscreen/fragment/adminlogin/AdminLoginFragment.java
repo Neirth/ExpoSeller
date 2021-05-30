@@ -22,11 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.ExpoSellerApplication;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.adminconsole.AdminConsoleActivity;
+import io.smartinez.exposeller.client.util.Utilities;
 
 @AndroidEntryPoint
 public class AdminLoginFragment extends Fragment {
-    private AdminLoginViewModel mViewModel;
-
+    // Elements of fragment
     private TextView mTvAdminConsole;
     private TextView mTvAdminEmail;
     private TextView mTvAdminPassword;
@@ -34,26 +34,49 @@ public class AdminLoginFragment extends Fragment {
     private EditText mEtAdminPassword;
     private Button mBtnAdminOk;
     private Button mBtnAdminCancel;
+
+    // Instance of animation object
     private Animation mLoadAnimation;
 
+    // View Model instance
+    private AdminLoginViewModel mViewModel;
+
+    /**
+     * Method to create the view instance
+     *
+     * @param inflater The inflater instance
+     * @param container The parent view
+     * @param savedInstanceState A saved instance of the fragment
+     * @return The view instance
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.admin_login_fragment, container, false);
     }
 
+    /**
+     * Method to initialize the components of the fragment
+     *
+     * @param view The view instance
+     * @param savedInstanceState A saved instance of the fragment
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        // Call to parent method
         super.onViewCreated(view, savedInstanceState);
+
+        // Instance the view model
         mViewModel = new ViewModelProvider(this).get(AdminLoginViewModel.class);
 
-        try {
-            initView();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Initialize the components of the fragment
+        initView();
     }
 
-    private void initView() throws Exception {
+    /**
+     * Private method to initialize the components of the fragment
+     */
+    private void initView() {
+        // Bind the elements of the fragment
         mTvAdminConsole = getView().findViewById(R.id.tvAdminConsole);
         mTvAdminEmail = getView().findViewById(R.id.tvAdminEmail);
         mTvAdminPassword = getView().findViewById(R.id.tvAdminPassword);
@@ -62,48 +85,56 @@ public class AdminLoginFragment extends Fragment {
         mBtnAdminOk = getView().findViewById(R.id.btnAdminOk);
         mBtnAdminCancel = getView().findViewById(R.id.btnAdminCancel);
 
+        // Configure animation object
         mLoadAnimation = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
         mLoadAnimation.setDuration(1000);
 
+        // Initialize the new instance of view model
         mViewModel = new ViewModelProvider(this).get(AdminLoginViewModel.class);
 
+        // Set callback to ok button
         mBtnAdminOk.setOnClickListener(v -> {
             if (mEtAdminEmail.getText().length() >= 1 && mEtAdminPassword.getText().length() >= 1) {
+                // Run login administration operation
                 mViewModel.loginAdministrator(mEtAdminEmail.getText().toString(), mEtAdminPassword.getText().toString())
                     .thenApplyAsync(result -> {
                         requireActivity().runOnUiThread(() -> {
-                            Log.d(ExpoSellerApplication.LOG_TAG, "The callback is called!");
+                            // Hidden the login fragment
                             getView().findViewById(R.id.fgAdminLogin).setVisibility(View.GONE);
                             getView().findViewById(R.id.fgAdminLogin).startAnimation(mLoadAnimation);
 
+                            // Clean values of fields
                             mEtAdminEmail.setText("");
                             mEtAdminPassword.setText("");
 
+                            // Start the activity
                             startActivity(new Intent(getContext(), AdminConsoleActivity.class));
                         });
 
+                        // Return a null value for finish the future operation
                         return null;
                     }).exceptionally(ex -> {
-                        requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), R.string.admin_login_error, Toast.LENGTH_SHORT).show());
+                        // Inform the error in ui
+                        requireActivity().runOnUiThread(() -> Utilities.showToast(getActivity(), R.string.admin_login_error));
+
+                        // Return a null value for finish the future operation
                         return null;
                     });
             } else {
-                Toast toast = Toast.makeText(getContext(), R.string.admin_login_validation_error, Toast.LENGTH_SHORT);
-                toast.getView().setBackgroundColor(getResources().getColor(R.color.darken_grey_transparent));
-
-                TextView toastMessage = toast.getView().findViewById(android.R.id.message);
-                toastMessage.setTextColor(Color.WHITE);
-
-                toast.show();
+                // Inform the error in ui
+                Utilities.showToast(getActivity(), R.string.admin_login_validation_error);
             }
         });
 
+        // Set the cancellation callback
         mBtnAdminCancel.setOnClickListener(v -> {
-            mEtAdminEmail.setText("");
-            mEtAdminPassword.setText("");
-
+            // Hidden the login fragment
             getActivity().findViewById(R.id.fgAdminLogin).setVisibility(View.GONE);
             getActivity().findViewById(R.id.fgAdminLogin).startAnimation(mLoadAnimation);
+
+            // Clean values of fields
+            mEtAdminEmail.setText("");
+            mEtAdminPassword.setText("");
         });
     }
 }

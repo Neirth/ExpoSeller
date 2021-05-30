@@ -16,7 +16,10 @@ import io.smartinez.exposeller.client.service.AdminService;
 
 @HiltViewModel
 public class ConcertsListViewModel extends ViewModel {
+    // Instance of use cases layer
     private final AdminService mAdminService;
+
+    // Instance of executor service
     private final ExecutorService mExecutorService;
 
     @Inject
@@ -25,10 +28,30 @@ public class ConcertsListViewModel extends ViewModel {
         this.mExecutorService = executorService;
     }
 
+    /**
+     * Method to get the instance of concert repo
+     *
+     * @return The instance of concert repo
+     */
     public ConcertRepo getConcertRepo() {
         return mAdminService.getConcertRepo();
     }
 
+    /**
+     * Method to get a live data with list of entities
+     *
+     * @return LiveData with List of Entities
+     */
+    public LiveData<List<Concert>> getListConcerts() {
+        return mAdminService.getConcertList();
+    }
+
+    /**
+     * Method to search with parameters in the repo
+     *
+     * @param typeSearch The type of search
+     * @param parameter The parameter to search
+     */
     public void searchListConcerts(AdminService.TypeSearch typeSearch, long parameter) {
         mExecutorService.submit(() -> {
             try {
@@ -39,6 +62,9 @@ public class ConcertsListViewModel extends ViewModel {
         });
     }
 
+    /**
+     * Method to notify changes in list
+     */
     public void notifyListChanges() {
         mExecutorService.submit(() -> {
             try {
@@ -49,7 +75,4 @@ public class ConcertsListViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<Concert>> getListConcerts() {
-        return mAdminService.getListConcerts();
-    }
 }

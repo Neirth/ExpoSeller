@@ -18,7 +18,10 @@ import io.smartinez.exposeller.client.service.UserService;
 
 @HiltViewModel
 public class CheckSchedulesViewModel extends ViewModel {
+    // Instance for use case user
     private final UserService mUsersService;
+
+    // Instance for executor service
     private final ExecutorService mExecutorService;
 
     @Inject
@@ -27,9 +30,17 @@ public class CheckSchedulesViewModel extends ViewModel {
         this.mExecutorService = executorService;
     }
 
+    /**
+     * Method to search in background the concerts with specific date
+     *
+     * @param date The date object
+     * @return The live data list
+     */
     public LiveData<List<Concert>> searchConcertWithDay(Date date) {
+        // Instance a mutable live data
         MutableLiveData<List<Concert>> concertList = new MutableLiveData<>();
 
+        // Run background the query
         mExecutorService.execute(() -> {
             try {
                 concertList.postValue(mUsersService.searchConcertWithDay(date));
@@ -38,6 +49,7 @@ public class CheckSchedulesViewModel extends ViewModel {
             }
         });
 
+        // Return the live data
         return concertList;
     }
 }

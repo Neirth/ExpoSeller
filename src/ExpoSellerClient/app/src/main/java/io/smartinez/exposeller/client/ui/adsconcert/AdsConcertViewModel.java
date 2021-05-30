@@ -21,8 +21,13 @@ import io.smartinez.exposeller.client.service.UserService;
 
 @HiltViewModel
 public class AdsConcertViewModel extends ViewModel {
+    // Instance for use case user
     private final UserService mUsersService;
+
+    // Instance for executor service
     private final ExecutorService mExecutorService;
+
+    // Atomic Reference to list advertisement
     private final AtomicReference<List<Advertisement>> mListAdvertisement;
 
     @Inject
@@ -32,9 +37,16 @@ public class AdsConcertViewModel extends ViewModel {
         this.mListAdvertisement = new AtomicReference<>(Collections.emptyList());
     }
 
+    /**
+     * Method for pick random list of advertisements
+     *
+     * @return LiveDate for Advertisement list
+     */
     public LiveData<List<Advertisement>> pickRandomAdsList() {
+        // Initialize the mutable live data
         MutableLiveData<List<Advertisement>> mutableAd = new MutableLiveData<>();
 
+        // Execute in background the query
         mExecutorService.execute(() -> {
             try {
                 mutableAd.postValue(mUsersService.pickRandomAdsList());
@@ -43,42 +55,63 @@ public class AdsConcertViewModel extends ViewModel {
             }
         });
 
+        // Return the live data
         return mutableAd;
     }
 
+    /**
+     * Method to run in idle advertisement
+     *
+     * @param activity Activity instance
+     * @param adImageView Image view to operate
+     */
     public void runIdleAdvertisment(Activity activity, ImageView adImageView) {
         mExecutorService.execute(() -> {
+            // Get thread object
             Thread currentThread = Thread.currentThread();
 
             while (true) {
-                if (mListAdvertisement.get().size() >= 1) {
-                    mListAdvertisement.get().forEach(adBanner -> {
-                        try {
+                // Foreach the list
+                mListAdvertisement.get().forEach(advertisement -> {
+                    try {
+                        // Check if not the activity is destroyed
+                        if (!activity.isDestroyed() || !activity.isFinishing()) {
+                            // Run in activity thread
                             activity.runOnUiThread(() -> {
-                                try {
-                                    adImageView.setContentDescription(adBanner.getName());
-                                    Glide.with(activity).load(adBanner.getPhotoAd()).into(adImageView);
-                                } catch (IllegalArgumentException e) {
-                                    currentThread.interrupt();
-                                }
+                                // Set description for text to speech
+                                adImageView.setContentDescription(advertisement.getName());
+
+                                // Load the image from
+                                Glide.with(activity).load(advertisement.getPhotoAd()).into(adImageView);
                             });
 
+                            // Wait 30 seconds before iterate
                             Thread.sleep(30 * 1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        } else {
+                            // Stop the thread if is stopped the activity
+                            currentThread.interrupt();
                         }
-                    });
-                } else {
-                    break;
-                }
+                    } catch (InterruptedException ignored) {
+                    }
+                });
             }
         });
     }
 
+    /**
+     * Method for get the list of advertisements
+     *
+     * @return The list of advertisements
+     */
     public List<Advertisement> getListAdvertisement() {
         return mListAdvertisement.get();
     }
 
+    /**
+     * Method for set the list of advertisements
+     * 
+     * @param advertisementList The list of advertisements
+     */
     public void setListAdvertisement(List<Advertisement> advertisementList) {
         mListAdvertisement.set(advertisementList);
     }

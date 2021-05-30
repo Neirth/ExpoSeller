@@ -14,7 +14,10 @@ import java.util.concurrent.ExecutorService;
 
 @HiltViewModel
 public class ConcertsMgtViewModel extends ViewModel {
+    // Instance of use cases layer
     private final AdminService mAdminService;
+
+    // Instance of executor service
     private final ExecutorService mExecutorService;
 
     @Inject
@@ -23,15 +26,31 @@ public class ConcertsMgtViewModel extends ViewModel {
         this.mExecutorService = executorService;
     }
 
+    /**
+     * Method to get the instance of concert repo
+     *
+     * @return The instance of concert repo
+     */
     public ConcertRepo getConcertRepo() {
         return mAdminService.getConcertRepo();
     }
 
+    /**
+     * Method to get the instance of executor service
+     *
+     * @return The instance of executor service
+     */
     public ExecutorService getExecutorService() {
         return this.mExecutorService;
     }
 
-    public int generateTicketFriendlyId() throws IOException {
-        return mAdminService.generateTicketFriendlyId(Concert.class);
+    /**
+     * Method to generate the friendly id
+     *
+     * @return The friendly generated
+     * @throws IOException In case of not being able to access the repository
+     */
+    public int generateFriendlyId() throws IOException {
+        return mAdminService.generateFriendlyId(Concert.class);
     }
 }

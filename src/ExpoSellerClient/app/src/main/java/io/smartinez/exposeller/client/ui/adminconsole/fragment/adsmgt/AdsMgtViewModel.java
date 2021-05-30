@@ -14,7 +14,10 @@ import java.util.concurrent.ExecutorService;
 
 @HiltViewModel
 public class AdsMgtViewModel extends ViewModel {
+    // Instance of use cases layer
     private final AdminService mAdminService;
+
+    // Instance of executor service
     private final ExecutorService mExecutorService;
 
     @Inject
@@ -23,15 +26,31 @@ public class AdsMgtViewModel extends ViewModel {
         this.mExecutorService = executorService;
     }
 
-    public AdvertisementRepo getAdBannerRepo() {
-        return mAdminService.getAdBannerRepo();
+    /**
+     * Method to get the instance of advertisement repo
+     *
+     * @return The instance of advertisement repo
+     */
+    public AdvertisementRepo getAdvertisementRepo() {
+        return mAdminService.getAdvertisementRepo();
     }
 
+    /**
+     * Method to get the instance of executor service
+     *
+     * @return The instance of executor service
+     */
     public ExecutorService getExecutorService() {
         return this.mExecutorService;
     }
 
-    public int generateTicketFriendlyId() throws IOException {
-        return mAdminService.generateTicketFriendlyId(Advertisement.class);
+    /**
+     * Method to generate the friendly id
+     *
+     * @return The friendly generated
+     * @throws IOException In case of not being able to access the repository
+     */
+    public int generateFriendlyId() throws IOException {
+        return mAdminService.generateFriendlyId(Advertisement.class);
     }
 }

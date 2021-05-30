@@ -44,7 +44,7 @@ public class CameraReaderImpl implements IFriendlyIdReader {
                         qrCodeDetected = mQrCodeDetector.detectAndDecode(imageArray);
 
                         if (qrCodeDetected != null && !qrCodeDetected.isEmpty() && !prevQrCodeDetected.equals(qrCodeDetected)) {
-                            mLogger.log(Level.FINE, "Detected FriendlyId from QR Code Camera: " + qrCodeDetected);
+                            mLogger.log(Level.INFO, "Detected FriendlyId from QR Code Camera: " + qrCodeDetected);
                             onScannedCodeListener.onScannedCodeListener(qrCodeDetected);
 
                             prevQrCodeDetected = qrCodeDetected;
