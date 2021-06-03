@@ -23,14 +23,19 @@
  */
 package io.smartinez.exposeller.validator.binding;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.Specializes;
 import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.inject.Named;
 
 import java.util.logging.Logger;
 
 /**
  * Class to bind the Logger instance
  */
+@Named
+@ApplicationScoped
 @SuppressWarnings("unused")
 public class LoggerBind {
     @Produces

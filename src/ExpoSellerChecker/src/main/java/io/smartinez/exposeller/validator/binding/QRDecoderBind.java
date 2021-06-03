@@ -23,13 +23,18 @@
  */
 package io.smartinez.exposeller.validator.binding;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.Specializes;
+import jakarta.inject.Named;
 import nu.pattern.OpenCV;
 import org.opencv.objdetect.QRCodeDetector;
 
 /**
  * Class to bind the QR Decoder instance
  */
+@Named
+@ApplicationScoped
 @SuppressWarnings("unused")
 public class QRDecoderBind {
     @Produces

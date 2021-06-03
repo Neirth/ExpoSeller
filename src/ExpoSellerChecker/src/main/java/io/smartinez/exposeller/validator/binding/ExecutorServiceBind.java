@@ -23,7 +23,10 @@
  */
 package io.smartinez.exposeller.validator.binding;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.Specializes;
+import jakarta.inject.Named;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,6 +34,8 @@ import java.util.concurrent.Executors;
 /**
  * Class to bind the Executor Service instance
  */
+@Named
+@ApplicationScoped
 @SuppressWarnings("unused")
 public class ExecutorServiceBind {
     @Produces

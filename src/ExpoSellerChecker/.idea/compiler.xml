@@ -6,11 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ExpoSellerChecker" />
+        <module name="ExpoSellerValidator" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ExpoSellerChecker" target="11" />
+      <module name="ExpoSellerValidator" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

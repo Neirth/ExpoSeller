@@ -23,7 +23,10 @@
  */
 package io.smartinez.exposeller.validator.binding;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.Specializes;
+import jakarta.inject.Named;
 import okhttp3.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
@@ -31,6 +34,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Class to bind the OkHttp instance
  */
+@Named
+@ApplicationScoped
 @SuppressWarnings("unused")
 public class OkHttpClientBind {
     @Produces

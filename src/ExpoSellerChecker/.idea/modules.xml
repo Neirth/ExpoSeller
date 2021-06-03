@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ExpoSellerChecker.iml" filepath="$PROJECT_DIR$/ExpoSellerChecker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ExpoSellerValidator.iml" filepath="$PROJECT_DIR$/ExpoSellerValidator.iml" />
     </modules>
   </component>
 </project>

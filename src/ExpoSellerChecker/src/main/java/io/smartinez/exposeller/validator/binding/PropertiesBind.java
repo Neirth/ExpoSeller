@@ -23,7 +23,10 @@
  */
 package io.smartinez.exposeller.validator.binding;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.Specializes;
+import jakarta.inject.Named;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +35,8 @@ import java.util.Properties;
 /**
  * Class to bind the Properties instance with application.properties preloaded
  */
+@Named
+@ApplicationScoped
 @SuppressWarnings("unused")
 public class PropertiesBind {
     @Produces
