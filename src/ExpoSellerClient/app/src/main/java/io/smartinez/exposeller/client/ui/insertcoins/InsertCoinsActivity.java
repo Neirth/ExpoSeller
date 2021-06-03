@@ -78,6 +78,9 @@ public class InsertCoinsActivity extends AppCompatActivity {
         // Call parent method
         super.onCreate(savedInstanceState);
 
+        // Hide the system ui
+        Utilities.hideSystemUi(getWindow());
+
         // Inflate the view
         setContentView(R.layout.activity_insert_coins);
 

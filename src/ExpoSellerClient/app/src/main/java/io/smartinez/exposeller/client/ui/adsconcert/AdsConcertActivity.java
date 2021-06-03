@@ -41,6 +41,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import io.smartinez.exposeller.client.R;
 import io.smartinez.exposeller.client.ui.mainscreen.MainScreenActivity;
 import io.smartinez.exposeller.client.util.TimeOutIdle;
+import io.smartinez.exposeller.client.util.Utilities;
 
 @AndroidEntryPoint
 public class AdsConcertActivity extends AppCompatActivity {
@@ -60,6 +61,9 @@ public class AdsConcertActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Call to parent constructor
         super.onCreate(savedInstanceState);
+
+        // Hide the system ui
+        Utilities.hideSystemUi(getWindow());
 
         // Inflate the view
         setContentView(R.layout.activity_ads_concert);

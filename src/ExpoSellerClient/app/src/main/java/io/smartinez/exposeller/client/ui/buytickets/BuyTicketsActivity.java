@@ -43,6 +43,7 @@ import io.smartinez.exposeller.client.ui.buytickets.adapter.BuyTicketConcertAdap
 import io.smartinez.exposeller.client.ui.insertcoins.InsertCoinsActivity;
 import io.smartinez.exposeller.client.ui.mainscreen.MainScreenActivity;
 import io.smartinez.exposeller.client.util.TimeOutIdle;
+import io.smartinez.exposeller.client.util.Utilities;
 
 @AndroidEntryPoint
 public class BuyTicketsActivity extends AppCompatActivity {
@@ -68,6 +69,9 @@ public class BuyTicketsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Call parent method
         super.onCreate(savedInstanceState);
+
+        // Hide the system ui
+        Utilities.hideSystemUi(getWindow());
 
         // Inflate the view
         setContentView(R.layout.activity_buy_tickets);

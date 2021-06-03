@@ -43,6 +43,7 @@ import io.smartinez.exposeller.client.ui.adsconcert.AdsConcertActivity;
 import io.smartinez.exposeller.client.ui.buytickets.BuyTicketsActivity;
 import io.smartinez.exposeller.client.ui.checkschedules.CheckSchedulesActivity;
 import io.smartinez.exposeller.client.util.TimeOutIdle;
+import io.smartinez.exposeller.client.util.Utilities;
 
 @AndroidEntryPoint
 public class MainScreenActivity extends AppCompatActivity {
@@ -66,6 +67,9 @@ public class MainScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Call to parent method
         super.onCreate(savedInstanceState);
+
+        // Hide the system ui
+        Utilities.hideSystemUi(getWindow());
 
         // Inflate the view
         setContentView(R.layout.activity_main_screen);
