@@ -1,0 +1,84 @@
+/*
+ * Copyright 2021 Sergio Martinez
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin'
+}
+
+group = 'io.neirth.exposeller.validator'
+description = 'ExpoSellerValidator'
+
+version = '1.0.0'
+sourceCompatibility = '11'
+mainClassName = 'io.neirth.exposeller.validator.ExpoSellerApplication'
+
+dependencies {
+    // Normal dependencies
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
+    implementation group: 'org.jboss.weld.se', name: 'weld-se-core', version: '4.0.1.SP1'
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.3'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.3'
+
+    implementation group: 'org.openjfx', name: 'javafx-base', version: '11'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: '11'
+
+    // JNI implementation of OpenCV
+    implementation group: 'org.openpnp', name: 'opencv', version: '4.5.1-2'
+
+    // JavaFX OS-dependent implementation
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: '11', classifier: 'win'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: '11', classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: '11', classifier: 'linux'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+javafx {
+    version = 11
+    modules = [ 'javafx.base', 'javafx.controls' ]
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+task copyResources(type: Copy) {
+    from "${projectDir}/src/main/resources"
+    into "${buildDir}/classes/main"
+}
+
+tasks.getByName("distZip").enabled = false
+tasks.getByName("distTar").enabled = false
+
+processResources.dependsOn copyResources
