@@ -52,7 +52,7 @@ In order to even start testing this project we will need the following:
 
 To build this project, you will need, if you want it to go on your appreciated iPhone or iPod, generate the corresponding developer certificate, as I have not yet learned how to generate it, you can use this Apple guide for it: [Wallet Developer Guide: Building Your First Pass](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/PassKit_PG/YourFirst.html#//apple_ref/doc/uid/TP40012195-CH2-SW27).
 
-Once the certificate is generated, you will need to convert it to a PKCS#12 file and store it in [assets/certificates/Certificates.p12](https://github.com/Neirth/ExpoSeller/blob/main/src/ExpoSellerClient/app/src/main/assets/certificates/Certificates.p12) within the graphical interface. If you have configured a password, you must include it in [PassbookTicketGeneratorImpl.java](https://github.com/Neirth/ExpoSeller/blob/9c1634685170264e0fbc8a16be2144d27c93e3dd/src/ExpoSellerClient/app/src/main/java/io/smartinez/exposeller/client/peripherals/ticketgenerator/PassbookTicketGeneratorImpl.java#L143) on line 143.
+Once the certificate is generated, you will need to convert it to a PKCS#12 file and store it in [assets/certificates/Certificates.p12](https://github.com/Neirth/ExpoSeller/blob/main/src/ExpoSellerClient//src/main/assets/certificates/Certificates.p12) within the graphical interface. If you have configured a password, you must include it in [PassbookTicketGeneratorImpl.java](https://github.com/Neirth/ExpoSeller/blob/main/src/ExpoSellerClient/src/main/java/io/neirth/exposeller/client/peripherals/ticketgenerator/PassbookTicketGeneratorImpl.java#L143) on line 143.
 
 You will also need to generate a Firebase project, associate the credentials with the user interface project and import the rules from the database available in rules/. The guys at Google put a good tutorial at our fingertips so that this can be simple and painless: [Add Firebase to your Android project](https://firebase.google.com/docs/android/setup). You will also have to configure the file [application.properties](https://github.com/Neirth/ExpoSeller/blob/main/src/ExpoSellerChecker/src/main/resources/application.properties) of the validator with the project ID of Firebase.
 
@@ -87,6 +87,8 @@ This project was born with the purpose of overcoming the end of high school. Alt
 At the same time, this project had in mind to leave a functional system for the entire automated management of the ticket life cycle. Therefore, any institution could, technically, take this project and launch it into production.
 
 Everything that can be expected from the future of this project is included in the [MIT license](https://choosealicense.com/licenses/mit/)  with which this project and all its files are attached.
+
+Nor do I rule out the fact that if I receive a Pull Request improving an area, I will not review it. Although this will not be a frequent line of improvements.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
