@@ -41,11 +41,10 @@ Here are some screenshots of the user interface:
 
 ### Prerequisites
 In order to even start testing this project we will need the following:
-- Have a webcam connected and configured
-- Have Android Studio installed
-- Have installed IntelliJ Community Edition, or any other IDE for Java
+- Have a webcam connected and configured.
+- Have Android Studio, or IntelliJ Community Edition. (With Android SDK configured)
 - Java 11 at least, in addition to having JavaFX installed and configured.
-- Have an account in firebase (Or failing that in Google)
+- Have an account in firebase. (Or failing that in Google)
 - (Optional, but important) Have an Apple developer account to generate a valid certificate for tickets based on Apple Passbook.
 - I don't think I'm forgetting anything. Ok, the shopping list is perfect. (Joke)
 
@@ -57,7 +56,15 @@ Once the certificate is generated, you will need to convert it to a PKCS#12 file
 
 You will also need to generate a Firebase project, associate the credentials with the user interface project and import the rules from the database available in rules/. The guys at Google put a good tutorial at our fingertips so that this can be simple and painless: [Add Firebase to your Android project](https://firebase.google.com/docs/android/setup). You will also have to configure the file [application.properties](https://github.com/Neirth/ExpoSeller/blob/main/src/ExpoSellerChecker/src/main/resources/application.properties) of the validator with the project ID of Firebase.
 
-After configuring our project with our infrastructure. We will only have to build the projects and execute them. The development environment will allow us to easily do this step.
+After configuring our project with our infrastructure. We will only have to build the projects and execute them. The development environment will allow us to easily do this step. If we do not have the development environment, we can always try to run this:
+
+    [dummy@dummy-world ExpoSeller]$ export ANDROID_SDK_ROOT=/home/dummy/Android/Sdk
+    [dummy@dummy-world ExpoSeller]$ ./gradlew clean build
+	<===========--> 88% EXECUTING [10s]
+	> :clean
+	> :build
+  
+(It is necessary to have the environment variable exported from the Android SDK, otherwise the user interface cannot be compiled)
 
 ## Built with
 
