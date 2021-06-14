@@ -3,7 +3,7 @@
 <p align="center">
 <img src="https://github.com/Neirth/ExpoSeller/blob/main/docs/exposeller_logo.png?raw=true" width="400" height="400" />
 </p>
-Ticket sales automation system based on Firebase Cloud Storage. From the user interface to the validator using the user's mobile device as a medium.
+Ticket sales automation system based on Firebase Services. From the user interface to the validator using the user's mobile device as a medium.
 
 ## Deployment
 
@@ -18,6 +18,7 @@ The document where I explain all this in detail is in [docs/TfcDocument.pdf](htt
 ## How works this project?
 
 This project is based on the principles of the Clean Architecture book, in which he explains the entire principle of hexagonal architecture.
+
 ![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_one.png)
 
 
@@ -29,8 +30,11 @@ The first will provide us with a graphical interface where we can execute the en
 
 ## Screenshots
 Here are some screenshots of the user interface:
+
 ![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_two.png)
+
 ![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_three.png)
+
 ![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_four.png)
 
 ## Getting Started
