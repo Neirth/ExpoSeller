@@ -383,3 +383,6 @@ Thumbs.db
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,linux,macos,android,androidstudio,code-java,java,visualstudiocode
+
+# Ignore Gradle build output directory
+build

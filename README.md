@@ -20,23 +20,18 @@ The document where I explain all this in detail is in [docs/TfcDocument.pdf](htt
 This project is based on the principles of the Clean Architecture book, in which he explains the entire principle of hexagonal architecture.
 ![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_one.png)
 
-Without going into detail about how this architecture works, a series of interfaces has been exposed to be able to implement them and use our own hardware. These belong to the outermost layer of the software. There are several examples to know how to implement them.
 
-![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_two.png)
+Without going into detail about how this architecture works, a series of interfaces has been exposed to be able to implement them and use our own hardware. These belong to the outermost layer of the software. There are several examples to know how to implement them.
 
 As for the components used in this system, there are mainly 3: The user interface, the mobile device and the ticket validator.
 
+The first will provide us with a graphical interface where we can execute the entire purchase process of the ticket in question, being able to also consult the tickets and everything related. The second will allow us to store the ticket that we have generated. This must be borne in mind that we will never know what operating system it works with, we are only interested in making it compatible with Apple Passbook. Finally, the validator device will allow us to validate the QR generated from the ticket identification code, not through the download QR code, this in turn will invalidate it in the database so that it cannot be used again.
+
+## Screenshots
+Here are some screenshots of the user interface:
+![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_two.png)
 ![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_three.png)
-
-The first will provide us with a graphical interface where we can execute the entire purchase process of the ticket in question, being able to also consult the tickets and everything related.
-
 ![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_four.png)
-
-The second will allow us to store the ticket that we have generated. This must be borne in mind that we will never know what operating system it works with, we are only interested in making it compatible with Apple Passbook.
-
-![](https://github.com/Neirth/ExpoSeller/raw/main/docs/screenshots/screenshot_five.png)
-
-Finally, the validator device will allow us to validate the QR generated from the ticket identification code, not through the download QR code, this in turn will invalidate it in the database so that it cannot be used again.
 
 ## Getting Started
 
@@ -62,11 +57,10 @@ After configuring our project with our infrastructure. We will only have to buil
 
 ## Built with
 
-
 The technologies that I have used for this project are:  
 - JavaFX  
 - OpenCV  
--  Firebase  
+- Firebase  
 - OkHttp 3  
 - Android Things  
 - Apple Passbook  
