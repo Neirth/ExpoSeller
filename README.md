@@ -1,7 +1,7 @@
 
 
 <p align="center">
-<img src="https://github.com/Neirth/ExpoSeller/blob/main/docs/exposeller_logo.png?raw=true" width="400" height="400" />
+<img src="https://github.com/Neirth/ExpoSeller/blob/main/docs/exposeller_logo.png?raw=true" />
 </p>
 Ticket sales automation system based on Firebase Services. From the user interface to the validator using the user's mobile device as a medium.
 
